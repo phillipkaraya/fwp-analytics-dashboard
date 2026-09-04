@@ -1017,7 +1017,7 @@
    "avgViews": 2418,
    "avgLikes": 113,
    "avgEngagement": 8.21,
-   "totalViews": 590129
+   "totalViews": 590131
   },
   "finance": {
    "count": 328,
@@ -1059,7 +1059,7 @@
    "avgViews": 4679,
    "avgLikes": 170,
    "avgEngagement": 4.19,
-   "totalViews": 584963
+   "totalViews": 584965
   },
   "sports": {
    "count": 185,
@@ -1073,7 +1073,7 @@
    "avgViews": 2897,
    "avgLikes": 131,
    "avgEngagement": 5.67,
-   "totalViews": 266584
+   "totalViews": 266586
   },
   "motivation": {
    "count": 145,
@@ -1974,7 +1974,7 @@
    "shareRate": 0.0
   },
   "tiktok": {
-   "views": 2600574,
+   "views": 2600576,
    "likes": 187098,
    "comments": 2746,
    "shares": 3784,
@@ -3299,7 +3299,7 @@
    "avgViews": 5356,
    "avgLikes": 158,
    "avgEngagement": 3.6,
-   "totalViews": 203546
+   "totalViews": 203548
   },
   {
    "tag": "#dji",
@@ -3360,10 +3360,10 @@
   {
    "tag": "#education",
    "count": 5,
-   "avgViews": 4588,
+   "avgViews": 4589,
    "avgLikes": 167,
    "avgEngagement": 5.25,
-   "totalViews": 18355
+   "totalViews": 18357
   },
   {
    "tag": "#motivation",
@@ -4091,7 +4091,7 @@
   {
    "month": "2025-01",
    "posts": 16,
-   "views": 31735,
+   "views": 31737,
    "likes": 2850,
    "comments": 180
   },
@@ -11694,7 +11694,7 @@
     {
      "id": "tt_7465540807492275487",
      "platform": "tiktok",
-     "views": 3090,
+     "views": 3092,
      "likes": 140,
      "date": "2025-01-29",
      "url": "https://www.tiktok.com/@phillip.karaya/video/7465540807492275487"
@@ -11709,7 +11709,7 @@
     }
    ],
    "bestPlatform": "tiktok",
-   "viewDiff": 2552
+   "viewDiff": 2554
   },
   {
    "title": "Figuring out how you can help is a great way to position yourself and find a mentor.",
@@ -21065,7 +21065,7 @@
    "avgViews": 4937,
    "avgLikes": 219,
    "avgEngagement": 5.31,
-   "totalViews": 4517713,
+   "totalViews": 4517715,
    "topPost": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
   },
   {
@@ -28795,9 +28795,9 @@
    "totalMutual": 4588
   }
  },
- "generatedAt": "2026-09-04T22:07:14+00:00",
+ "generatedAt": "2026-09-04T23:22:56+00:00",
  "dataAsOf": {
-  "posts": "2026-09-04T22:07:13+00:00",
+  "posts": "2026-09-04T23:22:56+00:00",
   "comments": "2026-02-22"
  }
 }
