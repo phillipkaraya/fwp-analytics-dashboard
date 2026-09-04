@@ -181,6 +181,8 @@ export interface FunnelStage {
 }
 
 export interface AnalyticsBundle {
+  generatedAt?: string; // ISO, written by scrape/analyze.py
+  dataAsOf?: { posts?: string; comments?: string };
   postingHeatmap?: HeatmapCell[][];
   bestPostingTimes?: BestPostingTime[];
   contentCategories?: Record<string, { count: number; avgViews: number; avgEngagement: number }>;
@@ -219,6 +221,24 @@ export interface PlatformFollowData {
   fans?: FollowUser[];
   mutual?: FollowUser[];
   note?: string;
+}
+
+// Content Vault — produced by scrape/analyze.py from scrape/categories.json.
+export interface VaultCategory {
+  slug: string;
+  label: string;
+  count: number;
+  totalViews: number;
+  avgViews: number;
+  platforms: Partial<Record<Platform, number>>;
+  postIds: string[]; // sorted by views desc
+}
+
+export interface ContentVault {
+  generatedAt: string;
+  totalPosts: number;
+  categories: VaultCategory[]; // sorted by count desc
+  byPost: Record<string, string[]>; // postId -> category slugs
 }
 
 export interface Deal {

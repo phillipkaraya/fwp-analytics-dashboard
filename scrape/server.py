@@ -36,11 +36,12 @@ from urllib.parse import parse_qs, urlparse
 # Make `import scrape.*` work when running this file directly.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from scrape import analyze  # noqa: E402
 from scrape.cdp import CDPError  # noqa: E402
 from scrape.platforms import instagram, tiktok, youtube, threads  # noqa: E402
 
 PORT = 5556
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 # Resolve paths relative to this file so it works no matter where it's run from.
 ROOT = Path(__file__).resolve().parent.parent
@@ -94,10 +95,32 @@ PLATFORM_RUNNERS = {
 }
 
 
-def run_scrape(job_id: str, platforms: list[str]) -> None:
+def record_platform_result(state: dict, platform: str, result: dict) -> None:
+    """Write one platform's scrape result into scrape_state (in place)."""
+    sub = state.get(platform, {}) or {}
+    sub["lastScrapedDate"] = now_iso()
+    sub["status"] = "complete"
+    sub.pop("lastError", None)
+    if result.get("totalScraped") is not None:
+        sub["totalScraped"] = result["totalScraped"]
+    if result.get("lastPostId"):
+        sub["lastPostId"] = result["lastPostId"]
+    if result.get("newPosts") is not None:
+        sub["lastRunNewPosts"] = result["newPosts"]
+    state[platform] = sub
+    followers = int(result.get("followers") or 0)
+    if followers > 0:
+        state.setdefault("followers", {})[platform] = followers
+        # analyze.py only appends a follower_history point for days on which
+        # at least one platform reported a fresh count.
+        state.setdefault("followersUpdated", {})[platform] = now_iso()
+
+
+def run_scrape(job_id: str, platforms: list[str], full: bool = False) -> None:
     """Worker thread — runs the platform scrapers sequentially and updates
-    the in-memory job state + scrape_state.json as it goes."""
-    update_job(job_id, status="running", currentPlatform=None, progress=0)
+    the in-memory job state + scrape_state.json as it goes, then rebuilds
+    analytics.json / content_vault.json / follower_history.json."""
+    update_job(job_id, status="running", currentPlatform=None, progress=0, mode="full" if full else "incremental")
     state = load_scrape_state()
     completed = 0
     errors: dict[str, str] = {}
@@ -112,15 +135,8 @@ def run_scrape(job_id: str, platforms: list[str]) -> None:
             update_job(job_id, currentStage=f"{platform}: {stage}", currentInfo=info)
 
         try:
-            result = runner(on_progress=progress)
-            sub = state.get(platform, {}) or {}
-            sub["lastScrapedDate"] = now_iso()
-            sub["status"] = "complete"
-            if result.get("totalScraped") is not None:
-                sub["totalScraped"] = result["totalScraped"]
-            if result.get("lastPostId"):
-                sub["lastPostId"] = result["lastPostId"]
-            state[platform] = sub
+            result = runner(on_progress=progress, full=full)
+            record_platform_result(state, platform, result)
             save_scrape_state(state)
         except CDPError as e:
             errors[platform] = str(e)
@@ -138,6 +154,14 @@ def run_scrape(job_id: str, platforms: list[str]) -> None:
             progress=int(completed / len(platforms) * 100),
             errors=errors if errors else None,
         )
+
+    # Rebuild the derived files so Insights + Vault reflect the new posts.
+    if len(errors) < len(platforms):
+        update_job(job_id, currentStage="analyzing")
+        try:
+            analyze.run()
+        except Exception as e:  # noqa: BLE001
+            errors["analyze"] = f"{type(e).__name__}: {e}"
 
     final_status = "complete" if not errors else (
         "complete" if len(errors) < len(platforms) else "error"
@@ -222,14 +246,16 @@ class Handler(BaseHTTPRequestHandler):
         if not platforms:
             self._json(400, {"error": "no valid platforms"})
             return
+        full = body.get("mode") == "full"
 
         job_id = uuid.uuid4().hex[:12]
-        # Real scraping ETA is variable. ~3 minutes per platform is a
-        # reasonable conservative estimate (IG ~2-5 min for ~700 posts).
-        eta_seconds = 180 * len(platforms)
+        # Incremental runs touch only the newest posts (~1 min/platform).
+        # A full sweep re-pages everything (~3 min/platform, IG the longest).
+        eta_seconds = (180 if full else 60) * len(platforms)
         job = {
             "id": job_id,
             "status": "queued",
+            "mode": "full" if full else "incremental",
             "platforms": platforms,
             "startedAt": now_iso(),
             "etaSeconds": eta_seconds,
@@ -242,7 +268,7 @@ class Handler(BaseHTTPRequestHandler):
             JOBS[job_id] = job
 
         threading.Thread(
-            target=run_scrape, args=(job_id, platforms), daemon=True
+            target=run_scrape, args=(job_id, platforms, full), daemon=True
         ).start()
         self._json(200, job)
 
@@ -252,11 +278,13 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
+    from scrape.cdp import default_port
+
     print(f"FWP Scraper service v{VERSION} on http://localhost:{PORT}")
     print(f"  data dir: {DATA_DIR}")
-    print("  Instagram: REAL Chrome-CDP scraper (needs Chrome on :9222)")
-    print("  TikTok / YouTube / Threads: scaffolds — see scrape/platforms/")
-    print("  endpoints: GET /ping  POST /scrape  GET /scrape-status?id=<jobId>")
+    print(f"  Chrome CDP port: {default_port()} (override with CHROME_CDP_PORT)")
+    print("  platforms: instagram, tiktok, youtube, threads (all real, Chrome-CDP)")
+    print("  endpoints: GET /ping  POST /scrape {platforms?, mode?: 'full'}  GET /scrape-status?id=<jobId>")
     HTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
 
 

@@ -94,8 +94,18 @@ def _is_thread_post(o: dict) -> bool:
     return any(k in o for k in ("caption", "taken_at", "text_post_app_info", "like_count"))
 
 
+def _owned_by_handle(raw: dict) -> bool:
+    """True only when the post's author is our handle. The profile page can
+    surface reposts, quoted posts, and (after a stray redirect) the For You
+    feed, all of which carry other people's usernames."""
+    user = raw.get("user") or {}
+    owner = str(user.get("username") or "").lower()
+    return owner == HANDLE.lower()
+
+
 def _extract_posts_from_body(body: str) -> list[dict]:
-    """Parse a captured /graphql/query body and return raw post dicts."""
+    """Parse a captured /graphql/query body and return raw post dicts
+    authored by HANDLE."""
     # Threads' graphql can return multi-line newline-delimited JSON sometimes
     # (streamed payloads). Try parsing each line independently and merge.
     posts: list[dict] = []
@@ -122,7 +132,7 @@ def _extract_posts_from_body(body: str) -> list[dict]:
     for cand in candidates:
         for post in _walk(cand, _is_thread_post):
             pk = str(post.get("pk") or "")
-            if not pk or pk in seen_pks:
+            if not pk or pk in seen_pks or not _owned_by_handle(post):
                 continue
             seen_pks.add(pk)
             posts.append(post)
@@ -180,24 +190,59 @@ def _to_post(raw: dict) -> dict:
     }
 
 
-def scrape(max_pages: int = 80, on_progress=None) -> dict:
+def _extract_follower_count(body: str) -> int:
+    """Pull the profile's follower_count out of a captured graphql body, if
+    the body carries the profile user object. Returns 0 when absent."""
+    try:
+        blob = json.loads(body)
+    except json.JSONDecodeError:
+        return 0
+    for user in _walk(
+        blob,
+        lambda o: isinstance(o, dict)
+        and "follower_count" in o
+        and str(o.get("username") or "").lower() == HANDLE.lower(),
+    ):
+        try:
+            return int(user.get("follower_count") or 0)
+        except (TypeError, ValueError):
+            continue
+    return 0
+
+
+def scrape(max_pages: int = 80, on_progress=None, full: bool = False) -> dict:
+    """Capture Threads' own graphql responses while scrolling the profile.
+
+    Incremental (default): stops once STOP_AFTER_KNOWN * 4 consecutive known
+    posts have streamed past. full=True scrolls until the page stops growing.
+    """
     existing, known_ids = load_existing(DATA_FILE)
     cdp = CDP()
     posts_by_pk: dict[str, dict] = {}
     consecutive_known = 0
     stopped_early = False
+    followers = 0
 
     try:
-        cdp.open_tab(PAGE_URL)
+        cdp.new_tab(PAGE_URL)
         cdp.wait_for_load(timeout=20)
         time.sleep(2.0)  # let Threads finish initial render + first XHRs
 
-        cdp.evaluate(_INSTALL_HOOK)
-        # Force navigation reload so initial profile fetch flows through our hook.
-        # (If hook installs after the page already fetched, we'd miss the first batch.)
+        # Register the hook to run before any page script on the next document,
+        # then reload so the initial profile query flows through it. (A hook
+        # installed after load misses the first batch.)
+        cdp.add_init_script(_INSTALL_HOOK)
         cdp.evaluate("window.scrollTo(0, 0)")
         cdp.evaluate("window.location.reload()")
-        cdp.wait_for_load(timeout=20)
+        time.sleep(0.5)
+        cdp.wait_for_load(timeout=20, expect_url_substring=f"@{HANDLE}")
+        # Threads sometimes lands a logged-in reload on the For You feed. Make
+        # sure we are on the profile before capturing anything, otherwise the
+        # hook would happily collect other people's posts.
+        href = cdp.evaluate("window.location.href") or ""
+        if f"@{HANDLE}".lower() not in href.lower():
+            cdp.navigate(PAGE_URL)
+            cdp.wait_for_load(timeout=20, expect_url_substring=f"@{HANDLE}")
         time.sleep(2.5)
         # Re-install hook (reload wiped it)
         cdp.evaluate(_INSTALL_HOOK)
@@ -213,6 +258,8 @@ def scrape(max_pages: int = 80, on_progress=None) -> dict:
             new_in_round = 0
             for entry in bodies:
                 body = entry.get("body") or ""
+                if not followers:
+                    followers = _extract_follower_count(body)
                 for raw in _extract_posts_from_body(body):
                     pk = str(raw.get("pk") or "")
                     if not pk:
@@ -225,7 +272,7 @@ def scrape(max_pages: int = 80, on_progress=None) -> dict:
                         new_in_round += 1
                         consecutive_known = 0
 
-            if known_ids and consecutive_known >= STOP_AFTER_KNOWN * 4:
+            if not full and known_ids and consecutive_known >= STOP_AFTER_KNOWN * 4:
                 # Threads pages are big; need more known posts to be sure
                 stopped_early = True
                 break
@@ -262,6 +309,7 @@ def scrape(max_pages: int = 80, on_progress=None) -> dict:
                     posts_by_pk[pk] = raw
 
     finally:
+        cdp.close_owned()
         cdp.detach()
 
     new_posts = [_to_post(raw) for raw in posts_by_pk.values()]
@@ -276,4 +324,5 @@ def scrape(max_pages: int = 80, on_progress=None) -> dict:
         "newPosts": len(new_posts),
         "stoppedEarly": stopped_early,
         "lastPostId": merged[0]["id"] if merged else None,
+        "followers": followers,
     }

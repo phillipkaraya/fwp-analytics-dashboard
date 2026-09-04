@@ -9,6 +9,7 @@ const TABS = [
   { href: "/posts", label: "Post Analysis" },
   { href: "/comments", label: "Comments" },
   { href: "/insights", label: "Insights" },
+  { href: "/vault", label: "Content Vault" },
   { href: "/deals", label: "Brand Deals" },
   { href: "/content-analyzer", label: "Content Analyzer" },
   { href: "/montage", label: "Montage Studio" },

@@ -20,11 +20,12 @@ import time
 from pathlib import Path
 
 from scrape.cdp import CDP, CDPError
-from scrape.handles import HANDLES
+from scrape.handles import YOUTUBE_CHANNEL_ID
 from scrape.incremental import STOP_AFTER_KNOWN, load_existing, merge
 
 DATA_FILE = Path(__file__).resolve().parent.parent.parent / "public" / "data" / "youtube_posts.json"
-PAGE_URL = f"https://www.youtube.com/{HANDLES['youtube']}/videos"
+# Channel-ID URL: the @handle 404'd after Phil renamed it (2026-09-04).
+PAGE_URL = f"https://www.youtube.com/channel/{YOUTUBE_CHANNEL_ID}/videos"
 
 
 def _extract_initial_state(cdp: CDP) -> dict:
@@ -216,10 +217,42 @@ def _continuation_request(cdp: CDP, api_key: str, context: dict, token: str) -> 
     return cdp.evaluate(expr, await_promise=True) or {}
 
 
-def _scrape_tab(cdp: CDP, tab_url: str, max_pages: int, on_progress, label: str) -> list[dict]:
-    """Navigate to a YT channel tab (videos or shorts) and page through it."""
-    cdp.open_tab(tab_url)
-    cdp.wait_for_load(timeout=20)
+def _find_subscribers(blob) -> int:
+    """Best-effort subscriber count from ytInitialData. Handles both the
+    legacy `subscriberCountText.simpleText` and the newer view-model
+    `{"content": "5.13K subscribers"}` shapes."""
+    for d in _walk(blob, "subscriberCountText"):
+        text = _safe(d, "subscriberCountText", "simpleText") or ""
+        if text:
+            return _parse_int(str(text).lower().replace("subscribers", "").replace("subscriber", ""))
+    for d in _walk(blob, "content"):
+        text = d.get("content")
+        if isinstance(text, str) and text.lower().endswith("subscribers"):
+            return _parse_int(text.lower().replace("subscribers", ""))
+    return 0
+
+
+def _scrape_tab(
+    cdp: CDP,
+    tab_url: str,
+    max_pages: int,
+    on_progress,
+    label: str,
+    known_ids: set[str] | frozenset[str] = frozenset(),
+    full: bool = False,
+) -> tuple[list[dict], bool, int]:
+    """Load a YT channel tab (videos or shorts) in OUR tab and page through it.
+
+    Returns (posts, stopped_early, subscribers). The first call opens the
+    tab; later calls navigate the same owned tab so we never touch anyone
+    else's YouTube tab.
+    """
+    expect = tab_url.rstrip("/").rsplit("/", 1)[-1]  # "videos" | "shorts"
+    if cdp.owned_tabs:
+        cdp.navigate(tab_url)
+    else:
+        cdp.new_tab(tab_url)
+    cdp.wait_for_load(timeout=20, expect_url_substring=expect)
     # Give ytInitialData a moment to attach (it's set very early)
     time.sleep(1.5)
 
@@ -230,9 +263,24 @@ def _scrape_tab(cdp: CDP, tab_url: str, max_pages: int, on_progress, label: str)
     context = state.get("context")
     if not api_key or not context:
         raise CDPError(f"INNERTUBE_API_KEY/context missing on {tab_url}")
+    subscribers = _find_subscribers(state["ytInitialData"])
 
     posts: list[dict] = []
     seen_ids: set[str] = set()
+    consecutive_known = 0
+    stopped_early = False
+
+    def known_run(new_slice: list[dict]) -> bool:
+        """Update the consecutive-known counter; True when we should stop."""
+        nonlocal consecutive_known
+        if full or not known_ids:
+            return False
+        for p in new_slice:
+            if p["id"] in known_ids:
+                consecutive_known += 1
+            else:
+                consecutive_known = 0
+        return consecutive_known >= STOP_AFTER_KNOWN
 
     def add_items(blob) -> None:
         for it in _walk(blob, "richItemRenderer"):
@@ -260,6 +308,8 @@ def _scrape_tab(cdp: CDP, tab_url: str, max_pages: int, on_progress, label: str)
     page = 1
     if on_progress:
         on_progress(f"{label} page", {"page": page, "totalPosts": len(posts)})
+    if known_run(posts):
+        return posts, True, subscribers
 
     while cont_tokens and page < max_pages:
         token = cont_tokens.pop(0)
@@ -278,23 +328,44 @@ def _scrape_tab(cdp: CDP, tab_url: str, max_pages: int, on_progress, label: str)
         if len(posts) == before:
             # No new items — don't infinite-loop on a stuck token
             break
+        if known_run(posts[before:]):
+            stopped_early = True
+            break
         time.sleep(0.4)
-    return posts
+    return posts, stopped_early, subscribers
 
 
-def scrape(max_pages: int = 50, on_progress=None) -> dict:
-    existing, _known_ids = load_existing(DATA_FILE)
+def scrape(max_pages: int = 50, on_progress=None, full: bool = False) -> dict:
+    """Scrape the Videos and Shorts tabs of the channel.
+
+    Incremental (default): each tab stops after STOP_AFTER_KNOWN consecutive
+    already-known videos. full=True pages every tab to the end.
+    """
+    existing, known_ids = load_existing(DATA_FILE)
     cdp = CDP()
     posts: list[dict] = []
+    stopped_early = False
+    followers = 0
     try:
-        posts.extend(_scrape_tab(cdp, PAGE_URL, max_pages, on_progress, "videos"))
+        vids, stopped, subs = _scrape_tab(
+            cdp, PAGE_URL, max_pages, on_progress, "videos", known_ids, full
+        )
+        posts.extend(vids)
+        stopped_early = stopped_early or stopped
+        followers = subs or followers
         shorts_url = PAGE_URL.replace("/videos", "/shorts")
         try:
-            posts.extend(_scrape_tab(cdp, shorts_url, max_pages, on_progress, "shorts"))
+            shorts, stopped, subs = _scrape_tab(
+                cdp, shorts_url, max_pages, on_progress, "shorts", known_ids, full
+            )
+            posts.extend(shorts)
+            stopped_early = stopped_early or stopped
+            followers = followers or subs
         except CDPError as e:
             if on_progress:
                 on_progress("shorts skipped", {"reason": str(e)})
     finally:
+        cdp.close_owned()
         cdp.detach()
 
     for p in posts:
@@ -306,9 +377,11 @@ def scrape(max_pages: int = 50, on_progress=None) -> dict:
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps(merged, indent=2))
 
-    new_count = sum(1 for p in posts if p["id"] not in _known_ids)
+    new_count = sum(1 for p in posts if p["id"] not in known_ids)
     return {
         "totalScraped": len(merged),
         "newPosts": new_count,
+        "stoppedEarly": stopped_early,
         "lastPostId": merged[0]["id"] if merged else None,
+        "followers": followers,
     }

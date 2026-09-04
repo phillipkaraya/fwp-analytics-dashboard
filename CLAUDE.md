@@ -12,7 +12,9 @@ shadcn/ui in April 2026 (see `v1-archive/` for the original).
 - Recharts (line/bar/doughnut). Custom 7×24 heatmap is hand-rolled.
 - Zustand + localStorage persistence (key: `fwp_dashboard_v2`)
 - Static export → GitHub Pages
-- Self-hosted fonts via `next/font`: Newsreader / Geist Sans / JetBrains Mono
+- System font stack (the self-hosted Newsreader/Geist load was reverted
+  in April 2026; `font-display` maps to the sans stack)
+- Python `scrape/` pipeline: scrapers → `analyze.py` → derived JSON
 
 ## Tabs (and where they live)
 | Tab | Route | Component | Reads from |
@@ -21,12 +23,12 @@ shadcn/ui in April 2026 (see `v1-archive/` for the original).
 | Post Analysis | `/posts` | `components/posts/posts.tsx` | posts × 4 |
 | Comments | `/comments` | `components/comments/comments.tsx` | comments |
 | Insights | `/insights` | `components/insights/insights.tsx` | analytics, follow_data |
-| Creator Research | `/creators` | `components/creators/creators.tsx` | Zustand only |
-| Thumbnails | `/thumbnails` | `components/thumbnails/thumbnails.tsx` | local studio server |
-| Calendar | `/calendar` | `components/calendar/calendar.tsx` | Zustand only |
-| ManyChat | `/manychat` | `components/manychat/manychat.tsx` | Zustand only |
-| Studio | `/studio` | `components/studio/studio.tsx` | local studio server + Zustand |
+| Content Vault | `/vault` | `components/vault/vault.tsx` | content_vault + posts × 4 |
 | Brand Deals | `/deals` | `components/deals/deals.tsx` | Zustand only |
+| Content Analyzer | `/content-analyzer` | `components/content-analyzer/content-analyzer.tsx` | local Video Vision API (:3001) |
+| Montage Studio | `/montage` | `components/montage/montage.tsx` | local OpenMontage (:8484) or tunnel |
+
+`/creators` still builds but is not in the nav (removed 2026-04-26).
 
 ## Design system (don't drift)
 - Background: `#eaf3fb` (light brand blue) — non-negotiable, this is THE brand move
@@ -46,25 +48,34 @@ palette first. The whole point of this rebuild was escaping the v1 AI
 slop palette (`#6c5ce7` purple).
 
 ## Data
-- All JSON in `public/data/` is real, scraped on 2026-03-28.
+- All JSON in `public/data/` is real. Posts come from `scrape/`, the
+  comments and follow data are the 2026-03-28 snapshot (not re-scraped yet).
 - Schema is documented in `lib/types.ts`.
 - The dashboard reads via `fetch()` at runtime — no build-time data
   embedding. Push new JSON files and the live site picks them up.
-- **The scraping pipeline is manual** (Chrome CDP via Phil's Mac).
-  `v1-archive/daily_update.sh` only timestamps + git pushes — it does
-  NOT actually re-scrape. Productizing recurring scraping is a
-  separate project.
+- **Refresh:** `python3 scrape/run.py` (incremental) or `--full` (master
+  sweep). It uses the already-running shared Chrome on :9222 and opens its
+  own tabs; never relaunch Chrome for it. Then commit `public/data/` and
+  push. Details in `scrape/README.md`.
+- **Derived files are generated, never hand-edited:** `analytics.json`
+  (all Insights sections), `content_vault.json` (Vault topics) and
+  `follower_history.json` come from `scrape/analyze.py`. Change the
+  computation there; change topics in `scrape/categories.json`.
+- The original v1 analytics generator was lost; `analyze.py` is its
+  replacement and reproduces the v1 numbers where the inputs are the same.
 
 ## PIN gate
 - SHA-256 client-side check (Web Crypto API), sessionStorage flag.
 - Hash configured via `NEXT_PUBLIC_DASHBOARD_PIN_HASH`. Falls back to
-  the v1 hash for "1973" so dev works without env config.
+  the hashed v1 PIN so dev works without env config. This repo is
+  public: never write the PIN itself into any tracked file.
 - Set the GH repo secret `DASHBOARD_PIN_HASH` for production.
 
-## Local Studio server (optional)
-Thumbnails AI backgrounds and Studio video features call
-`http://localhost:5555` (Python `studio_server.py` from v1-archive).
-Both tabs detect when the server is offline and degrade gracefully —
+## Local tools (optional)
+Content Analyzer calls the Video Vision API on `localhost:3001`; Montage
+Studio calls OpenMontage on `localhost:8484` (or a Cloudflare tunnel);
+the Refresh data button calls `scrape/server.py` on `localhost:5556`.
+All three detect when the service is offline and degrade gracefully —
 do not break this contract when extending.
 
 ## Deploy

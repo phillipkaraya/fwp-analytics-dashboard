@@ -9,6 +9,7 @@ import type {
   ScrapeState,
   FollowData,
   AnalyticsBundle,
+  ContentVault,
 } from "./types";
 
 type FetchOpts = { fallback?: unknown };
@@ -40,8 +41,7 @@ export const dataPaths = {
   followData: `${DATA_BASE}/follow_data.json`,
   scrapeState: `${DATA_BASE}/scrape_state.json`,
   followerHistory: `${DATA_BASE}/follower_history.json`,
-  contentQueue: `${DATA_BASE}/content_queue.json`,
-  contentAnalysis: `${DATA_BASE}/content_analysis.json`,
+  contentVault: `${DATA_BASE}/content_vault.json`,
 } as const;
 
 export const loadPosts = {
@@ -84,3 +84,8 @@ export const loadScrapeState = () =>
 
 export const loadFollowerHistory = () =>
   fetchJson<FollowerSnapshot[]>(dataPaths.followerHistory, { fallback: [] });
+
+export const loadContentVault = () =>
+  fetchJson<ContentVault>(dataPaths.contentVault, {
+    fallback: { generatedAt: "", totalPosts: 0, categories: [], byPost: {} },
+  });

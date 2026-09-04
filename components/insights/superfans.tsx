@@ -2,20 +2,22 @@ import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import type { TopCommenter, AudienceOverlap } from "@/lib/types";
 import { KpiCard } from "@/components/charts/kpi-card";
-import { fmt, fmtPct } from "@/lib/format";
+import { fmt, fmtDate, fmtPct } from "@/lib/format";
 
 interface SuperfansProps {
   commenters: TopCommenter[];
   overlap?: AudienceOverlap;
+  /** Newest comment date in the dataset; comments are not re-scraped yet. */
+  asOf?: string;
 }
 
-export function Superfans({ commenters, overlap }: SuperfansProps) {
+export function Superfans({ commenters, overlap, asOf }: SuperfansProps) {
   return (
     <div className="space-y-4">
       <div className="grid gap-4 lg:grid-cols-3">
         <Section
           title="Superfans"
-          hint="Most-frequent commenters across all platforms"
+          hint={`Most-frequent commenters across all platforms${asOf ? ` · comments through ${fmtDate(asOf)}` : ""}`}
           bodyClassName="-mx-5 max-h-[420px] overflow-y-auto"
           className="lg:col-span-2"
         >

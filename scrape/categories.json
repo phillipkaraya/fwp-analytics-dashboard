@@ -1,0 +1,59 @@
+{
+  "_readme": "Editable topic map for the Content Vault. Matching is whole-word, case-insensitive, against title + caption + hashtags (with the # stripped). A post can land in several categories; posts matching nothing go to `other`. Edit freely, then run: python3 scrape/run.py --analyze-only",
+  "finance": {
+    "label": "Finance",
+    "keywords": ["money", "finance", "financial", "budget", "budgeting", "invest", "investing", "investment", "investor", "stocks", "stock market", "credit", "credit score", "credit card", "debt", "savings", "save money", "wealth", "wealthy", "rich", "millionaire", "income", "cash", "bank", "banking", "401k", "roth", "ira", "dividend", "dividends", "crypto", "bitcoin", "tax", "taxes", "loan", "loans", "interest rate", "net worth", "passive income", "paycheck", "salary", "retire", "retirement", "financewithphil", "finance with phil", "inflation", "recession", "💰", "💵", "💸", "📈"]
+  },
+  "real_estate": {
+    "label": "Real Estate",
+    "keywords": ["real estate", "realestate", "realtor", "house", "houses", "home", "homes", "property", "properties", "rental", "rentals", "rent", "landlord", "tenant", "tenants", "airbnb", "renovation", "renovate", "renovating", "flip", "flipping", "mortgage", "closing", "listing", "apartment", "duplex", "square feet", "sqft", "hoa", "zillow", "homeowner", "homeowners", "down payment", "section 8", "smart locks", "smart lock", "🏠", "🏡"]
+  },
+  "cars": {
+    "label": "Cars",
+    "keywords": ["car", "cars", "truck", "trucks", "tesla", "bmw", "mercedes", "benz", "lambo", "lamborghini", "ferrari", "porsche", "audi", "toyota", "honda", "ford", "chevy", "corvette", "jeep", "dodge", "hellcat", "dealership", "dealer", "mileage", "engine", "horsepower", "v8", "supercar", "supercars", "exotic", "exotics", "dreamdrives", "dream drives", "rental car", "turo", "wrap", "rims", "wheels", "test drive", "g wagon", "rolls royce", "bentley", "maybach", "speeding ticket", "sped", "speeding", "carbuying", "car buying", "midnight club", "🏎️", "🏎", "🚗", "🚙"]
+  },
+  "entrepreneurship": {
+    "label": "Entrepreneurship",
+    "keywords": ["business", "businesses", "entrepreneur", "entrepreneurs", "entrepreneurship", "startup", "startups", "ceo", "founder", "hustle", "side hustle", "company", "brand", "client", "clients", "sales", "marketing", "revenue", "profit", "profits", "llc", "agency", "consulting", "scale", "scaling", "employee", "employees", "hire", "hiring", "ai", "automation", "ecommerce", "shopify", "dropshipping", "vending", "vending machine", "intellovate", "grant", "grants", "contract", "contracts"]
+  },
+  "education": {
+    "label": "Education",
+    "keywords": ["learn", "learned", "lesson", "lessons", "tip", "tips", "how to", "explained", "explain", "tutorial", "guide", "teach", "teaching", "school", "college", "university", "student", "students", "degree", "class", "course", "study", "knowledge", "facts", "did you know", "mistake", "mistakes", "advice", "education", "educational", "scholarship", "scholarships", "hbcu", "aamu", "venturehub"]
+  },
+  "motivation": {
+    "label": "Motivation",
+    "keywords": ["motivation", "motivational", "mindset", "discipline", "grind", "success", "successful", "goals", "goal", "dream", "dreams", "believe", "inspire", "inspiration", "inspiring", "never give up", "consistency", "consistent", "growth", "focus", "faith", "blessed", "grateful", "gratitude", "purpose", "quote", "quotes", "keep going", "level up", "hard work"]
+  },
+  "comedy": {
+    "label": "Comedy",
+    "keywords": ["funny", "comedy", "lol", "lmao", "joke", "jokes", "prank", "skit", "skits", "meme", "memes", "hilarious", "laugh", "laughing", "humor", "relatable", "pov", "when you", "be like", "dontletthisflop", "fyp", "foryou", "foryoupage", "viral", "self checkout", "greenscreen", "greenscreenvideo", "based on a true story", "jk", "😂", "🤣", "💀"]
+  },
+  "lifestyle": {
+    "label": "Lifestyle",
+    "keywords": ["lifestyle", "day in the life", "vlog", "morning routine", "routine", "fashion", "outfit", "fit", "drip", "luxury", "atlanta", "atl", "weekend", "date night", "party", "birthday", "wedding", "apartment tour", "house tour", "shopping", "haul", "sneakers", "watch", "watches", "jewelry"]
+  },
+  "travel": {
+    "label": "Travel",
+    "keywords": ["travel", "traveling", "travelling", "traveler", "trip", "trips", "vacation", "flight", "flights", "airport", "airline", "airlines", "hotel", "hotels", "resort", "beach", "island", "passport", "abroad", "tour", "explore", "dubai", "mexico", "jamaica", "bahamas", "cancun", "paris", "london", "europe", "faresaver", "fare saver", "cheap flights", "road trip", "cruise", "first class", "business class", "points", "miles", "✈️", "✈", "🌴", "🏝️"]
+  },
+  "africa": {
+    "label": "Africa",
+    "keywords": ["africa", "african", "kenya", "kenyan", "nairobi", "nigeria", "nigerian", "lagos", "ghana", "accra", "tanzania", "uganda", "ethiopia", "south africa", "rwanda", "mombasa", "safari", "diaspora", "undugu", "swahili", "motherland"]
+  },
+  "sports": {
+    "label": "Sports",
+    "keywords": ["sports", "basketball", "nba", "football", "nfl", "soccer", "fifa", "world cup", "baseball", "mlb", "boxing", "ufc", "mma", "golf", "tennis", "gym", "workout", "workouts", "fitness", "marathon", "falcons", "hawks", "braves", "lakers", "lebron", "super bowl", "olympics", "game day", "gameday", "coach", "athlete", "athletes", "playoffs", "championship", "stadium", "arena", "pickup game", "hoops", "buckets", "hoop", "and 1", "foul", "game point", "gg", "dunk", "jumper", "three pointer", "rebound", "physical therapy", "exercising", "exercise", "training", "🏀", "🏈", "⚽", "⚾", "🏋️", "🥊", "⛳"]
+  },
+  "family": {
+    "label": "Family & Community",
+    "keywords": ["family", "kids", "kid", "children", "child", "son", "daughter", "dad", "father", "fatherhood", "mom", "mother", "parents", "parenting", "wife", "husband", "marriage", "baby", "giveback", "give back", "giving back", "community", "nonprofit", "non profit", "charity", "donate", "donation", "foundation", "forthekids", "for the kids", "mentor", "mentorship", "youth", "church", "karaya foundation", "global abiding hope"]
+  },
+  "food": {
+    "label": "Food",
+    "keywords": ["food", "foodie", "restaurant", "restaurants", "recipe", "recipes", "cooking", "cook", "chef", "eat", "eating", "dinner", "lunch", "breakfast", "brunch", "bistro", "coffee", "steak", "pizza", "burger", "burgers", "wings", "sushi", "tacos", "dessert", "sipsandbites", "sips and bites", "mukbang", "taste test"]
+  },
+  "other": {
+    "label": "Other",
+    "keywords": []
+  }
+}

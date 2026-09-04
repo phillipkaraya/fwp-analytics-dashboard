@@ -1,16 +1,19 @@
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import type { HighValueComment } from "@/lib/types";
+import { fmtDate } from "@/lib/format";
 
 interface UnrepliedProps {
   comments: HighValueComment[];
+  /** Newest comment date in the dataset; comments are not re-scraped yet. */
+  asOf?: string;
 }
 
-export function HighValueQuestions({ comments }: UnrepliedProps) {
+export function HighValueQuestions({ comments, asOf }: UnrepliedProps) {
   return (
     <Section
       title="High-Value Unreplied Questions"
-      hint={`${comments.length} questions with engagement, awaiting reply`}
+      hint={`${comments.length} questions with engagement, awaiting reply${asOf ? ` · comments through ${fmtDate(asOf)}` : ""}`}
       bodyClassName="max-h-[480px] overflow-y-auto pr-1"
     >
       <ul className="space-y-3">

@@ -58,7 +58,10 @@ export function Insights() {
       <div className="grid gap-4 lg:grid-cols-2">
         {a.viralPosts && <ViralPosts posts={a.viralPosts} />}
         {a.highValueComments && (
-          <HighValueQuestions comments={a.highValueComments} />
+          <HighValueQuestions
+            comments={a.highValueComments}
+            asOf={a.dataAsOf?.comments}
+          />
         )}
       </div>
 
@@ -94,6 +97,7 @@ export function Insights() {
         <Superfans
           commenters={a.topCommenters}
           overlap={a.audienceOverlap}
+          asOf={a.dataAsOf?.comments}
         />
       )}
 

@@ -3,19 +3,19 @@
 PIN-gated analytics dashboard for Phillip Karaya / Finance With Phil's
 cross-platform content (Instagram, TikTok, YouTube, Threads).
 
-**Live:** https://financewithphil.github.io/fwp-analytics-dashboard/
-**PIN:** 1973
+**Live:** https://phillipkaraya.github.io/fwp-analytics-dashboard/
+(PIN-gated; the PIN is not stored in this repo.)
 
 ## Stack
 
 - Next.js 16 (App Router) + TypeScript
 - Tailwind v4 with `@theme` design tokens
-- shadcn/ui components on top of Radix / Base UI
+- shadcn/ui components on top of Base UI
 - Recharts for line / bar / doughnut charts (custom 7×24 heatmap)
 - Zustand with `localStorage` persistence for client-side state
-- Newsreader (display) + Geist Sans (body) + JetBrains Mono (data),
-  self-hosted via `next/font`
+- System font stack (sans / mono) with the FWP light-blue palette
 - Static export to GitHub Pages (no SSR)
+- Python scraper + analyzer in `scrape/` (see `scrape/README.md`)
 
 ## Project layout
 
@@ -24,22 +24,24 @@ app/                     Next.js App Router routes (one per tab)
 components/
   charts/                Reusable primitives — KpiCard, LineChart,
                          BarChart, DoughnutChart, PlatformBadge, Section
-  layout/                AppShell, Nav, AuthGate, PinWall, DataStatusBar
-  overview/              Overview tab composition (8 sections)
-  insights/              Insights tab composition (12 sections)
-  posts/, comments/      Tab implementations
-  calendar/, deals/      Tab implementations
-  creators/, manychat/   Tab implementations
-  thumbnails/, studio/   Tab implementations (local-server-aware)
+  layout/                AppShell, Nav, AuthGate, PinWall, DataStatusBar,
+                         ScrapeDialog (Refresh data)
+  overview/              Overview tab (KPIs, platform charts, top posts)
+  posts/, comments/      Post Analysis and Comments tabs
+  insights/              Insights tab (12 sections from analytics.json)
+  vault/                 Content Vault tab (posts grouped by topic)
+  deals/                 Brand Deals tab (Zustand-only)
+  content-analyzer/      Local Video Vision integration (localhost:3001)
+  montage/               OpenMontage Studio integration (localhost:8484)
 lib/
   data.ts                Typed JSON loaders for /public/data/*
   derive.ts              Pure helpers (totals, byPlatform, cadence, etc.)
   store.ts               Zustand store with localStorage persistence
   auth.ts                SHA-256 PIN check (Web Crypto API)
   format.ts              fmt(), fmtPct(), fmtDate(), platformLabel
-  fonts.ts               next/font configuration
-  studio-server.ts       Client for the optional Python Studio server
-  types.ts               Shared TypeScript types
+  scrape-client.ts       Client for scrape/server.py (Refresh data button)
+  types.ts               Shared TypeScript types (mirror the JSON shapes)
+scrape/                  Python scraper, analyzer, topic map — scrape/README.md
 public/data/             Real scraped JSON data (read-only at runtime)
 v1-archive/              Original single-file dashboard preserved as-is
 ```
@@ -53,28 +55,31 @@ pnpm build             # static export to out/
 pnpm lint
 ```
 
-The PIN gate falls back to "1973" in development. To override, set
+The PIN gate falls back to the v1 PIN in development. To override, set
 `NEXT_PUBLIC_DASHBOARD_PIN_HASH` (SHA-256 hex) in `.env.local`.
 
 ## Refreshing data
 
 The dashboard reads `public/data/*.json` at runtime via fetch. To
-update:
+update, with the shared Chrome running and logged in:
 
-1. Run the v1 scraping flow (Chrome CDP on port 9222) — see
-   `v1-archive/` for the original Python scripts.
-2. Replace the JSON files in `public/data/`.
-3. Commit and push — GitHub Pages will auto-redeploy in ~60s.
+```bash
+python3 scrape/run.py            # incremental: only new posts
+python3 scrape/run.py --full     # master sweep: refresh every post
+git add public/data && git commit -m "Refresh data" && git push
+```
 
-## Optional local Studio server
+`run.py` scrapes, then regenerates `analytics.json`, `content_vault.json`
+and `follower_history.json`. GitHub Pages redeploys in about a minute.
+Full details, including how the incremental stop works, are in
+`scrape/README.md`.
 
-Two tabs (Thumbnails, Content Studio) integrate with a local Python
-server at `localhost:5555` for AI background generation, video
-analysis, and one-click publishing. Both tabs detect when the server
-is offline and degrade gracefully — caption editing, queue management,
-and canvas-based thumbnail variations all work without it.
+## Optional local tools
 
-To run the server, see `v1-archive/studio_server.py`.
+Two tabs integrate with local services and degrade gracefully when they
+are offline: Content Analyzer (Video Vision API on `localhost:3001`) and
+Montage Studio (OpenMontage on `localhost:8484` or a Cloudflare tunnel).
+The Refresh data button talks to `scrape/server.py` on `localhost:5556`.
 
 ## Deploy
 

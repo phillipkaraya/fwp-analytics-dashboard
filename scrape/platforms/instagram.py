@@ -1,21 +1,25 @@
 """
 Instagram scraper.
 
-Strategy: navigate Chrome to instagram.com/<handle>/ so the session cookies
-are loaded, then run fetch() in the page context via CDP Runtime.evaluate.
-The page handles auth automatically — no header replay needed.
+Strategy (since 2026-09-04): open instagram.com/<handle>/ in our own tab,
+hook window.fetch + XMLHttpRequest so every /graphql/query response body is
+captured, reload so the first page flows through the hook, then scroll to
+let Instagram's own React app paginate. Posts are parsed out of
+`data.xdt_api__v1__feed__user_timeline_graphql_connection.edges[].node`.
 
-Endpoints used:
-    GET /api/v1/users/web_profile_info/?username=<handle>   -> {data: {user: {id, full_name, edge_owner_to_timeline_media: {count}, ...}}}
-    GET /api/v1/feed/user/<pk>/?count=12[&max_id=<cursor>]  -> {items: [...], more_available, next_max_id}
+Why not /api/v1/feed/user/<pk>/ like before: www.instagram.com now answers
+that (and web_profile_info) with 429 / an HTML shell for scripted calls,
+even from a logged-in tab. Letting the page make its own requests sidesteps
+auth headers, doc_id rotation and the throttle entirely.
 
-Each item has play_count (for reels), like_count, comment_count, caption,
-taken_at (epoch), etc.
+Follower count comes from the profile page's og:description meta
+("10.9K Followers, 5,751 Following, 675 Posts"), no API call needed.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import time
 from pathlib import Path
 from typing import Any
@@ -25,21 +29,183 @@ from scrape.handles import HANDLES
 from scrape.incremental import STOP_AFTER_KNOWN, load_existing, merge
 
 DATA_FILE = Path(__file__).resolve().parent.parent.parent / "public" / "data" / "instagram_posts.json"
+HANDLE = HANDLES["instagram"]
+PAGE_URL = f"https://www.instagram.com/{HANDLE}/"
+TIMELINE_KEYS = (
+    "xdt_api__v1__feed__user_timeline_graphql_connection",
+    "xdt_api__v1__feed__user_timeline_graphql_connection_v2",
+)
+
+# Captures every /graphql/query response (fetch AND XHR) into window.__FWP_IG.
+_INSTALL_HOOK = """
+(function() {
+  if (window.__FWP_IG_HOOK__) return 'already';
+  window.__FWP_IG_HOOK__ = true;
+  window.__FWP_IG = [];
+  function keep(url, text) {
+    try {
+      if (url.indexOf('graphql') >= 0 && text && text.length > 2000) {
+        window.__FWP_IG.push({ at: Date.now(), length: text.length, body: text });
+        if (window.__FWP_IG.length > 300) window.__FWP_IG.shift();
+      }
+    } catch (e) {}
+  }
+  const origFetch = window.fetch;
+  window.fetch = function(input, init) {
+    const url = (typeof input === 'string') ? input : ((input && input.url) || '');
+    return origFetch.apply(this, arguments).then(function(res) {
+      try { res.clone().text().then(function(t) { keep(url, t); }); } catch (e) {}
+      return res;
+    });
+  };
+  const origOpen = XMLHttpRequest.prototype.open;
+  const origSend = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.open = function(method, url) {
+    this.__fwp_url = url;
+    return origOpen.apply(this, arguments);
+  };
+  XMLHttpRequest.prototype.send = function(body) {
+    this.addEventListener('load', () => { keep(this.__fwp_url || '', this.responseText || ''); });
+    return origSend.apply(this, arguments);
+  };
+  // The FIRST grid page is server-embedded (RelayPrefetchedStreamCache in a
+  // <script type="application/json"> tag) and never goes through fetch.
+  // Harvest it too, otherwise the newest 12 posts are invisible and the
+  // incremental stop fires on page two.
+  window.__FWP_IG_harvest = function() {
+    var n = 0;
+    document.querySelectorAll('script[type="application/json"]').forEach(function(s) {
+      var t = s.textContent || '';
+      if (t.indexOf('user_timeline_graphql_connection') >= 0) { keep('embedded:graphql', t); n++; }
+    });
+    return n;
+  };
+  window.__FWP_IG_harvest();
+  return 'installed';
+})()
+"""
+
+_DRAIN_BODIES = """
+(function() {
+  const items = window.__FWP_IG || [];
+  window.__FWP_IG = [];
+  return items;
+})()
+"""
+
+_FOLLOWERS_RE = re.compile(r"([\d.,]+)\s*([KM]?)\s+Followers", re.I)
+
 APP_ID = "936619743392459"
-PAGE_URL = f"https://www.instagram.com/{HANDLES['instagram']}/"
+# The timeline query hides play counts on reels (view_count null). The
+# per-media info endpoint still answers from a logged-in tab (verified
+# 2026-09-04: 200 + play_count), so we top up zero-view reels with it.
+ENRICH_CAP_INCREMENTAL = 60
+ENRICH_CAP_FULL = 200
 
 
-def _evaluate_fetch(cdp: CDP, path: str) -> dict:
-    expr = (
-        f"fetch({json.dumps(path)}, {{ headers: {{ 'X-IG-App-ID': {json.dumps(APP_ID)} }}, credentials: 'include' }})"
-        ".then(r => r.text()).then(t => { try { return JSON.parse(t); } catch(e) { return { __error: 'parse', body: t.slice(0,500) }; } })"
-    )
-    return cdp.evaluate(expr, await_promise=True)
+def _enrich_views(cdp: CDP, posts: list[dict], cap: int, on_progress=None) -> int:
+    """Fill in views (and bump likes/comments) for reels/videos that have
+    views == 0, newest first, up to `cap` media-info calls. Returns count."""
+    targets = [
+        p for p in posts
+        if not p.get("views") and p.get("type") in ("reel", "video") and p.get("id", "").startswith("ig_")
+    ]
+    targets.sort(key=lambda p: p.get("date") or "", reverse=True)
+    done = 0
+    for p in targets[:cap]:
+        pk = p["id"][3:].split("_")[0]
+        expr = (
+            f"fetch('/api/v1/media/{pk}/info/', {{ headers: {{ 'X-IG-App-ID': '{APP_ID}' }}, credentials: 'include' }})"
+            ".then(r => r.text().then(t => { try { const d = JSON.parse(t); const it = (d.items || [])[0] || {}; "
+            "return { status: r.status, play: it.play_count || it.ig_play_count || it.view_count || 0, like: it.like_count || 0, comment: it.comment_count || 0 }; }"
+            " catch (e) { return { status: r.status, error: 'parse' }; } }))"
+            ".catch(e => ({ status: 0, error: String(e) }))"
+        )
+        try:
+            r = cdp.evaluate(expr, await_promise=True) or {}
+        except CDPError:
+            break
+        if r.get("status") != 200:
+            # Throttled or blocked: stop rather than hammer the endpoint.
+            if on_progress:
+                on_progress("view enrichment stopped", {"status": r.get("status"), "done": done})
+            break
+        views = int(r.get("play") or 0)
+        if views:
+            p["views"] = views
+            p["likes"] = max(int(p.get("likes") or 0), int(r.get("like") or 0))
+            p["comments"] = max(int(p.get("comments") or 0), int(r.get("comment") or 0))
+            p["engagementRate"] = f"{(p['likes'] + p['comments']) / views * 100:.2f}"
+        done += 1
+        time.sleep(0.45)
+    if on_progress and done:
+        on_progress("views enriched", {"posts": done, "remainingZeroView": max(0, len(targets) - done)})
+    return done
+
+
+def _parse_compact(num: str, suffix: str) -> int:
+    try:
+        n = float(num.replace(",", ""))
+    except ValueError:
+        return 0
+    mult = {"k": 1_000, "m": 1_000_000}.get(suffix.lower(), 1)
+    return int(n * mult)
+
+
+def _followers_from_meta(cdp: CDP) -> int:
+    desc = cdp.evaluate(
+        "(document.querySelector('meta[property=\"og:description\"]') || {}).content || ''"
+    ) or ""
+    m = _FOLLOWERS_RE.search(str(desc))
+    return _parse_compact(m.group(1), m.group(2)) if m else 0
+
+
+def _walk(obj: Any):
+    """Yield every dict nested anywhere inside obj."""
+    if isinstance(obj, dict):
+        yield obj
+        for v in obj.values():
+            yield from _walk(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from _walk(v)
+
+
+def _timeline_nodes(body: str) -> tuple[list[dict], bool | None]:
+    """Return (nodes, has_next_page) from a captured graphql body, or ([], None).
+
+    Handles both the plain fetch response ({data: {xdt_api__...}}) and the
+    server-embedded Relay cache, where the same connection sits several
+    levels deep inside a `require` array."""
+    try:
+        blob = json.loads(body)
+    except json.JSONDecodeError:
+        return [], None
+    nodes: list[dict] = []
+    has_next: bool | None = None
+    seen: set[str] = set()
+    for d in _walk(blob):
+        for key in TIMELINE_KEYS:
+            conn = d.get(key)
+            if isinstance(conn, dict) and isinstance(conn.get("edges"), list):
+                for e in conn["edges"]:
+                    node = e.get("node") if isinstance(e, dict) else None
+                    if isinstance(node, dict):
+                        nid = str(node.get("id") or node.get("pk") or "")
+                        if nid and nid not in seen:
+                            seen.add(nid)
+                            nodes.append(node)
+                pi = conn.get("page_info") or {}
+                if has_next is None and "has_next_page" in pi:
+                    has_next = pi.get("has_next_page")
+    return nodes, has_next
 
 
 def _parse_post(item: dict) -> dict:
-    """Convert Instagram media object to our Post schema."""
-    pk = item.get("id") or item.get("pk")
+    """Convert an Instagram media node to our Post schema (same shape the
+    old /api/v1/feed/user items had, so ids stay stable: ig_<pk>_<owner>)."""
+    pk = item.get("pk")
+    node_id = item.get("id") or (f"{pk}_{item.get('owner_id')}" if pk and item.get("owner_id") else pk)
     code = item.get("code")
     caption = ((item.get("caption") or {}).get("text")) or ""
     media_type = item.get("media_type")  # 1=image, 2=video, 8=carousel
@@ -55,7 +221,7 @@ def _parse_post(item: dict) -> dict:
     eng = ((likes + comments) / views * 100) if views else 0
     hashtags = " ".join(t for t in caption.split() if t.startswith("#"))
     return {
-        "id": f"ig_{pk}",
+        "id": f"ig_{node_id}",
         "url": f"https://www.instagram.com/p/{code}/" if code else "",
         "title": caption.split("\n", 1)[0][:120] if caption else "",
         "caption": caption,
@@ -76,76 +242,119 @@ def _parse_post(item: dict) -> dict:
     }
 
 
-def scrape(max_pages: int = 60, on_progress=None) -> dict:
-    """Scrape posts from instagram.com/<handle>/ via Chrome CDP.
+def scrape(max_pages: int = 60, on_progress=None, full: bool = False) -> dict:
+    """Scrape posts from instagram.com/<handle>/ by capturing the page's own
+    GraphQL timeline responses while scrolling.
 
-    Incremental: stops paginating after STOP_AFTER_KNOWN consecutive posts
-    that already exist in public/data/instagram_posts.json. New posts are
-    merged on top of the existing list (preserving engagement data from
-    older scrapes).
+    Incremental (default): stops after STOP_AFTER_KNOWN consecutive posts
+    that already exist locally. full=True (master sweep) scrolls until the
+    grid is exhausted, refreshing metrics on every post.
     """
-    handle = HANDLES["instagram"]
     existing, known_ids = load_existing(DATA_FILE)
     cdp = CDP()
-    try:
-        tab = cdp.open_tab(PAGE_URL)
-        cdp.attach(tab)
-        cdp.wait_for_load(timeout=20)
+    posts_by_id: dict[str, dict] = {}
+    consecutive_known = 0
+    stopped_early = False
+    followers = 0
+    saw_timeline = False
 
-        if on_progress:
-            on_progress("resolving user", {"handle": handle, "existingPosts": len(existing)})
-        profile = _evaluate_fetch(cdp, f"/api/v1/users/web_profile_info/?username={handle}")
-        if not profile or "data" not in profile:
-            raise CDPError(f"web_profile_info returned: {str(profile)[:200]}")
-        user = profile["data"]["user"]
-        pk = user["id"]
-        full_name = user.get("full_name") or handle
-
-        new_posts: list[dict] = []
-        cursor: str | None = None
-        consecutive_known = 0
-        stopped_early = False
-        for page_idx in range(max_pages):
-            path = f"/api/v1/feed/user/{pk}/?count=12"
-            if cursor:
-                path += f"&max_id={cursor}"
-            feed = _evaluate_fetch(cdp, path)
-            if not feed:
-                break
-            items = feed.get("items") or []
-            for it in items:
-                p = _parse_post(it)
+    def drain() -> int:
+        nonlocal consecutive_known, saw_timeline
+        new_in_round = 0
+        for entry in cdp.evaluate(_DRAIN_BODIES) or []:
+            nodes, _has_next = _timeline_nodes(entry.get("body") or "")
+            if nodes:
+                saw_timeline = True
+            for node in nodes:
+                p = _parse_post(node)
                 if p["id"] in known_ids:
                     consecutive_known += 1
                 else:
                     consecutive_known = 0
-                    new_posts.append(p)
+                if p["id"] not in posts_by_id:
+                    posts_by_id[p["id"]] = p
+                    new_in_round += 1
+        return new_in_round
+
+    try:
+        cdp.new_tab(PAGE_URL)
+        cdp.wait_for_load(timeout=20, expect_url_substring=HANDLE)
+        time.sleep(1.5)
+        followers = _followers_from_meta(cdp)
+
+        # Register the hook to run before any page script on the next
+        # document, then reload. Instagram fires the first timeline fetch
+        # during load; a hook installed after load misses the newest 12
+        # posts and the incremental stop then fires on page two.
+        cdp.add_init_script(_INSTALL_HOOK)
+        cdp.evaluate("window.location.reload()")
+        time.sleep(0.5)
+        cdp.wait_for_load(timeout=20, expect_url_substring=HANDLE)
+        cdp.evaluate(_INSTALL_HOOK)  # no-op if the init script ran; safety net otherwise
+        time.sleep(2.5)
+        embedded = cdp.evaluate("window.__FWP_IG_harvest ? window.__FWP_IG_harvest() : 0") or 0
+        if not followers:
+            followers = _followers_from_meta(cdp)
+
+        logged_out = cdp.evaluate(
+            "!!document.querySelector('input[name=\"username\"]') || /Log in/.test(document.title)"
+        )
+        if logged_out:
+            raise CDPError("Instagram shows the login wall — sign in to instagram.com in the shared Chrome and rerun.")
+
+        if on_progress:
+            on_progress("hook installed", {
+                "handle": HANDLE, "existingPosts": len(existing),
+                "followers": followers, "embeddedPayloads": embedded,
+            })
+
+        stale_rounds = 0
+        for round_idx in range(max_pages):
+            new_in_round = drain()
             if on_progress:
-                on_progress("paginating", {
-                    "page": page_idx + 1,
-                    "newPosts": len(new_posts),
+                on_progress("scrolling", {
+                    "round": round_idx + 1,
+                    "newPosts": len(posts_by_id),
+                    "newInRound": new_in_round,
                     "consecutiveKnown": consecutive_known,
                 })
-            if known_ids and consecutive_known >= STOP_AFTER_KNOWN:
+            if not full and known_ids and consecutive_known >= STOP_AFTER_KNOWN:
                 stopped_early = True
                 break
-            if not feed.get("more_available"):
-                break
-            cursor = feed.get("next_max_id")
-            if not cursor:
-                break
-            time.sleep(0.6)  # be polite
+            if new_in_round == 0 and round_idx > 0:
+                stale_rounds += 1
+                if stale_rounds >= 5:
+                    break
+            else:
+                stale_rounds = 0
+            cdp.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            time.sleep(2.5)
+
+        drain()  # anything left in the buffer
+
+        if not saw_timeline:
+            raise CDPError(
+                "No timeline GraphQL responses captured on the profile page. "
+                "Instagram may have changed its query names (see TIMELINE_KEYS) or the profile did not render."
+            )
+
+        new_posts = list(posts_by_id.values())
+        merged = merge(existing, new_posts)
+        # Top up play counts while the logged-in tab is still open.
+        _enrich_views(cdp, merged, ENRICH_CAP_FULL if full else ENRICH_CAP_INCREMENTAL, on_progress)
     finally:
+        cdp.close_owned()
         cdp.detach()
 
-    merged = merge(existing, new_posts)
+    merged.sort(key=lambda p: p.get("date", "") or "0", reverse=True)
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps(merged, indent=2))
 
+    new_count = sum(1 for p in new_posts if p["id"] not in known_ids)
     return {
         "totalScraped": len(merged),
-        "newPosts": len(new_posts),
+        "newPosts": new_count,
         "stoppedEarly": stopped_early,
         "lastPostId": merged[0]["id"] if merged else None,
-        "fullName": full_name,
+        "followers": followers,
     }
