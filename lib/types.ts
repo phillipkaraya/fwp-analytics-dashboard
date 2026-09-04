@@ -241,29 +241,6 @@ export interface ContentVault {
   byPost: Record<string, string[]>; // postId -> category slugs
 }
 
-export interface Deal {
-  id: string;
-  brand: string;
-  platform: Platform | "multi";
-  status:
-    | "prospect"
-    | "outreach"
-    | "negotiation"
-    | "contracted"
-    | "delivered"
-    | "paid"
-    | "completed";
-  value: number;
-  startDate?: string;
-  endDate?: string;
-  description?: string;
-  deliverables?: string[];
-  pocEmail?: string;
-  pocPhone?: string;
-  postUrl?: string;
-  notes?: string;
-}
-
 export interface CreatorRecord {
   id: string;
   handle: string;

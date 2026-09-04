@@ -1,18 +1,14 @@
-// Single Zustand store for client-side state (Brand Deals + Creator Research).
-// Calendar / ManyChat / Content Studio / Thumbnails were removed in 2026-04-25
-// after Phil scoped the dashboard down to the analytics-only surfaces.
+// Single Zustand store for client-side state. Only Creator Research still
+// persists here (the hidden /creators route). Brand Deals moved to Monday
+// and was removed from the dashboard on 2026-09-04; Calendar / ManyChat /
+// Content Studio / Thumbnails went in April 2026.
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { CreatorRecord, Deal } from "./types";
+import type { CreatorRecord } from "./types";
 
 interface DashboardState {
-  deals: Deal[];
   creators: CreatorRecord[];
-
-  addDeal: (deal: Deal) => void;
-  updateDeal: (id: string, patch: Partial<Deal>) => void;
-  removeDeal: (id: string) => void;
 
   addCreator: (creator: CreatorRecord) => void;
   removeCreator: (id: string) => void;
@@ -21,17 +17,7 @@ interface DashboardState {
 export const useDashboardStore = create<DashboardState>()(
   persist(
     (set) => ({
-      deals: [],
       creators: [],
-
-      addDeal: (deal) =>
-        set((s) => ({ deals: [...s.deals, deal] })),
-      updateDeal: (id, patch) =>
-        set((s) => ({
-          deals: s.deals.map((d) => (d.id === id ? { ...d, ...patch } : d)),
-        })),
-      removeDeal: (id) =>
-        set((s) => ({ deals: s.deals.filter((d) => d.id !== id) })),
 
       addCreator: (creator) =>
         set((s) => ({ creators: [...s.creators, creator] })),
@@ -41,7 +27,14 @@ export const useDashboardStore = create<DashboardState>()(
     {
       name: "fwp_dashboard_v2",
       storage: createJSONStorage(() => localStorage),
-      version: 1,
+      version: 2,
+      // v1 persisted a `deals` array. Strip it so older browsers do not carry
+      // a ghost slice around forever.
+      migrate: (persisted) => {
+        const state = { ...(persisted as Record<string, unknown>) };
+        delete state.deals;
+        return state as unknown as DashboardState;
+      },
     },
   ),
 );

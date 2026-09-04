@@ -26,13 +26,11 @@ components/
                          BarChart, DoughnutChart, PlatformBadge, Section
   layout/                AppShell, Nav, AuthGate, PinWall, DataStatusBar,
                          ScrapeDialog (Refresh data)
-  overview/              Overview tab (KPIs, platform charts, top posts)
+  overview/              Overview tab (30-day hero, platform strip,
+                         activity chart, topics ribbon, top posts)
   posts/, comments/      Post Analysis and Comments tabs
-  insights/              Insights tab (12 sections from analytics.json)
+  insights/              Insights tab (sections from analytics.json)
   vault/                 Content Vault tab (posts grouped by topic)
-  deals/                 Brand Deals tab (Zustand-only)
-  content-analyzer/      Local Video Vision integration (localhost:3001)
-  montage/               OpenMontage Studio integration (localhost:8484)
 lib/
   data.ts                Typed JSON loaders for /public/data/*
   derive.ts              Pure helpers (totals, byPlatform, cadence, etc.)
@@ -74,12 +72,10 @@ and `follower_history.json`. GitHub Pages redeploys in about a minute.
 Full details, including how the incremental stop works, are in
 `scrape/README.md`.
 
-## Optional local tools
+## Optional local tool
 
-Two tabs integrate with local services and degrade gracefully when they
-are offline: Content Analyzer (Video Vision API on `localhost:3001`) and
-Montage Studio (OpenMontage on `localhost:8484` or a Cloudflare tunnel).
-The Refresh data button talks to `scrape/server.py` on `localhost:5556`.
+The Refresh data button talks to `scrape/server.py` on `localhost:5556`
+and degrades gracefully when the service is offline.
 
 ## Deploy
 

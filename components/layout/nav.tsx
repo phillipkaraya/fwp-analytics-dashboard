@@ -10,9 +10,6 @@ const TABS = [
   { href: "/comments", label: "Comments" },
   { href: "/insights", label: "Insights" },
   { href: "/vault", label: "Content Vault" },
-  { href: "/deals", label: "Brand Deals" },
-  { href: "/content-analyzer", label: "Content Analyzer" },
-  { href: "/montage", label: "Montage Studio" },
 ] as const;
 
 export function Nav() {

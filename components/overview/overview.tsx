@@ -8,7 +8,6 @@ import { PostActivity } from "./post-activity";
 import { PlatformCharts } from "./platform-charts";
 import { PlatformStatusRow } from "./platform-status";
 import { ResponseRate } from "./response-rate";
-import { RevenueSummary } from "./revenue";
 import { TopPosts } from "./top-posts";
 
 export function Overview() {
@@ -59,7 +58,6 @@ export function Overview() {
       <PostActivity posts={posts} />
       <PlatformCharts posts={posts} />
       <ResponseRate comments={comments} />
-      <RevenueSummary />
       <TopPosts posts={posts} />
     </div>
   );

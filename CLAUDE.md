@@ -19,16 +19,18 @@ shadcn/ui in April 2026 (see `v1-archive/` for the original).
 ## Tabs (and where they live)
 | Tab | Route | Component | Reads from |
 |---|---|---|---|
-| Overview | `/` | `components/overview/overview.tsx` | posts × 4, comments, scrape_state |
+| Overview | `/` | `components/overview/overview.tsx` | posts × 4, scrape_state, follower_history, content_vault |
 | Post Analysis | `/posts` | `components/posts/posts.tsx` | posts × 4 |
 | Comments | `/comments` | `components/comments/comments.tsx` | comments |
 | Insights | `/insights` | `components/insights/insights.tsx` | analytics, follow_data |
 | Content Vault | `/vault` | `components/vault/vault.tsx` | content_vault + posts × 4 |
-| Brand Deals | `/deals` | `components/deals/deals.tsx` | Zustand only |
-| Content Analyzer | `/content-analyzer` | `components/content-analyzer/content-analyzer.tsx` | local Video Vision API (:3001) |
-| Montage Studio | `/montage` | `components/montage/montage.tsx` | local OpenMontage (:8484) or tunnel |
 
 `/creators` still builds but is not in the nav (removed 2026-04-26).
+Brand Deals, Content Analyzer and Montage Studio were removed 2026-09-04:
+deals live in Monday now, and the other two needed a local server that
+belongs in a standalone tool. Overview reads posts × 4, scrape_state,
+follower_history and content_vault; the comments data moved to the
+Comments tab.
 
 ## Design system (don't drift)
 - Background: `#eaf3fb` (light brand blue) — non-negotiable, this is THE brand move
@@ -37,9 +39,11 @@ shadcn/ui in April 2026 (see `v1-archive/` for the original).
 - Text: `#0a1628` ink, `#334155` soft, `#64748b` muted
 - Positive `#16a34a`, Negative `#dc2626`, Warn `#d97706` — sparse use only
 - Per-platform colors: IG `#c13584`, TT `#111111`, YT `#cc0000`, TH `#0a1628`
-- Display font: **Newsreader** (italic for emphasis on "Analytics" word)
-- Body: **Geist Sans**
-- Mono: **JetBrains Mono** for eyebrows, KPI labels, data, hashtags
+- Type: system sans for display and body, system mono for eyebrows, KPI
+  labels, data and hashtags. Newsreader/Geist were tried and reverted;
+  `font-display` is just the sans stack with tighter tracking.
+- The Overview hero is the ONE dark band (`--ink` to `--brand-deep`).
+  Everything else stays light cards on the blue background.
 - Card borders: 8px radius. Data tables: **0px radius** — sharp.
 - KPI numbers use `tabular` class for tabular figures.
 
@@ -72,11 +76,9 @@ slop palette (`#6c5ce7` purple).
 - Set the GH repo secret `DASHBOARD_PIN_HASH` for production.
 
 ## Local tools (optional)
-Content Analyzer calls the Video Vision API on `localhost:3001`; Montage
-Studio calls OpenMontage on `localhost:8484` (or a Cloudflare tunnel);
-the Refresh data button calls `scrape/server.py` on `localhost:5556`.
-All three detect when the service is offline and degrade gracefully —
-do not break this contract when extending.
+The Refresh data button calls `scrape/server.py` on `localhost:5556`. It
+detects when the service is offline and degrades gracefully; do not break
+this contract when extending.
 
 ## Deploy
 - GH Actions: `.github/workflows/deploy.yml` builds with
@@ -85,12 +87,11 @@ do not break this contract when extending.
 - Add `.nojekyll` to the artifact (already in the workflow).
 
 ## Persisted client state (Zustand)
-Single store under `fwp_dashboard_v2`:
-- `deals` (Brand Deals tab)
-- `flows` (ManyChat)
-- `calendar` (Content Calendar)
-- `creators` (Creator Research)
-- `contentQueue` (Content Studio)
-- `studioFolder` (Studio source path)
+Single store under `fwp_dashboard_v2` (persist version 2):
+- `creators` (Creator Research, hidden `/creators` route)
+
+Version 2 strips the old `deals` slice on rehydrate. Everything else the
+store once held (flows, calendar, contentQueue, studioFolder) was removed
+with its tab.
 
 PIN auth uses `sessionStorage["fwp_auth"]`, separate from the store.
