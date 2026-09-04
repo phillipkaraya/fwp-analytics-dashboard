@@ -9,6 +9,18 @@ export function fmt(n: number | undefined | null): string {
   return String(n);
 }
 
+/** Display-size variant of fmt(): drops the decimal once a value has three
+ *  leading digits ("545K", "128M") so hero numerals never exceed five glyphs. */
+export function fmtShort(n: number | undefined | null): string {
+  if (n === undefined || n === null || Number.isNaN(n)) return "—";
+  const a = Math.abs(n);
+  if (a >= 100_000_000) return Math.round(n / 1_000_000) + "M";
+  if (a >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+  if (a >= 100_000) return Math.round(n / 1_000) + "K";
+  if (a >= 1_000) return (n / 1_000).toFixed(1) + "K";
+  return String(n);
+}
+
 export function fmtPct(
   n: number | undefined | null,
   digits = 1,

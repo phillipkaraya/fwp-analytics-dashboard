@@ -15,7 +15,8 @@ import { Superfans } from "./superfans";
 import { HookAnalysis } from "./hooks";
 import { HighValueQuestions } from "./unreplied";
 import { DoesntFollowBack } from "./follow-back";
-import { InsightsSummary } from "./summary";
+import { HeroPanel, HeroRow, PageHero } from "@/components/layout/page-hero";
+import { fmt, fmtDate, fmtShort } from "@/lib/format";
 
 export function Insights() {
   const [a, setA] = useState<AnalyticsBundle | null>(null);
@@ -34,27 +35,69 @@ export function Insights() {
   }, []);
 
   if (loading || !a) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted">
-          Loading insights
-        </p>
-      </div>
-    );
+    return <PageHero eyebrow="Loading insights" title="Insights" />;
   }
 
-  return (
-    <div className="space-y-8">
-      <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
-          Patterns · Behaviors · Opportunities
-        </p>
-        <h2 className="font-display mt-2 text-3xl font-medium text-ink">
-          Insights
-        </h2>
-      </header>
+  const topHook = a.hookTypes
+    ? [...a.hookTypes].sort((x, y) => y.avgViews - x.avgViews)[0]
+    : null;
+  const topHashtag = a.hashtagPerformance
+    ? [...a.hashtagPerformance].sort((x, y) => y.avgViews - x.avgViews)[0]
+    : null;
+  const overlap = a.audienceOverlap;
+  const overlapCount = Array.isArray(overlap?.crossPlatformUsers)
+    ? overlap.crossPlatformUsers.length
+    : 0;
 
-      <InsightsSummary data={a} />
+  return (
+    <>
+      <PageHero
+        eyebrow={`Patterns · behaviors · opportunities${
+          a.generatedAt ? ` · computed ${fmtDate(a.generatedAt)}` : ""
+        }`}
+        title="Insights"
+        lede="What the numbers say about what to make next, computed from every post and the comment snapshot."
+        stats={[
+          { label: "Viral posts", value: fmtShort(a.viralPosts?.length ?? 0), hint: "3× the platform average" },
+          { label: "Cross-posts", value: fmtShort(a.crossPosts?.length ?? 0), hint: "same idea on 2+ platforms" },
+          {
+            label: "Cross-platform fans",
+            value: fmtShort(overlapCount),
+            hint: overlap ? `of ${fmt(overlap.totalUniqueUsers)} unique commenters` : undefined,
+          },
+          {
+            label: "Unreplied questions",
+            value: fmtShort(a.highValueComments?.length ?? 0),
+            hint: "with engagement, still open",
+          },
+        ]}
+        aside={
+          <HeroPanel label="Standouts">
+            <ul className="mt-4 space-y-2.5">
+              <HeroRow label="Best hook">
+                <span className="font-medium capitalize">
+                  {topHook?.type?.replace(/_/g, " ") ?? "none"}
+                </span>
+                <span className="tabular w-16 text-right font-mono text-[11px] text-white/55">
+                  {topHook ? `${fmt(topHook.avgViews)} avg` : ""}
+                </span>
+              </HeroRow>
+              <HeroRow label="Top hashtag">
+                <span className="max-w-[160px] truncate font-medium">{topHashtag?.tag ?? "none"}</span>
+                <span className="tabular w-16 text-right font-mono text-[11px] text-white/55">
+                  {topHashtag ? `${fmt(topHashtag.avgViews)} avg` : ""}
+                </span>
+              </HeroRow>
+              <HeroRow label="Comments through">
+                <span className="tabular font-medium">
+                  {a.dataAsOf?.comments ? fmtDate(a.dataAsOf.comments) : "n/a"}
+                </span>
+              </HeroRow>
+            </ul>
+          </HeroPanel>
+        }
+      />
+      <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
       {/* Most actionable insights first: viral posts + hook library */}
       <div className="grid gap-4 lg:grid-cols-2">
@@ -114,6 +157,7 @@ export function Insights() {
       )}
 
       {follow && <DoesntFollowBack data={follow} />}
-    </div>
+      </div>
+    </>
   );
 }

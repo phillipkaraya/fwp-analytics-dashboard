@@ -3,8 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadAllPosts } from "@/lib/data";
 import type { Post, Platform } from "@/lib/types";
-import { PLATFORMS, toNum } from "@/lib/derive";
-import { fmt, fmtDate, fmtPct, platformLabel } from "@/lib/format";
+import { PLATFORMS, avgEngagementRate, byPlatform, toNum, totals } from "@/lib/derive";
+import { HeroPanel, HeroRow, PageHero } from "@/components/layout/page-hero";
+import { PlatformDot } from "@/components/charts/platform-badge";
+import { fmt, fmtDate, fmtPct, fmtShort, platformLabel } from "@/lib/format";
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import { LineChart } from "@/components/charts/line-chart";
@@ -70,26 +72,72 @@ export function Posts() {
     [filtered],
   );
 
+  // Hero numbers follow the filters, so narrowing to one platform or a search
+  // term re-states the headline for exactly that slice.
+  const slice = useMemo(() => {
+    const t = totals(filtered);
+    const grouped = byPlatform(filtered, (p) => p.platform);
+    return {
+      ...t,
+      engagement: avgEngagementRate(filtered),
+      perPlatform: PLATFORMS.map((pl) => ({
+        platform: pl,
+        posts: grouped[pl].length,
+        views: totals(grouped[pl]).views,
+      })),
+    };
+  }, [filtered]);
+
   if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted">
-          Loading posts
-        </p>
-      </div>
-    );
+    return <PageHero eyebrow="Loading posts" title="Post Analysis" />;
   }
 
   return (
-    <div className="space-y-8">
-      <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
-          {fmt(filtered.length)} of {fmt(posts.length)} posts
-        </p>
-        <h2 className="font-display mt-2 text-3xl font-medium text-ink">
-          Post Analysis
-        </h2>
-      </header>
+    <>
+      <PageHero
+        eyebrow={`${fmt(filtered.length)} of ${fmt(posts.length)} posts${
+          platform === "all" ? "" : ` · ${platformLabel[platform]}`
+        }${search.trim() ? ` · matching "${search.trim()}"` : ""}`}
+        title="Post Analysis"
+        lede="Every post the scraper knows about. Filter, sort, and click a row for the full detail."
+        stats={[
+          {
+            label: "Posts",
+            value: fmtShort(filtered.length),
+            hint: filtered.length === posts.length ? "all platforms" : `of ${fmt(posts.length)}`,
+          },
+          {
+            label: "Views",
+            value: fmtShort(slice.views),
+            hint: filtered.length ? `${fmt(Math.round(slice.views / filtered.length))} per post` : undefined,
+          },
+          { label: "Likes", value: fmtShort(slice.likes), hint: `${fmt(slice.comments)} comments` },
+          { label: "Avg engagement", value: fmtPct(slice.engagement), hint: "per post" },
+        ]}
+        aside={
+          <HeroPanel label="By platform">
+            <ul className="mt-4 space-y-2.5">
+              {slice.perPlatform.map((row) => (
+                <HeroRow
+                  key={row.platform}
+                  label={
+                    <>
+                      <PlatformDot platform={row.platform} className="ring-2 ring-white/20" />
+                      {platformLabel[row.platform]}
+                    </>
+                  }
+                >
+                  <span className="tabular font-medium">{fmt(row.posts)}</span>
+                  <span className="tabular w-16 text-right font-mono text-[11px] text-white/55">
+                    {fmt(row.views)} views
+                  </span>
+                </HeroRow>
+              ))}
+            </ul>
+          </HeroPanel>
+        }
+      />
+      <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
       <div className="flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4">
         <Field label="Search">
@@ -206,7 +254,8 @@ export function Posts() {
       </Section>
 
       <PostDetailDialog post={open} onClose={() => setOpen(null)} />
-    </div>
+      </div>
+    </>
   );
 }
 

@@ -5,9 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { loadAllPosts, loadContentVault } from "@/lib/data";
 import type { ContentVault, Platform, Post, VaultCategory } from "@/lib/types";
 import { PLATFORMS, toNum } from "@/lib/derive";
-import { fmt, fmtDate, platformLabel, platformShort } from "@/lib/format";
+import { fmt, fmtDate, fmtShort, platformLabel, platformShort } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { KpiCard } from "@/components/charts/kpi-card";
+import { HeroPanel, PageHero } from "@/components/layout/page-hero";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -142,54 +142,74 @@ export function Vault() {
 
   if (loading || !vault) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted">
-          Loading vault
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Loading vault"
+        title={
+          <>
+            Content <span className="italic">Vault</span>
+          </>
+        }
+      />
     );
   }
 
   const visible = filtered.slice(0, limit);
   const topics = vault.categories.filter((c) => c.slug !== "other");
+  const mostReach = [...topics].sort((a, b) => b.totalViews - a.totalViews).slice(0, 4);
 
   return (
-    <div className="space-y-8">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
-            {fmt(vault.totalPosts)} posts · {topics.length} topics
-            {vault.generatedAt && ` · filed ${fmtDate(vault.generatedAt)}`}
-          </p>
-          <h2 className="font-display mt-2 text-3xl font-medium text-ink">
+    <>
+      <PageHero
+        eyebrow={`${fmt(vault.totalPosts)} posts · ${topics.length} topics${
+          vault.generatedAt ? ` · filed ${fmtDate(vault.generatedAt)}` : ""
+        }`}
+        title={
+          <>
             Content <span className="italic">Vault</span>
-          </h2>
-          <p className="mt-2 max-w-xl text-sm text-ink-soft">
-            Every post, filed by topic from its caption and hashtags. Pick a
-            topic, narrow by platform, then copy the links or open any post
-            at the source.
-          </p>
-        </div>
-      </header>
-
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <KpiCard label="Topics" value={topics.length} emphasis="brand" />
-        <KpiCard
-          label="Posts filed"
-          value={fmt(vault.totalPosts - uncategorized)}
-          hint={`of ${fmt(vault.totalPosts)}`}
-        />
-        <KpiCard
-          label="Multi-topic"
-          value={fmt(multiTopic)}
-          hint="posts in 2+ topics"
-        />
-        <KpiCard
-          label="Unfiled"
-          value={fmt(uncategorized)}
-          hint="add keywords in scrape/categories.json"
-        />
-      </div>
+          </>
+        }
+        lede="Every post, filed by topic from its caption and hashtags. Pick a topic, narrow by platform, then copy the links or open any post at the source."
+        stats={[
+          { label: "Topics", value: fmtShort(topics.length), hint: "from scrape/categories.json" },
+          {
+            label: "Posts filed",
+            value: fmtShort(vault.totalPosts - uncategorized),
+            hint: `of ${fmt(vault.totalPosts)}`,
+          },
+          { label: "Multi-topic", value: fmtShort(multiTopic), hint: "posts in 2+ topics" },
+          { label: "Unfiled", value: fmtShort(uncategorized), hint: "add keywords to file them" },
+        ]}
+        aside={
+          <HeroPanel label="Most reach">
+            <ul className="mt-4 space-y-1">
+              {mostReach.map((c) => (
+                <li key={c.slug}>
+                  <button
+                    type="button"
+                    onClick={() => pick(c.slug)}
+                    aria-pressed={slug === c.slug}
+                    className={cn(
+                      "flex w-full items-center justify-between gap-3 rounded px-2 py-1.5 text-left text-sm transition",
+                      slug === c.slug ? "bg-white text-ink" : "text-white/85 hover:bg-white/10",
+                    )}
+                  >
+                    <span className="font-medium">{c.label}</span>
+                    <span
+                      className={cn(
+                        "tabular font-mono text-[11px]",
+                        slug === c.slug ? "text-ink-muted" : "text-white/55",
+                      )}
+                    >
+                      {fmt(c.count)} · {fmt(c.totalViews)} views
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </HeroPanel>
+        }
+      />
+      <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
       {/* Topic rail */}
       <nav aria-label="Topics" className="flex flex-wrap gap-2">
@@ -333,7 +353,8 @@ export function Vault() {
           />
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </>
   );
 }
 

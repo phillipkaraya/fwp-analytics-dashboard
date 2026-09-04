@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import { pickWindow } from "@/lib/derive";
 import type { ContentVault, FollowerSnapshot, Post, ScrapeState } from "@/lib/types";
+import { PageHero } from "@/components/layout/page-hero";
 import { Hero } from "./hero";
 import { PlatformStatusRow } from "./platform-status";
 import { TopicsRibbon } from "./topics-ribbon";
@@ -50,15 +51,7 @@ export function Overview() {
   const days = useMemo(() => pickWindow(posts), [posts]);
 
   if (loading || !scrape) {
-    return (
-      <div className="hero min-h-[320px] text-white">
-        <div className="mx-auto flex min-h-[320px] max-w-[1500px] items-center px-6">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/60">
-            Loading data
-          </p>
-        </div>
-      </div>
-    );
+    return <PageHero eyebrow="Loading data" title="Overview" />;
   }
 
   return (

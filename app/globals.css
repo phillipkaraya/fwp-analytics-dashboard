@@ -189,6 +189,9 @@
 .on-dark-down {
   color: color-mix(in oklab, var(--negative) 55%, white);
 }
+.on-dark-warn {
+  color: color-mix(in oklab, var(--warn) 60%, white);
+}
 
 /* Watermark ordinal stamped on a card by <Numbered n>. */
 .numbered::before {

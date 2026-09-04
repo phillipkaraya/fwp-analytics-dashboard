@@ -17,11 +17,11 @@ const PLATFORM_COLOR: Record<string, string> = {
   YouTube: "var(--yt)",
   Threads: "var(--th)",
 };
-import { fmt, fmtDate, fmtPct, platformLabel } from "@/lib/format";
+import { fmt, fmtDate, fmtPct, fmtShort, platformLabel } from "@/lib/format";
 import { StaleNote } from "@/components/layout/stale-note";
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
-import { KpiCard } from "@/components/charts/kpi-card";
+import { HeroPanel, HeroRow, PageHero } from "@/components/layout/page-hero";
 import { DoughnutChart } from "@/components/charts/doughnut-chart";
 import { BarChart } from "@/components/charts/bar-chart";
 import { Input } from "@/components/ui/input";
@@ -119,52 +119,72 @@ export function Comments() {
   }, [enriched]);
 
   if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted">
-          Loading comments
-        </p>
-      </div>
-    );
+    return <PageHero eyebrow="Loading comments" title="Comments" />;
   }
 
   return (
-    <div className="space-y-8">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
-            {fmt(filtered.length)} of {fmt(comments.length)} comments
-          </p>
-          <h2 className="font-display mt-2 text-3xl font-medium text-ink">
-            Comments
-          </h2>
-        </div>
-        <StaleNote
-          date={asOf}
-          label="Comments"
-          detail="No comment scraper yet, so this tab is a snapshot."
-        />
-      </header>
-
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <KpiCard
-          label="Response Rate"
-          value={fmtPct(stats.rate)}
-          hint={`${fmt(stats.responded)} replies of ${fmt(stats.total)}`}
-          emphasis="brand"
-        />
-        <KpiCard label="Total Comments" value={fmt(stats.total)} hint="across all posts" />
-        <KpiCard
-          label="Replies Sent"
-          value={fmt(stats.responded)}
-          hint={stats.responded === 0 ? "untapped engagement" : "from Phil"}
-        />
-        <KpiCard
-          label="Questions"
-          value={fmt(stats.sentiment.question)}
-          hint="awaiting reply"
-        />
-      </div>
+    <>
+      <PageHero
+        eyebrow={`${fmt(filtered.length)} of ${fmt(comments.length)} comments`}
+        title="Comments"
+        lede="What the audience said back, who Phil answered, and the questions still waiting."
+        stats={[
+          {
+            label: "Response rate",
+            value: fmtPct(stats.rate),
+            hint: `${fmt(stats.responded)} replies of ${fmt(stats.total)}`,
+          },
+          { label: "Total comments", value: fmtShort(stats.total), hint: "across all posts" },
+          {
+            label: "Replies sent",
+            value: fmtShort(stats.responded),
+            hint: stats.responded === 0 ? "untapped engagement" : "from Phil",
+          },
+          { label: "Questions", value: fmtShort(stats.sentiment.question), hint: "awaiting reply" },
+        ]}
+        footer={
+          <StaleNote
+            tone="dark"
+            date={asOf}
+            label="Comments"
+            detail="No comment scraper yet, so this tab is a snapshot."
+          />
+        }
+        aside={
+          <HeroPanel label="Sentiment">
+            <ul className="mt-4 space-y-2.5">
+              {(
+                [
+                  ["Positive", stats.sentiment.positive, "var(--positive)"],
+                  ["Question", stats.sentiment.question, "var(--brand)"],
+                  ["Neutral", stats.sentiment.neutral, "rgb(255 255 255 / 0.45)"],
+                  ["Negative", stats.sentiment.negative, "var(--negative)"],
+                ] as const
+              ).map(([name, n, color]) => (
+                <HeroRow
+                  key={name}
+                  label={
+                    <>
+                      <span
+                        aria-hidden
+                        className="inline-block h-1.5 w-1.5 rounded-full ring-2 ring-white/20"
+                        style={{ background: color }}
+                      />
+                      {name}
+                    </>
+                  }
+                >
+                  <span className="tabular font-medium">{fmt(n)}</span>
+                  <span className="tabular w-12 text-right font-mono text-[11px] text-white/55">
+                    {fmtPct(stats.total ? (n / stats.total) * 100 : 0, 0)}
+                  </span>
+                </HeroRow>
+              ))}
+            </ul>
+          </HeroPanel>
+        }
+      />
+      <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Section title="Response Rate by Platform" hint="Share of comments Phil replied to">
@@ -300,7 +320,8 @@ export function Comments() {
           </div>
         )}
       </Section>
-    </div>
+      </div>
+    </>
   );
 }
 
