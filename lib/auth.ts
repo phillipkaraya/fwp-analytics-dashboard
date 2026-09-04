@@ -27,6 +27,23 @@ export async function verifyPin(pin: string): Promise<boolean> {
   return hash === getExpectedHash();
 }
 
+// Same-tab sessionStorage writes do not fire the "storage" event, so the
+// gate subscribes here and mark/sign-out notify explicitly.
+const listeners = new Set<() => void>();
+
+export function subscribeAuth(listener: () => void): () => void {
+  listeners.add(listener);
+  window.addEventListener("storage", listener);
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener("storage", listener);
+  };
+}
+
+function notify(): void {
+  for (const l of listeners) l();
+}
+
 export function isAuthenticated(): boolean {
   if (typeof window === "undefined") return false;
   return sessionStorage.getItem(PIN_STORAGE_KEY) === "true";
@@ -35,9 +52,11 @@ export function isAuthenticated(): boolean {
 export function markAuthenticated(): void {
   if (typeof window === "undefined") return;
   sessionStorage.setItem(PIN_STORAGE_KEY, "true");
+  notify();
 }
 
 export function signOut(): void {
   if (typeof window === "undefined") return;
   sessionStorage.removeItem(PIN_STORAGE_KEY);
+  notify();
 }

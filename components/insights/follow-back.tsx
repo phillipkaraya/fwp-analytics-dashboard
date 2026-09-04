@@ -2,7 +2,8 @@
 
 import { Section } from "@/components/charts/section";
 import { useState } from "react";
-import { fmt, fmtDate, platformLabel, relativeTime } from "@/lib/format";
+import { fmt, platformLabel } from "@/lib/format";
+import { StaleNote } from "@/components/layout/stale-note";
 import type { FollowData, Platform } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -21,11 +22,7 @@ export function DoesntFollowBack({ data }: FollowBackProps) {
   return (
     <Section
       title="Doesn't Follow Back"
-      hint={
-        scrapedAt
-          ? `Snapshot from ${fmtDate(scrapedAt)} (${relativeTime(scrapedAt)}) — re-scrape to refresh`
-          : "Accounts you follow that don't follow you"
-      }
+      hint="Accounts you follow that do not follow you back"
       action={
         <div className="flex gap-1 rounded border border-border p-0.5">
           {TABS.map((t) => {
@@ -50,10 +47,12 @@ export function DoesntFollowBack({ data }: FollowBackProps) {
       bodyClassName="-mx-5 max-h-[420px] overflow-y-auto"
     >
       {scrapedAt && (
-        <div className="mx-5 mb-2 -mt-2 rounded border border-warn/40 bg-warn-soft px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-warn">
-          Stale snapshot · last scraped {relativeTime(scrapedAt)} · numbers
-          will not reflect follows / unfollows you've made since
-        </div>
+        <StaleNote
+          date={scrapedAt}
+          label="Follow data"
+          detail="Follows and unfollows since then are not reflected."
+          className="mx-5 mb-3 -mt-1"
+        />
       )}
       {list.length === 0 ? (
         <div className="py-8 text-center text-sm text-ink-muted">
@@ -78,7 +77,7 @@ export function DoesntFollowBack({ data }: FollowBackProps) {
             {list.slice(0, 100).map((u) => (
               <tr
                 key={u.id || u.username}
-                className="border-b border-border last:border-b-0 hover:bg-muted/40"
+                className="border-b border-border even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
               >
                 <td className="px-5 py-1.5 font-mono text-brand">
                   @{u.username}

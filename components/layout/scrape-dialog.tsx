@@ -32,18 +32,25 @@ export function ScrapeDialog({
   onOpenChange,
   lastScrapedDate,
 }: ScrapeDialogProps) {
-  const [health, setHealth] = useState<ScraperHealth | null | "checking">(
-    "checking",
+  // undefined = still probing, null = service offline, object = reachable.
+  const [health, setHealth] = useState<ScraperHealth | null | undefined>(
+    undefined,
   );
   const [job, setJob] = useState<ScrapeJob | null>(null);
   const [starting, setStarting] = useState(false);
   const pollRef = useRef<number | null>(null);
 
-  // Probe health when the dialog opens
+  // Probe health when the dialog opens. The "checking" state is the reset
+  // done in handleClose, so this effect only ever sets state asynchronously.
   useEffect(() => {
     if (!open) return;
-    setHealth("checking");
-    pingScraper().then(setHealth);
+    let live = true;
+    pingScraper().then((h) => {
+      if (live) setHealth(h);
+    });
+    return () => {
+      live = false;
+    };
   }, [open]);
 
   // Poll job status while running
@@ -77,6 +84,7 @@ export function ScrapeDialog({
       window.location.reload();
       return;
     }
+    if (!v) setHealth(undefined); // next open starts from "checking"
     onOpenChange(v);
   }
 
@@ -94,8 +102,8 @@ export function ScrapeDialog({
             Refresh Dashboard Data
           </DialogTitle>
           <DialogDescription>
-            Re-scrapes Instagram, TikTok, YouTube, and Threads via the local
-            scraper service.
+            Runs the incremental scrape for Instagram, TikTok, YouTube and
+            Threads through the local scraper service.
           </DialogDescription>
         </DialogHeader>
 
@@ -115,17 +123,13 @@ export function ScrapeDialog({
         </div>
 
         {/* States */}
-        {health === "checking" && (
+        {health === undefined && (
           <p className="text-sm text-ink-muted">Checking scraper service…</p>
         )}
 
-        {health === null && (
-          <ServiceOffline />
-        )}
+        {health === null && <ServiceOffline />}
 
-        {health && health !== "checking" && !job && (
-          <ReadyToStart isStub={health.version.startsWith("0.1")} />
-        )}
+        {health && !job && <ReadyToStart />}
 
         {job && (job.status === "queued" || job.status === "running") && (
           <RunningJob job={job} etaLabel={etaLabel} />
@@ -145,9 +149,9 @@ export function ScrapeDialog({
         )}
 
         <DialogFooter>
-          {!job && health && health !== "checking" && (
+          {!job && health && (
             <>
-              <Button variant="ghost" onClick={() => onOpenChange(false)}>
+              <Button variant="ghost" onClick={() => handleClose(false)}>
                 Cancel
               </Button>
               <Button onClick={handleStart} disabled={starting}>
@@ -161,12 +165,12 @@ export function ScrapeDialog({
             </Button>
           )}
           {(job?.status === "queued" || job?.status === "running") && (
-            <Button variant="ghost" onClick={() => onOpenChange(false)}>
-              Close — keep running in background
+            <Button variant="ghost" onClick={() => handleClose(false)}>
+              Close and keep running
             </Button>
           )}
           {(health === null || job?.status === "error") && (
-            <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            <Button variant="ghost" onClick={() => handleClose(false)}>
               Close
             </Button>
           )}
@@ -193,33 +197,27 @@ function ServiceOffline() {
   );
 }
 
-function ReadyToStart({ isStub }: { isStub: boolean }) {
+function ReadyToStart() {
   return (
     <div className="space-y-2 text-sm text-ink-soft">
       <p>
-        Re-scrapes all four platforms sequentially. The dashboard's freshness
-        timestamps update as each platform finishes.
+        Looks for posts newer than the last run on all four platforms, then
+        regenerates the Insights and Vault files. Freshness timestamps update
+        as each platform finishes.
       </p>
       <div className="rounded border border-border bg-muted/40 px-3 py-2 text-xs">
         <div className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">
-          Status by platform
+          Needs
         </div>
         <ul className="mt-1.5 space-y-0.5">
+          <li>The shared Chrome running on :9222, logged in to each platform.</li>
           <li>
-            <span className="text-positive">●</span> Instagram — real scraper
-            (needs Chrome on :9222 + IG login)
-          </li>
-          <li>
-            <span className="text-warn">●</span> TikTok / YouTube / Threads —
-            scaffold (will error; doesn&apos;t block IG)
+            For a full re-scrape of every post, run{" "}
+            <code className="font-mono text-[11px]">scrape/run.py --full</code>{" "}
+            from a terminal instead.
           </li>
         </ul>
       </div>
-      {isStub && (
-        <div className="rounded border border-border bg-card px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-ink-muted">
-          Note · stub mode active
-        </div>
-      )}
     </div>
   );
 }
@@ -252,7 +250,7 @@ function RunningJob({
           Come back at {etaLabel ?? "—"}
         </div>
         <p className="mt-1 text-ink-soft">
-          You can close this dialog — the scrape keeps running. Reload the
+          You can close this dialog and the scrape keeps running. Reload the
           dashboard once it&apos;s complete and the new numbers will appear.
         </p>
       </div>

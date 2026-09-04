@@ -1,5 +1,5 @@
 import { BarChart } from "@/components/charts/bar-chart";
-import { DoughnutChart } from "@/components/charts/doughnut-chart";
+import { Numbered } from "@/components/charts/numbered";
 import { Section } from "@/components/charts/section";
 import { fmt, fmtPct, platformLabel } from "@/lib/format";
 import { PLATFORMS, byPlatform, totals, avgEngagementRate } from "@/lib/derive";
@@ -25,39 +25,30 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
     views: totals(grouped[p]).views,
   }));
 
-  const distData = PLATFORMS.map((p) => ({
-    name: platformLabel[p],
-    value: grouped[p].length,
-    color: PLATFORM_COLOR[platformLabel[p]],
-  }));
-
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      <Section title="Engagement Rate" hint="Average % per post">
-        <BarChart
-          data={engagementData}
-          xKey="platform"
-          yKey="rate"
-          colorMap={PLATFORM_COLOR}
-          yFormatter={(v) => fmtPct(v, 1)}
-        />
-      </Section>
-      <Section title="Total Views" hint="Lifetime, by platform">
-        <BarChart
-          data={viewsData}
-          xKey="platform"
-          yKey="views"
-          colorMap={PLATFORM_COLOR}
-          yFormatter={(v) => fmt(v)}
-        />
-      </Section>
-      <Section title="Post Distribution" hint="Share of total posts">
-        <DoughnutChart
-          data={distData}
-          centerLabel="Total Posts"
-          centerValue={fmt(posts.length)}
-        />
-      </Section>
+    <div className="grid gap-4 lg:grid-cols-2">
+      <Numbered n={2}>
+        <Section title="Engagement Rate" hint="Average % per post, by platform">
+          <BarChart
+            data={engagementData}
+            xKey="platform"
+            yKey="rate"
+            colorMap={PLATFORM_COLOR}
+            yFormatter={(v) => fmtPct(v, 1)}
+          />
+        </Section>
+      </Numbered>
+      <Numbered n={3}>
+        <Section title="Total Views" hint="Lifetime, by platform">
+          <BarChart
+            data={viewsData}
+            xKey="platform"
+            yKey="views"
+            colorMap={PLATFORM_COLOR}
+            yFormatter={(v) => fmt(v)}
+          />
+        </Section>
+      </Numbered>
     </div>
   );
 }

@@ -8,7 +8,6 @@ import { fmt, fmtDate, fmtPct, platformLabel } from "@/lib/format";
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import { LineChart } from "@/components/charts/line-chart";
-import { BarChart } from "@/components/charts/bar-chart";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -70,26 +69,6 @@ export function Posts() {
         .reverse(),
     [filtered],
   );
-
-  const hourBuckets = useMemo(() => {
-    const map = new Map<number, { count: number; sum: number }>();
-    for (const p of posts) {
-      if (!p.time) continue;
-      const h = parseInt(p.time.slice(0, 2), 10);
-      if (!Number.isFinite(h)) continue;
-      const bucket = map.get(h) ?? { count: 0, sum: 0 };
-      bucket.count += 1;
-      bucket.sum += toNum(p.views);
-      map.set(h, bucket);
-    }
-    return Array.from({ length: 24 }, (_, h) => {
-      const b = map.get(h);
-      return {
-        hour: `${h.toString().padStart(2, "0")}h`,
-        avg: b ? Math.round(b.sum / b.count) : 0,
-      };
-    });
-  }, [posts]);
 
   if (loading) {
     return (
@@ -158,27 +137,17 @@ export function Posts() {
         </Field>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Section
-          title="Top 50 Performance"
-          hint="Views for the current sorted result set"
-        >
-          <LineChart
-            data={performanceData}
-            xKey="date"
-            yKey="views"
-            yFormatter={(v) => fmt(v)}
-          />
-        </Section>
-        <Section title="Best Posting Times" hint="Avg views by hour-of-day">
-          <BarChart
-            data={hourBuckets}
-            xKey="hour"
-            yKey="avg"
-            yFormatter={(v) => fmt(v)}
-          />
-        </Section>
-      </div>
+      <Section
+        title="Top 50 Performance"
+        hint="Views for the current sorted result set. Posting-time patterns live on the Insights heatmap."
+      >
+        <LineChart
+          data={performanceData}
+          xKey="date"
+          yKey="views"
+          yFormatter={(v) => fmt(v)}
+        />
+      </Section>
 
       <Section
         title="All Posts"
@@ -202,7 +171,7 @@ export function Posts() {
               <tr
                 key={p.id}
                 onClick={() => setOpen(p)}
-                className="cursor-pointer border-b border-border last:border-b-0 hover:bg-muted/40"
+                className="cursor-pointer border-b border-border even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
               >
                 <td className="px-5 py-2">
                   <PlatformBadge platform={p.platform} />

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadAnalytics, loadFollowData } from "@/lib/data";
-import type { AnalyticsBundle, FollowData } from "@/lib/types";
+import { loadAnalytics, loadContentVault, loadFollowData } from "@/lib/data";
+import type { AnalyticsBundle, ContentVault, FollowData } from "@/lib/types";
+import { Numbered } from "@/components/charts/numbered";
 import { PostingHeatmap } from "./heatmap";
-import { ContentCategories } from "./categories";
+import { TopicsCard } from "./topics-card";
 import { EngagementFunnel } from "./funnel";
 import { ViralPosts } from "./viral-posts";
 import { GrowthVelocity } from "./growth";
@@ -19,16 +20,17 @@ import { InsightsSummary } from "./summary";
 export function Insights() {
   const [a, setA] = useState<AnalyticsBundle | null>(null);
   const [follow, setFollow] = useState<FollowData | null>(null);
+  const [vault, setVault] = useState<ContentVault | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([loadAnalytics(), loadFollowData()])
-      .then(([analytics, fd]) => {
+    Promise.all([loadAnalytics(), loadFollowData(), loadContentVault()])
+      .then(([analytics, fd, v]) => {
         setA(analytics);
         setFollow(fd);
-        setLoading(false);
+        setVault(v);
       })
-      .catch(() => setLoading(false));
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading || !a) {
@@ -56,7 +58,11 @@ export function Insights() {
 
       {/* Most actionable insights first: viral posts + hook library */}
       <div className="grid gap-4 lg:grid-cols-2">
-        {a.viralPosts && <ViralPosts posts={a.viralPosts} />}
+        {a.viralPosts && (
+          <Numbered n={1}>
+            <ViralPosts posts={a.viralPosts} />
+          </Numbered>
+        )}
         {a.highValueComments && (
           <HighValueQuestions
             comments={a.highValueComments}
@@ -72,24 +78,30 @@ export function Insights() {
       {/* Pattern analysis */}
       <div className="grid gap-4 lg:grid-cols-2">
         {a.hashtagPerformance && (
-          <HashtagPerformance data={a.hashtagPerformance} />
+          <Numbered n={2}>
+            <HashtagPerformance data={a.hashtagPerformance} />
+          </Numbered>
         )}
-        {a.crossPosts && <CrossPosts data={a.crossPosts} />}
+        {a.crossPosts && (
+          <Numbered n={3}>
+            <CrossPosts data={a.crossPosts} />
+          </Numbered>
+        )}
       </div>
 
       {a.postingHeatmap && <PostingHeatmap data={a.postingHeatmap} />}
 
       <div className="grid gap-4 lg:grid-cols-3">
-        {a.contentCategories && (
-          <ContentCategories data={a.contentCategories} />
-        )}
+        {vault && vault.categories.length > 0 && <TopicsCard vault={vault} />}
         {a.engagementFunnel && (
-          <EngagementFunnel data={a.engagementFunnel} />
+          <Numbered n={4}>
+            <EngagementFunnel data={a.engagementFunnel} />
+          </Numbered>
         )}
         {a.growthVelocity && (
-          <div className="lg:col-span-1">
+          <Numbered n={5}>
             <GrowthVelocity data={a.growthVelocity} />
-          </div>
+          </Numbered>
         )}
       </div>
 

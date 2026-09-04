@@ -5,11 +5,20 @@ import { loadComments } from "@/lib/data";
 import type { Comment, Platform } from "@/lib/types";
 import {
   PLATFORMS,
+  byPlatform,
   commentResponseRate,
   sentimentBreakdown,
   inferSentiment,
 } from "@/lib/derive";
+
+const PLATFORM_COLOR: Record<string, string> = {
+  Instagram: "var(--ig)",
+  TikTok: "var(--tt)",
+  YouTube: "var(--yt)",
+  Threads: "var(--th)",
+};
 import { fmt, fmtDate, fmtPct, platformLabel } from "@/lib/format";
+import { StaleNote } from "@/components/layout/stale-note";
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import { KpiCard } from "@/components/charts/kpi-card";
@@ -83,6 +92,20 @@ export function Comments() {
     { name: "Question", value: stats.sentiment.question, color: "var(--brand)" },
   ];
 
+  // Comments are a frozen snapshot until a scraper exists; label the newest date.
+  const asOf = useMemo(
+    () => comments.reduce<string>((m, c) => (c.date > m ? c.date : m), ""),
+    [comments],
+  );
+
+  const perPlatform = useMemo(() => {
+    const grouped = byPlatform(comments, (c) => c.platform);
+    return PLATFORMS.map((p) => ({
+      platform: platformLabel[p],
+      rate: Number(commentResponseRate(grouped[p]).rate.toFixed(2)),
+    }));
+  }, [comments]);
+
   const volume = useMemo(() => {
     const map = new Map<string, number>();
     for (const c of enriched) {
@@ -107,32 +130,34 @@ export function Comments() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
-          {fmt(filtered.length)} of {fmt(comments.length)} comments
-        </p>
-        <h2 className="font-display mt-2 text-3xl font-medium text-ink">
-          Comments
-        </h2>
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
+            {fmt(filtered.length)} of {fmt(comments.length)} comments
+          </p>
+          <h2 className="font-display mt-2 text-3xl font-medium text-ink">
+            Comments
+          </h2>
+        </div>
+        <StaleNote
+          date={asOf}
+          label="Comments"
+          detail="No comment scraper yet, so this tab is a snapshot."
+        />
       </header>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <KpiCard
-          label="Total Comments"
-          value={fmt(stats.total)}
-          emphasis="brand"
-        />
-        <KpiCard
           label="Response Rate"
           value={fmtPct(stats.rate)}
-          hint={`${fmt(stats.responded)} replies`}
+          hint={`${fmt(stats.responded)} replies of ${fmt(stats.total)}`}
+          emphasis="brand"
         />
+        <KpiCard label="Total Comments" value={fmt(stats.total)} hint="across all posts" />
         <KpiCard
-          label="Positive"
-          value={fmt(stats.sentiment.positive)}
-          hint={fmtPct(
-            stats.total ? (stats.sentiment.positive / stats.total) * 100 : 0,
-          )}
+          label="Replies Sent"
+          value={fmt(stats.responded)}
+          hint={stats.responded === 0 ? "untapped engagement" : "from Phil"}
         />
         <KpiCard
           label="Questions"
@@ -141,7 +166,16 @@ export function Comments() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Section title="Response Rate by Platform" hint="Share of comments Phil replied to">
+          <BarChart
+            data={perPlatform}
+            xKey="platform"
+            yKey="rate"
+            colorMap={PLATFORM_COLOR}
+            yFormatter={(v) => fmtPct(v, 1)}
+          />
+        </Section>
         <Section title="Comment Sentiment" hint="Auto-classified by keyword">
           <DoughnutChart
             data={sentimentData}
@@ -238,7 +272,7 @@ export function Comments() {
             {filtered.slice(0, 300).map((c) => (
               <tr
                 key={c.id}
-                className="border-b border-border last:border-b-0 hover:bg-muted/40"
+                className="border-b border-border even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
               >
                 <td className="px-5 py-2">
                   <PlatformBadge platform={c.platform} />

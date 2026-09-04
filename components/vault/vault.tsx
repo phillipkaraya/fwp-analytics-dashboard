@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loadAllPosts, loadContentVault } from "@/lib/data";
 import type { ContentVault, Platform, Post, VaultCategory } from "@/lib/types";
 import { PLATFORMS, toNum } from "@/lib/derive";
@@ -28,10 +29,13 @@ type SortKey = "views" | "likes" | "date";
 const PAGE = 96;
 
 export function Vault() {
+  // Deep links from the Overview ribbon and the Insights topics card arrive
+  // as /vault/?topic=<slug>. Read once for the initial chip.
+  const params = useSearchParams();
   const [vault, setVault] = useState<ContentVault | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [slug, setSlug] = useState<string>("all");
+  const [slug, setSlug] = useState<string>(() => params.get("topic") || "all");
   const [platform, setPlatform] = useState<Platform | "all">("all");
   const [sort, setSort] = useState<SortKey>("views");
   const [search, setSearch] = useState("");

@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { isAuthenticated } from "@/lib/auth";
+import { useSyncExternalStore } from "react";
+import { isAuthenticated, subscribeAuth } from "@/lib/auth";
 import { PinWall } from "./pin-wall";
 
+// null = not yet known (server render and the first hydration pass);
+// afterwards it mirrors sessionStorage through subscribeAuth().
+function getSnapshot(): boolean | null {
+  return isAuthenticated();
+}
+function getServerSnapshot(): boolean | null {
+  return null;
+}
+
 export function AuthGate({ children }: { children: React.ReactNode }) {
-  const [ready, setReady] = useState(false);
-  const [authed, setAuthed] = useState(false);
+  const authed = useSyncExternalStore(subscribeAuth, getSnapshot, getServerSnapshot);
 
-  useEffect(() => {
-    setAuthed(isAuthenticated());
-    setReady(true);
-  }, []);
-
-  if (!ready) {
+  if (authed === null) {
     return (
       <div className="fixed inset-0 grid place-items-center bg-background">
         <div className="font-mono text-xs uppercase tracking-[0.22em] text-ink-muted">
@@ -23,7 +26,9 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!authed) return <PinWall onSuccess={() => setAuthed(true)} />;
+  // PinWall calls markAuthenticated(), which notifies the store; nothing
+  // else to do on success.
+  if (!authed) return <PinWall onSuccess={() => undefined} />;
 
   return <>{children}</>;
 }

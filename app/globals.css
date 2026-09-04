@@ -153,3 +153,75 @@
     border-radius: 0;
   }
 }
+
+/* === Redesign 2026-09 ======================================================
+   One dark band (the Overview hero), watermark numerals, and a short
+   fade-up on mount. Everything else stays light cards on the blue page. */
+
+.hero {
+  background:
+    radial-gradient(
+      55% 70% at 82% 55%,
+      color-mix(in oklab, var(--brand) 42%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      40% 55% at 8% 100%,
+      color-mix(in oklab, var(--brand) 28%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(180deg, var(--ink) 0%, var(--ink) 12%, var(--brand-deep) 100%);
+}
+
+.hero-grid {
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.9), transparent 90%);
+}
+
+/* Positive / negative on the dark band: lifted toward white so they read. */
+.on-dark-up {
+  color: color-mix(in oklab, var(--positive) 55%, white);
+}
+.on-dark-down {
+  color: color-mix(in oklab, var(--negative) 55%, white);
+}
+
+/* Watermark ordinal stamped on a card by <Numbered n>. */
+.numbered::before {
+  content: attr(data-n);
+  position: absolute;
+  right: 1rem;
+  top: 0.15rem;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-display);
+  font-size: 88px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in oklab, var(--ink) 6%, transparent);
+}
+
+/* Fade-up on mount. Elements opt in with .rise and stagger via --rise-delay. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+}

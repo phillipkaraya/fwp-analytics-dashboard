@@ -12,37 +12,37 @@ const TABS = [
   { href: "/vault", label: "Content Vault" },
 ] as const;
 
-export function Nav() {
-  const pathname = usePathname();
+export function Nav({ tone = "light" }: { tone?: "light" | "dark" }) {
+  const pathname = (usePathname() ?? "/").replace(/\/+$/, "") || "/";
+  const dark = tone === "dark";
   return (
-    <nav
-      aria-label="Primary"
-      className="-mx-6 overflow-x-auto px-6 pb-px"
-    >
-      <ul className="flex min-w-max gap-1 border-b border-border">
+    <nav aria-label="Primary" className="-mx-6 overflow-x-auto px-6 sm:mx-0 sm:px-0">
+      <ul
+        className={cn(
+          "flex min-w-max gap-0.5 rounded-full p-1",
+          dark ? "bg-white/10" : "bg-muted",
+        )}
+      >
         {TABS.map((tab) => {
           const active =
-            tab.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(tab.href);
+            tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
           return (
             <li key={tab.href}>
               <Link
                 href={tab.href}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative inline-block whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors",
+                  "block whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors",
                   active
-                    ? "text-brand"
-                    : "text-ink-muted hover:text-ink",
+                    ? dark
+                      ? "bg-white text-ink shadow-sm"
+                      : "bg-card text-brand-deep shadow-sm"
+                    : dark
+                      ? "text-white/70 hover:bg-white/10 hover:text-white"
+                      : "text-ink-muted hover:text-ink",
                 )}
               >
                 {tab.label}
-                {active && (
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-2 -bottom-px h-[2px] rounded-full bg-brand"
-                  />
-                )}
               </Link>
             </li>
           );

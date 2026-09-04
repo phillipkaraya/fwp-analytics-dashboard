@@ -1,20 +1,24 @@
-import { LineChart } from "@/components/charts/line-chart";
+import { ComboChart } from "@/components/charts/combo-chart";
+import { Numbered } from "@/components/charts/numbered";
 import { Section } from "@/components/charts/section";
 import type { Post } from "@/lib/types";
-import { monthlyPostActivity } from "@/lib/derive";
+import { monthlyActivity } from "@/lib/derive";
 
 export function PostActivity({ posts }: { posts: Post[] }) {
-  const data = monthlyPostActivity(posts).map((d) => ({
+  const data = monthlyActivity(posts).map((d) => ({
     month: formatMonth(d.month),
-    count: d.count,
+    views: d.views,
+    posts: d.posts,
   }));
   return (
-    <Section
-      title="Monthly Post Activity"
-      hint="Posts published per month across all platforms"
-    >
-      <LineChart data={data} xKey="month" yKey="count" />
-    </Section>
+    <Numbered n={1}>
+      <Section
+        title="Monthly Activity"
+        hint="Lifetime views earned by the posts published each month (bars) and how many went out (line). Last 18 months."
+      >
+        <ComboChart data={data} />
+      </Section>
+    </Numbered>
   );
 }
 

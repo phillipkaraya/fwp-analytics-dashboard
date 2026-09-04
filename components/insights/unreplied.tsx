@@ -1,7 +1,7 @@
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import type { HighValueComment } from "@/lib/types";
-import { fmtDate } from "@/lib/format";
+import { StaleNote } from "@/components/layout/stale-note";
 
 interface UnrepliedProps {
   comments: HighValueComment[];
@@ -13,7 +13,8 @@ export function HighValueQuestions({ comments, asOf }: UnrepliedProps) {
   return (
     <Section
       title="High-Value Unreplied Questions"
-      hint={`${comments.length} questions with engagement, awaiting reply${asOf ? ` · comments through ${fmtDate(asOf)}` : ""}`}
+      hint={`${comments.length} questions with engagement, awaiting reply`}
+      action={<StaleNote date={asOf} label="Comments" />}
       bodyClassName="max-h-[480px] overflow-y-auto pr-1"
     >
       <ul className="space-y-3">

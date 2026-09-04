@@ -17,9 +17,19 @@ export function fmtPct(
   return n.toFixed(digits) + "%";
 }
 
+/** Date-only strings ("2026-03-28") are calendar dates, not instants. The
+ *  Date constructor treats them as UTC midnight, which renders as the day
+ *  before anywhere west of Greenwich, so parse them as local dates. */
+export function parseDate(input: string | Date): Date {
+  if (input instanceof Date) return input;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input);
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return new Date(input);
+}
+
 export function fmtDate(input: string | Date | undefined): string {
   if (!input) return "—";
-  const d = typeof input === "string" ? new Date(input) : input;
+  const d = parseDate(input);
   if (Number.isNaN(d.getTime())) return "—";
   return d.toLocaleDateString("en-US", {
     month: "short",
@@ -30,7 +40,7 @@ export function fmtDate(input: string | Date | undefined): string {
 
 export function relativeTime(input: string | Date | undefined): string {
   if (!input) return "—";
-  const d = typeof input === "string" ? new Date(input) : input;
+  const d = parseDate(input);
   if (Number.isNaN(d.getTime())) return "—";
   const diffMs = Date.now() - d.getTime();
   const minutes = Math.floor(diffMs / 60_000);

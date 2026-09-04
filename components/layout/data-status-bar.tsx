@@ -4,68 +4,103 @@ import { useEffect, useState } from "react";
 import { loadScrapeState } from "@/lib/data";
 import { relativeTime } from "@/lib/format";
 import { signOut } from "@/lib/auth";
+import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ScrapeDialog } from "./scrape-dialog";
 
-export function DataStatusBar() {
-  const [last, setLast] = useState<string | undefined>();
+const STALE_AFTER_MS = 7 * 86_400_000;
+
+interface Freshness {
+  last?: string;
+  stale: boolean;
+}
+
+export function DataStatusBar({ tone = "light" }: { tone?: "light" | "dark" }) {
+  // Freshness is derived once from the fetched state, so render stays pure
+  // (no Date.now() in the render path).
+  const [fresh, setFresh] = useState<Freshness | null>(null);
   const [open, setOpen] = useState(false);
+  const dark = tone === "dark";
 
   useEffect(() => {
+    let live = true;
     loadScrapeState()
       .then((s) => {
-        const dates = [
+        if (!live) return;
+        const last = [
           s.instagram?.lastScrapedDate,
           s.tiktok?.lastScrapedDate,
           s.youtube?.lastScrapedDate,
           s.threads?.lastScrapedDate,
           s.lastAutoCheck,
         ]
-          .filter(Boolean)
+          .filter((d): d is string => !!d)
           .sort()
-          .reverse();
-        setLast(dates[0]);
+          .reverse()[0];
+        const stale = last
+          ? Date.now() - new Date(last).getTime() > STALE_AFTER_MS
+          : true;
+        setFresh({ last, stale });
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (live) setFresh({ stale: true });
+      });
+    return () => {
+      live = false;
+    };
   }, []);
 
-  const stale = last
-    ? Date.now() - new Date(last).getTime() > 7 * 86_400_000
-    : true;
+  const stale = fresh?.stale ?? true;
 
   return (
-    <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-muted">
-      <span className="inline-flex items-center gap-2">
-        <span
-          aria-hidden
-          className={`inline-block h-1.5 w-1.5 rounded-full ${
-            stale ? "bg-warn" : "bg-positive"
-          }`}
-        />
-        {stale ? "Stale" : "Live"} · scraped {last ? relativeTime(last) : "—"}
-      </span>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="rounded border border-border px-2 py-1 text-ink-muted transition hover:border-brand/50 hover:text-brand"
-      >
-        ↻ Refresh data
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          signOut();
-          window.location.reload();
-        }}
-        className="text-ink-muted underline-offset-4 transition hover:text-ink hover:underline"
-      >
-        Sign out
-      </button>
+    <div className="ml-auto flex items-center gap-3">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={cn(
+            "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition",
+            dark
+              ? "border-white/15 text-white/75 hover:border-white/40 hover:text-white"
+              : "border-border text-ink-muted hover:border-brand/50 hover:text-ink",
+          )}
+          aria-label="Data status and actions"
+        >
+          <span
+            aria-hidden
+            className={cn(
+              "inline-block h-1.5 w-1.5 rounded-full",
+              fresh === null ? "bg-current opacity-40" : stale ? "bg-warn" : "bg-positive",
+            )}
+          />
+          <span>
+            {fresh === null
+              ? "checking"
+              : `${stale ? "Stale" : "Live"} · ${fresh.last ? relativeTime(fresh.last) : "never"}`}
+          </span>
+          <span aria-hidden className="opacity-60">
+            ▾
+          </span>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-44">
+          <DropdownMenuItem onClick={() => setOpen(true)}>Refresh data</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              signOut();
+              window.location.reload();
+            }}
+          >
+            Sign out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-      <ScrapeDialog
-        open={open}
-        onOpenChange={setOpen}
-        lastScrapedDate={last}
-      />
+      <ScrapeDialog open={open} onOpenChange={setOpen} lastScrapedDate={fresh?.last} />
     </div>
   );
 }

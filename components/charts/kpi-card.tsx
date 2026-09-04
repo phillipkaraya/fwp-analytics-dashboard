@@ -23,6 +23,7 @@ export function KpiCard({
     <div
       className={cn(
         "rounded-lg border border-border bg-card p-5 shadow-sm transition hover:border-brand/40",
+        emphasis === "brand" && "border-t-2 border-t-brand/40",
         align === "right" && "text-right",
         className,
       )}
@@ -32,7 +33,7 @@ export function KpiCard({
       </p>
       <p
         className={cn(
-          "tabular mt-2 font-display text-3xl font-medium leading-none",
+          "tabular mt-2 font-display text-4xl font-semibold leading-none tracking-[-0.02em]",
           emphasis === "brand" ? "text-brand" : "text-ink",
         )}
       >

@@ -1,64 +1,76 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { loadAllPosts, loadComments, loadScrapeState } from "@/lib/data";
-import type { Comment, Post, ScrapeState } from "@/lib/types";
-import { FollowerKpis } from "./follower-kpis";
+import { useEffect, useMemo, useState } from "react";
+import {
+  loadAllPosts,
+  loadContentVault,
+  loadFollowerHistory,
+  loadScrapeState,
+} from "@/lib/data";
+import { pickWindow } from "@/lib/derive";
+import type { ContentVault, FollowerSnapshot, Post, ScrapeState } from "@/lib/types";
+import { Hero } from "./hero";
+import { PlatformStatusRow } from "./platform-status";
+import { TopicsRibbon } from "./topics-ribbon";
 import { PostActivity } from "./post-activity";
 import { PlatformCharts } from "./platform-charts";
-import { PlatformStatusRow } from "./platform-status";
-import { ResponseRate } from "./response-rate";
 import { TopPosts } from "./top-posts";
 
 export function Overview() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [comments, setComments] = useState<Comment[]>([]);
   const [scrape, setScrape] = useState<ScrapeState | null>(null);
+  const [history, setHistory] = useState<FollowerSnapshot[]>([]);
+  const [vault, setVault] = useState<ContentVault | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([loadAllPosts(), loadComments(), loadScrapeState()])
-      .then(([p, c, s]) => {
+    Promise.all([
+      loadAllPosts(),
+      loadScrapeState(),
+      loadFollowerHistory(),
+      loadContentVault(),
+    ])
+      .then(([p, s, h, v]) => {
         if (cancelled) return;
         setPosts(p);
-        setComments(c);
         setScrape(s);
-        setLoading(false);
+        setHistory(h);
+        setVault(v);
       })
-      .catch(() => setLoading(false));
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
     return () => {
       cancelled = true;
     };
   }, []);
 
+  // One window for the hero and the top-posts table so they reconcile.
+  const days = useMemo(() => pickWindow(posts), [posts]);
+
   if (loading || !scrape) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted">
-          Loading data
-        </p>
+      <div className="hero min-h-[320px] text-white">
+        <div className="mx-auto flex min-h-[320px] max-w-[1500px] items-center px-6">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/60">
+            Loading data
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-muted">
-          Cross-Platform Snapshot
-        </p>
-        <h2 className="font-display mt-2 text-3xl font-medium text-ink">
-          Overview
-        </h2>
-      </header>
-
-      <FollowerKpis posts={posts} comments={comments} scrape={scrape} />
-      <PlatformStatusRow posts={posts} scrape={scrape} />
-      <PostActivity posts={posts} />
-      <PlatformCharts posts={posts} />
-      <ResponseRate comments={comments} />
-      <TopPosts posts={posts} />
-    </div>
+    <>
+      <Hero posts={posts} scrape={scrape} history={history} days={days} />
+      <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
+        <PlatformStatusRow posts={posts} scrape={scrape} history={history} />
+        {vault && vault.categories.length > 0 && <TopicsRibbon vault={vault} />}
+        <PostActivity posts={posts} />
+        <PlatformCharts posts={posts} />
+        <TopPosts posts={posts} days={days} />
+      </div>
+    </>
   );
 }

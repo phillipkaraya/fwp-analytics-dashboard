@@ -1,16 +1,18 @@
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import { fmt, fmtPct, fmtDate } from "@/lib/format";
-import { topPosts, toNum } from "@/lib/derive";
+import { topPosts, toNum, windowLabel } from "@/lib/derive";
+import { Numbered } from "@/components/charts/numbered";
 import type { Post } from "@/lib/types";
 
-export function TopPosts({ posts }: { posts: Post[] }) {
-  const top = topPosts(posts, 30, 10);
+export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number }) {
+  const top = topPosts(posts, days, 10);
 
   return (
+    <Numbered n={4}>
     <Section
       title="Top Performing Posts"
-      hint="Last 30 days, ranked by views"
+      hint={`${windowLabel(days)}, ranked by views`}
       bodyClassName="-mx-5"
     >
       <div className="overflow-x-auto">
@@ -47,14 +49,14 @@ export function TopPosts({ posts }: { posts: Post[] }) {
                   colSpan={7}
                   className="px-5 py-8 text-center text-sm text-ink-muted"
                 >
-                  No posts in the last 30 days.
+                  No posts in this window.
                 </td>
               </tr>
             ) : (
               top.map((p) => (
                 <tr
                   key={p.id}
-                  className="border-b border-border last:border-b-0 transition hover:bg-muted/40"
+                  className="border-b border-border transition even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
                 >
                   <td className="px-5 py-3">
                     <PlatformBadge platform={p.platform} />
@@ -95,5 +97,6 @@ export function TopPosts({ posts }: { posts: Post[] }) {
         </table>
       </div>
     </Section>
+    </Numbered>
   );
 }

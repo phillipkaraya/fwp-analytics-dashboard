@@ -2,7 +2,8 @@ import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import type { TopCommenter, AudienceOverlap } from "@/lib/types";
 import { KpiCard } from "@/components/charts/kpi-card";
-import { fmt, fmtDate, fmtPct } from "@/lib/format";
+import { fmt, fmtPct } from "@/lib/format";
+import { StaleNote } from "@/components/layout/stale-note";
 
 interface SuperfansProps {
   commenters: TopCommenter[];
@@ -17,7 +18,8 @@ export function Superfans({ commenters, overlap, asOf }: SuperfansProps) {
       <div className="grid gap-4 lg:grid-cols-3">
         <Section
           title="Superfans"
-          hint={`Most-frequent commenters across all platforms${asOf ? ` · comments through ${fmtDate(asOf)}` : ""}`}
+          hint="Most-frequent commenters across all platforms"
+          action={<StaleNote date={asOf} label="Comments" />}
           bodyClassName="-mx-5 max-h-[420px] overflow-y-auto"
           className="lg:col-span-2"
         >
@@ -26,7 +28,7 @@ export function Superfans({ commenters, overlap, asOf }: SuperfansProps) {
               {commenters.slice(0, 20).map((c, i) => (
                 <tr
                   key={c.username + i}
-                  className="border-b border-border last:border-b-0 hover:bg-muted/40"
+                  className="border-b border-border even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
                 >
                   <td className="px-5 py-2 font-mono text-[11px] text-ink-muted w-8">
                     {String(i + 1).padStart(2, "0")}
@@ -118,7 +120,7 @@ export function Superfans({ commenters, overlap, asOf }: SuperfansProps) {
                 .map((u, i) => (
                   <tr
                     key={u.username + i}
-                    className="border-b border-border last:border-b-0 hover:bg-muted/40"
+                    className="border-b border-border even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
                   >
                     <td className="px-5 py-2 font-mono text-[11px] text-ink-muted">
                       {String(i + 1).padStart(2, "0")}

@@ -1,5 +1,5 @@
 import { KpiCard } from "@/components/charts/kpi-card";
-import { fmt, fmtPct } from "@/lib/format";
+import { fmt } from "@/lib/format";
 import type { AnalyticsBundle } from "@/lib/types";
 
 interface SummaryProps {
