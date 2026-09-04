@@ -9,7 +9,7 @@ export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number })
   const top = topPosts(posts, days, 10);
 
   return (
-    <Numbered n={4}>
+    <Numbered n={5}>
     <Section
       title="Top Performing Posts"
       hint={`${windowLabel(days)}, ranked by views`}

@@ -14,6 +14,7 @@ import { Hero } from "./hero";
 import { PlatformStatusRow } from "./platform-status";
 import { TopicsRibbon } from "./topics-ribbon";
 import { PostActivity } from "./post-activity";
+import { FollowerHistory } from "./follower-history";
 import { PlatformCharts } from "./platform-charts";
 import { TopPosts } from "./top-posts";
 
@@ -61,6 +62,7 @@ export function Overview() {
         <PlatformStatusRow posts={posts} scrape={scrape} history={history} />
         {vault && vault.categories.length > 0 && <TopicsRibbon vault={vault} />}
         <PostActivity posts={posts} />
+        <FollowerHistory history={history} ordinal={2} />
         <PlatformCharts posts={posts} />
         <TopPosts posts={posts} days={days} />
       </div>
