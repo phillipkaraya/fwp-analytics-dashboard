@@ -87,3 +87,19 @@ export const platformColor: Record<Platform, string> = {
   youtube: "var(--yt)",
   threads: "var(--th)",
 };
+
+/**
+ * Optical left shift for a display-size numeral so its ink, not its glyph box,
+ * sits on the left edge of the label beneath it.
+ *
+ * Measured on the system font at weight 600: every digit carries about 0.045em
+ * of left side bearing. A leading "1" is the special case. Its flag hangs left
+ * of the stem, and the eye reads the stem as the edge of the number, so the
+ * value slides further until the stem (0.225em from the origin) lands on the
+ * label's edge (Phil, 2026-09-04: "the part that is the straight line down").
+ * Apply as style={{ marginLeft: numeralShift(value) }}.
+ */
+export function numeralShift(value: unknown): string {
+  const text = typeof value === "string" || typeof value === "number" ? String(value) : "";
+  return text.trim().startsWith("1") ? "-0.225em" : "-0.045em";
+}

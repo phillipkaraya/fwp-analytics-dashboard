@@ -1,4 +1,4 @@
-import { fmt, fmtDate, platformLabel, relativeTime } from "@/lib/format";
+import { fmt, fmtDate, numeralShift, platformLabel, relativeTime } from "@/lib/format";
 import { PlatformDot } from "@/components/charts/platform-badge";
 import {
   PLATFORMS,
@@ -64,7 +64,10 @@ export function PlatformStatusRow({
               </span>
             </div>
             <div className="mt-3 flex flex-wrap items-baseline gap-x-2">
-              <p className="font-display tabular -ml-[0.045em] text-3xl font-semibold leading-none tracking-[-0.02em] text-ink">
+              <p
+                className="font-display tabular text-3xl font-semibold leading-none tracking-[-0.02em] text-ink"
+                style={{ marginLeft: numeralShift(fmt(followers)) }}
+              >
                 {fmt(followers)}
               </p>
               <span className="text-xs text-ink-muted">followers</span>

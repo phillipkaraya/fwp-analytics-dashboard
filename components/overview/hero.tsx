@@ -1,6 +1,6 @@
 "use client";
 
-import { fmt, fmtDate, fmtShort, platformLabel, relativeTime } from "@/lib/format";
+import { fmt, fmtDate, fmtShort, numeralShift, platformLabel, relativeTime } from "@/lib/format";
 import {
   PLATFORMS,
   followerDeltas,
@@ -57,7 +57,10 @@ export function Hero({ posts, scrape, history, days }: HeroProps) {
       aside={
         <HeroPanel label="Followers">
           <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="tabular -ml-[0.045em] font-display text-4xl font-semibold leading-none tracking-[-0.02em]">
+            <span
+              className="tabular font-display text-4xl font-semibold leading-none tracking-[-0.02em]"
+              style={{ marginLeft: numeralShift(fmt(totalFollowers)) }}
+            >
               {fmt(totalFollowers)}
             </span>
             {deltas.total !== null && deltas.since && (

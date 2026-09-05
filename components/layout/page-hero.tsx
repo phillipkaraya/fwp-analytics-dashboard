@@ -1,4 +1,4 @@
-import { fmtPct } from "@/lib/format";
+import { fmtPct, numeralShift } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export interface HeroStat {
@@ -66,9 +66,12 @@ export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: Pa
                     className="rise min-w-[8.5rem]"
                     style={{ "--rise-delay": `${120 + i * 70}ms` } as React.CSSProperties}
                   >
-                    {/* -0.045em pulls the digit ink flush with the label below it;
-                        the system font leaves that much side bearing at display size. */}
-                    <dd className="tabular -ml-[0.045em] font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
+                    {/* Digit ink, not the glyph box, sits on the label's left
+                        edge; a leading 1 aligns by its stem. See numeralShift. */}
+                    <dd
+                      className="tabular font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl lg:text-7xl"
+                      style={{ marginLeft: numeralShift(s.value) }}
+                    >
                       {s.value}
                     </dd>
                     <dt className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
