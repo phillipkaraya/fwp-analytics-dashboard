@@ -1031,14 +1031,14 @@
    "avgViews": 11279,
    "avgLikes": 589,
    "avgEngagement": 3.64,
-   "totalViews": 2402637
+   "totalViews": 2402638
   },
   "entrepreneurship": {
    "count": 265,
    "avgViews": 7117,
    "avgLikes": 376,
    "avgEngagement": 4.9,
-   "totalViews": 1366469
+   "totalViews": 1366470
   },
   "travel": {
    "count": 226,
@@ -1049,10 +1049,10 @@
   },
   "real_estate": {
    "count": 201,
-   "avgViews": 3292,
+   "avgViews": 3293,
    "avgLikes": 124,
    "avgEngagement": 3.81,
-   "totalViews": 474191
+   "totalViews": 474192
   },
   "lifestyle": {
    "count": 190,
@@ -1966,7 +1966,7 @@
  "engagementFunnel": {
   "instagram": {
    "views": 8188666,
-   "likes": 353736,
+   "likes": 353744,
    "comments": 12272,
    "shares": 0,
    "likeRate": 4.32,
@@ -1974,7 +1974,7 @@
    "shareRate": 0.0
   },
   "tiktok": {
-   "views": 2600576,
+   "views": 2600577,
    "likes": 187098,
    "comments": 2746,
    "shares": 3784,
@@ -3129,7 +3129,7 @@
    "avgViews": 27079,
    "avgLikes": 2166,
    "avgEngagement": 4.85,
-   "totalViews": 974858
+   "totalViews": 974859
   },
   {
    "tag": "#travelhacks",
@@ -4000,7 +4000,7 @@
    "month": "2024-06",
    "posts": 9,
    "views": 39666,
-   "likes": 1821,
+   "likes": 1822,
    "comments": 224
   },
   {
@@ -4028,7 +4028,7 @@
    "month": "2024-10",
    "posts": 7,
    "views": 25096,
-   "likes": 718,
+   "likes": 719,
    "comments": 49
   },
   {
@@ -4042,7 +4042,7 @@
    "month": "2025-01",
    "posts": 16,
    "views": 31737,
-   "likes": 2850,
+   "likes": 2851,
    "comments": 180
   },
   {
@@ -4139,8 +4139,8 @@
   {
    "month": "2026-06",
    "posts": 22,
-   "views": 23916,
-   "likes": 683,
+   "views": 23917,
+   "likes": 688,
    "comments": 53
   }
  ],
@@ -4895,7 +4895,7 @@
      "id": "ig_3400415194294620061_5251656103",
      "platform": "instagram",
      "views": 11525,
-     "likes": 891,
+     "likes": 892,
      "date": "2024-06-28",
      "url": "https://www.instagram.com/p/C8ws5pgxY-d/"
     },
@@ -5081,7 +5081,7 @@
      "id": "ig_3480285257172086897_5251656103",
      "platform": "instagram",
      "views": 8999,
-     "likes": 384,
+     "likes": 385,
      "date": "2024-10-16",
      "url": "https://www.instagram.com/p/DBMdQCGxXBx/"
     },
@@ -6177,7 +6177,7 @@
      "id": "ig_3556623510023757514_5251656103",
      "platform": "instagram",
      "views": 5838,
-     "likes": 273,
+     "likes": 274,
      "date": "2025-01-29",
      "url": "https://www.instagram.com/p/DFbqj0SxN7K/"
     },
@@ -20627,7 +20627,7 @@
    "postId": "ig_3400415194294620061_5251656103",
    "platform": "instagram",
    "views": 11525,
-   "likes": 891,
+   "likes": 892,
    "engagement": 9.15,
    "engagementRate": "9.15",
    "categories": [
@@ -20811,7 +20811,7 @@
    "postId": "ig_3480285257172086897_5251656103",
    "platform": "instagram",
    "views": 8999,
-   "likes": 384,
+   "likes": 385,
    "engagement": 4.56,
    "engagementRate": "4.56",
    "categories": [
@@ -20834,6 +20834,13 @@
    "tiktok": 14000,
    "youtube": 5020,
    "threads": 1787
+  },
+  {
+   "date": "2026-09-05",
+   "instagram": 11000,
+   "tiktok": 14000,
+   "youtube": 5020,
+   "threads": 1787
   }
  ],
  "hookTypes": [
@@ -20843,7 +20850,7 @@
    "avgViews": 4937,
    "avgLikes": 219,
    "avgEngagement": 5.31,
-   "totalViews": 4517715,
+   "totalViews": 4517716,
    "topPost": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
   },
   {
@@ -20913,28 +20920,28 @@
  "lastPosted": {
   "instagram": {
    "lastDate": "2026-06-23",
-   "daysSince": 73,
+   "daysSince": 74,
    "lastTitle": "A employee for $200 a month that works harder than a $4000 a month employee \ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02",
    "lastId": "ig_3926289000590522362_5251656103",
    "totalPosts": 681
   },
   "tiktok": {
    "lastDate": "2026-06-23",
-   "daysSince": 73,
+   "daysSince": 74,
    "lastTitle": "No more typing when you don\u2019t want too \ud83d\ude0c",
    "lastId": "tt_7654796959949016351",
    "totalPosts": 193
   },
   "youtube": {
    "lastDate": "2025-08-03",
-   "daysSince": 397,
+   "daysSince": 398,
    "lastTitle": "You don\u2019t have to have money to start a business.. use the banks money instead!, 151 views",
    "lastId": "yt_GLJonGVG3zA",
    "totalPosts": 644
   },
   "threads": {
    "lastDate": "2026-06-05",
-   "daysSince": 91,
+   "daysSince": 92,
    "lastTitle": "\ud83d\udd7a\ud83c\udffe\ud83d\ude02",
    "lastId": "th_3913149855149112734",
    "totalPosts": 564
@@ -28558,9 +28565,9 @@
    "totalMutual": 4588
   }
  },
- "generatedAt": "2026-09-05T01:58:18+00:00",
+ "generatedAt": "2026-09-05T04:16:02+00:00",
  "dataAsOf": {
-  "posts": "2026-09-04T23:22:56+00:00",
+  "posts": "2026-09-05T04:16:02+00:00",
   "comments": "2026-02-22"
  },
  "questionCount": 932,
