@@ -11,6 +11,18 @@ export const PLATFORMS: Platform[] = [
   "threads",
 ];
 
+/**
+ * Threads publishes likes, replies and reposts but no view count, so every
+ * Threads post arrives with views 0 and engagementRate 0. Anything that shows,
+ * averages or ranks by views must leave Threads out (or show likes instead)
+ * rather than present that zero as a measurement (Phil, 2026-09-04).
+ */
+export const VIEWLESS_PLATFORMS: ReadonlySet<Platform> = new Set<Platform>(["threads"]);
+
+export function hasViews(platform: Platform): boolean {
+  return !VIEWLESS_PLATFORMS.has(platform);
+}
+
 export function toNum(v: string | number | undefined | null): number {
   if (v === undefined || v === null) return 0;
   const n = typeof v === "string" ? parseFloat(v) : v;

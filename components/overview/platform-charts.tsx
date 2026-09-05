@@ -2,7 +2,7 @@ import { BarChart } from "@/components/charts/bar-chart";
 import { Numbered } from "@/components/charts/numbered";
 import { Section } from "@/components/charts/section";
 import { fmt, fmtPct, platformLabel } from "@/lib/format";
-import { PLATFORMS, byPlatform, totals, avgEngagementRate } from "@/lib/derive";
+import { PLATFORMS, byPlatform, hasViews, totals, avgEngagementRate } from "@/lib/derive";
 import type { Post } from "@/lib/types";
 
 const PLATFORM_COLOR: Record<string, string> = {
@@ -14,13 +14,15 @@ const PLATFORM_COLOR: Record<string, string> = {
 
 export function PlatformCharts({ posts }: { posts: Post[] }) {
   const grouped = byPlatform(posts, (p) => p.platform);
+  // Threads has no view count, so its 0% and 0 views are absences, not values.
+  const measured = PLATFORMS.filter(hasViews);
 
-  const engagementData = PLATFORMS.map((p) => ({
+  const engagementData = measured.map((p) => ({
     platform: platformLabel[p],
     rate: Number(avgEngagementRate(grouped[p]).toFixed(2)),
   }));
 
-  const viewsData = PLATFORMS.map((p) => ({
+  const viewsData = measured.map((p) => ({
     platform: platformLabel[p],
     views: totals(grouped[p]).views,
   }));
@@ -29,7 +31,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
     <div className="grid gap-4 lg:grid-cols-2">
       <Numbered n={3}>
         <Section kicker="By platform"
-          title="Engagement Rate" hint="Average % per post, by platform">
+          title="Engagement Rate" hint="Average % per post. Threads has no view count, so it is left out.">
           <BarChart
             data={engagementData}
             xKey="platform"
@@ -41,7 +43,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
       </Numbered>
       <Numbered n={4}>
         <Section kicker="By platform"
-          title="Total Views" hint="Lifetime, by platform">
+          title="Total Views" hint="Lifetime. Threads has no view count, so it is left out.">
           <BarChart
             data={viewsData}
             xKey="platform"

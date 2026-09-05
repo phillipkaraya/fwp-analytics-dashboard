@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadAllPosts } from "@/lib/data";
 import type { Post, Platform } from "@/lib/types";
-import { PLATFORMS, avgEngagementRate, byPlatform, toNum, totals } from "@/lib/derive";
+import { PLATFORMS, avgEngagementRate, byPlatform, hasViews, toNum, totals } from "@/lib/derive";
 import { HeroPanel, HeroRow, PageHero } from "@/components/layout/page-hero";
 import { PlatformDot } from "@/components/charts/platform-badge";
 import { fmt, fmtDate, fmtPct, fmtShort, platformLabel } from "@/lib/format";
@@ -80,10 +80,13 @@ export function Posts() {
     return {
       ...t,
       engagement: avgEngagementRate(filtered),
+      // False when the slice is Threads only: no platform in it reports views.
+      viewsKnown: filtered.some((p) => hasViews(p.platform)),
       perPlatform: PLATFORMS.map((pl) => ({
         platform: pl,
         posts: grouped[pl].length,
         views: totals(grouped[pl]).views,
+        likes: totals(grouped[pl]).likes,
       })),
     };
   }, [filtered]);
@@ -106,13 +109,17 @@ export function Posts() {
             value: fmtShort(filtered.length),
             hint: filtered.length === posts.length ? "all platforms" : `of ${fmt(posts.length)}`,
           },
-          {
-            label: "Views",
-            value: fmtShort(slice.views),
-            hint: filtered.length ? `${fmt(Math.round(slice.views / filtered.length))} per post` : undefined,
-          },
+          slice.viewsKnown
+            ? {
+                label: "Views",
+                value: fmtShort(slice.views),
+                hint: filtered.length ? `${fmt(Math.round(slice.views / filtered.length))} per post` : undefined,
+              }
+            : { label: "Views", value: "n/a", hint: "Threads shows no view counts" },
           { label: "Likes", value: fmtShort(slice.likes), hint: `${fmt(slice.comments)} comments` },
-          { label: "Avg engagement", value: fmtPct(slice.engagement), hint: "per post" },
+          slice.viewsKnown
+            ? { label: "Avg engagement", value: fmtPct(slice.engagement), hint: "per post" }
+            : { label: "Avg engagement", value: "n/a", hint: "needs a view count" },
         ]}
         aside={
           <HeroPanel label="By platform">
@@ -129,7 +136,7 @@ export function Posts() {
                 >
                   <span className="tabular font-medium">{fmt(row.posts)}</span>
                   <span className="tabular min-w-16 whitespace-nowrap text-right font-mono text-[11px] text-white/55">
-                    {fmt(row.views)} views
+                    {hasViews(row.platform) ? `${fmt(row.views)} views` : `${fmt(row.likes)} likes`}
                   </span>
                 </HeroRow>
               ))}
@@ -231,7 +238,13 @@ export function Posts() {
                   {p.title || p.caption?.slice(0, 80) || "(no title)"}
                 </td>
                 <td className="px-2 py-2 text-right text-ink">
-                  {fmt(p.views)}
+                  {hasViews(p.platform) ? (
+                    fmt(p.views)
+                  ) : (
+                    <span className="font-mono text-[11px] text-ink-muted" title="Threads shows no view counts">
+                      n/a
+                    </span>
+                  )}
                 </td>
                 <td className="px-2 py-2 text-right text-ink-soft">
                   {fmt(p.likes)}
@@ -240,7 +253,11 @@ export function Posts() {
                   {fmt(p.comments)}
                 </td>
                 <td className="px-5 py-2 text-right text-brand">
-                  {fmtPct(toNum(p.engagementRate))}
+                  {hasViews(p.platform) ? (
+                    fmtPct(toNum(p.engagementRate))
+                  ) : (
+                    <span className="font-mono text-[11px] text-ink-muted">n/a</span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -317,12 +334,12 @@ function PostDetailDialog({
               </DialogTitle>
             </DialogHeader>
             <div className="grid grid-cols-4 gap-3 py-3">
-              <Stat label="Views" value={fmt(post.views)} emphasis />
+              <Stat label="Views" value={hasViews(post.platform) ? fmt(post.views) : "n/a"} emphasis />
               <Stat label="Likes" value={fmt(post.likes)} />
               <Stat label="Comments" value={fmt(post.comments)} />
               <Stat
                 label="Engage"
-                value={fmtPct(toNum(post.engagementRate))}
+                value={hasViews(post.platform) ? fmtPct(toNum(post.engagementRate)) : "n/a"}
               />
             </div>
             {post.caption && (
