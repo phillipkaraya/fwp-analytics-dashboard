@@ -5,18 +5,9 @@ import { loadComments } from "@/lib/data";
 import type { Comment, Platform } from "@/lib/types";
 import {
   PLATFORMS,
-  byPlatform,
-  commentResponseRate,
   sentimentBreakdown,
   inferSentiment,
 } from "@/lib/derive";
-
-const PLATFORM_COLOR: Record<string, string> = {
-  Instagram: "var(--ig)",
-  TikTok: "var(--tt)",
-  YouTube: "var(--yt)",
-  Threads: "var(--th)",
-};
 import { fmt, fmtDate, fmtPct, fmtShort, platformLabel } from "@/lib/format";
 import { StaleNote } from "@/components/layout/stale-note";
 import { Section } from "@/components/charts/section";
@@ -79,11 +70,16 @@ export function Comments() {
     });
   }, [enriched, platform, sentiment, sort, search]);
 
-  const stats = useMemo(() => {
-    const r = commentResponseRate(comments);
-    const s = sentimentBreakdown(enriched);
-    return { ...r, sentiment: s };
-  }, [comments, enriched]);
+  // The "replied" flag in the snapshot is unreliable, so response rate and
+  // replies sent are deliberately not shown anywhere on this tab.
+  const stats = useMemo(
+    () => ({
+      total: comments.length,
+      commenters: new Set(comments.map((c) => c.username.toLowerCase())).size,
+      sentiment: sentimentBreakdown(enriched),
+    }),
+    [comments, enriched],
+  );
 
   const sentimentData = [
     { name: "Positive", value: stats.sentiment.positive, color: "var(--positive)" },
@@ -97,14 +93,6 @@ export function Comments() {
     () => comments.reduce<string>((m, c) => (c.date > m ? c.date : m), ""),
     [comments],
   );
-
-  const perPlatform = useMemo(() => {
-    const grouped = byPlatform(comments, (c) => c.platform);
-    return PLATFORMS.map((p) => ({
-      platform: platformLabel[p],
-      rate: Number(commentResponseRate(grouped[p]).rate.toFixed(2)),
-    }));
-  }, [comments]);
 
   const volume = useMemo(() => {
     const map = new Map<string, number>();
@@ -127,20 +115,16 @@ export function Comments() {
       <PageHero
         eyebrow={`${fmt(filtered.length)} of ${fmt(comments.length)} comments`}
         title="Comments"
-        lede="What the audience said back, who Phil answered, and the questions still waiting."
+        lede="What the audience said back, how it felt, and the questions worth answering."
         stats={[
-          {
-            label: "Response rate",
-            value: fmtPct(stats.rate),
-            hint: `${fmt(stats.responded)} replies of ${fmt(stats.total)}`,
-          },
           { label: "Total comments", value: fmtShort(stats.total), hint: "across all posts" },
+          { label: "Questions", value: fmtShort(stats.sentiment.question), hint: "worth a reply" },
           {
-            label: "Replies sent",
-            value: fmtShort(stats.responded),
-            hint: stats.responded === 0 ? "untapped engagement" : "from Phil",
+            label: "Positive",
+            value: fmtShort(stats.sentiment.positive),
+            hint: fmtPct(stats.total ? (stats.sentiment.positive / stats.total) * 100 : 0, 0) + " of comments",
           },
-          { label: "Questions", value: fmtShort(stats.sentiment.question), hint: "awaiting reply" },
+          { label: "Commenters", value: fmtShort(stats.commenters), hint: "unique accounts" },
         ]}
         footer={
           <StaleNote
@@ -167,10 +151,10 @@ export function Comments() {
                     <>
                       <span
                         aria-hidden
-                        className="inline-block h-1.5 w-1.5 rounded-full ring-2 ring-white/20"
+                        className="inline-block h-1.5 w-1.5 shrink-0 rounded-full ring-2 ring-white/20"
                         style={{ background: color }}
                       />
-                      {name}
+                      <span>{name}</span>
                     </>
                   }
                 >
@@ -186,16 +170,7 @@ export function Comments() {
       />
       <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <Section title="Response Rate by Platform" hint="Share of comments Phil replied to">
-          <BarChart
-            data={perPlatform}
-            xKey="platform"
-            yKey="rate"
-            colorMap={PLATFORM_COLOR}
-            yFormatter={(v) => fmtPct(v, 1)}
-          />
-        </Section>
+      <div className="grid gap-4 lg:grid-cols-2">
         <Section title="Comment Sentiment" hint="Auto-classified by keyword">
           <DoughnutChart
             data={sentimentData}

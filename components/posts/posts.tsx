@@ -122,8 +122,8 @@ export function Posts() {
                   key={row.platform}
                   label={
                     <>
-                      <PlatformDot platform={row.platform} className="ring-2 ring-white/20" />
-                      {platformLabel[row.platform]}
+                      <PlatformDot platform={row.platform} className="shrink-0 ring-2 ring-white/20" />
+                      <span>{platformLabel[row.platform]}</span>
                     </>
                   }
                 >

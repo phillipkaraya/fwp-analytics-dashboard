@@ -56,29 +56,17 @@ export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: Pa
                 {lede}
               </p>
             )}
+            {/* Natural widths with one even gap, so a short value next to a
+                long one does not leave a hole (equal columns did). */}
             {stats.length > 0 && (
-              <dl
-                className={cn(
-                  "mt-8 grid grid-cols-2 gap-x-8 gap-y-8 lg:gap-x-10",
-                  stats.length >= 4
-                    ? "lg:grid-cols-4"
-                    : stats.length === 3
-                      ? "lg:grid-cols-3"
-                      : "lg:grid-cols-2",
-                )}
-              >
+              <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-8">
                 {stats.map((s, i) => (
                   <div
                     key={s.label}
-                    className="rise min-w-0"
+                    className="rise min-w-[8.5rem]"
                     style={{ "--rise-delay": `${120 + i * 70}ms` } as React.CSSProperties}
                   >
-                    <dd
-                      className={cn(
-                        "tabular font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl",
-                        aside ? "lg:text-6xl xl:text-7xl" : "lg:text-7xl",
-                      )}
-                    >
+                    <dd className="tabular font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
                       {s.value}
                     </dd>
                     <dt className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
@@ -143,7 +131,7 @@ export function HeroRow({
 }) {
   return (
     <li className="flex items-center justify-between gap-3 border-t border-white/10 pt-2.5 text-sm first:border-t-0 first:pt-0">
-      <span className="flex min-w-0 items-center gap-2 truncate text-white/80">{label}</span>
+      <span className="flex min-w-0 items-center gap-2 text-white/80 [&>span:last-child]:truncate">{label}</span>
       <span className="flex shrink-0 items-baseline gap-2">{children}</span>
     </li>
   );

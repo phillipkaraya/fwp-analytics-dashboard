@@ -72,8 +72,8 @@ export function Hero({ posts, scrape, history, days }: HeroProps) {
                 key={p}
                 label={
                   <>
-                    <PlatformDot platform={p} className="ring-2 ring-white/20" />
-                    {platformLabel[p]}
+                    <PlatformDot platform={p} className="shrink-0 ring-2 ring-white/20" />
+                    <span>{platformLabel[p]}</span>
                   </>
                 }
               >
