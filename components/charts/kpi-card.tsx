@@ -33,7 +33,7 @@ export function KpiCard({
       </p>
       <p
         className={cn(
-          "tabular mt-2 font-display text-4xl font-semibold leading-none tracking-[-0.02em]",
+          "tabular -ml-[0.045em] mt-2 font-display text-4xl font-semibold leading-none tracking-[-0.02em]",
           emphasis === "brand" ? "text-brand" : "text-ink",
         )}
       >

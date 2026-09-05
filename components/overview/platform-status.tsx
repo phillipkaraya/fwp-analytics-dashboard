@@ -44,11 +44,13 @@ export function PlatformStatusRow({
             )}
           >
             <div className="flex items-center justify-between gap-2">
+              {/* Name first, dot after, so the label's left edge is the cell's
+                  left edge and the number below lines up under it. */}
               <div className="flex items-center gap-2">
-                <PlatformDot platform={p} />
                 <h4 className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
                   {platformLabel[p]}
                 </h4>
+                <PlatformDot platform={p} />
               </div>
               <span
                 className={cn(
@@ -60,7 +62,7 @@ export function PlatformStatusRow({
               </span>
             </div>
             <div className="mt-3 flex flex-wrap items-baseline gap-x-2">
-              <p className="font-display tabular text-3xl font-semibold leading-none tracking-[-0.02em] text-ink">
+              <p className="font-display tabular -ml-[0.045em] text-3xl font-semibold leading-none tracking-[-0.02em] text-ink">
                 {fmt(followers)}
               </p>
               <span className="text-xs text-ink-muted">followers</span>
