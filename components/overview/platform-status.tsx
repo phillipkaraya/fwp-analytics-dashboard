@@ -24,7 +24,7 @@ export function PlatformStatusRow({
   const deltas = followerDeltas(history);
 
   return (
-    <div className="card rise grid grid-cols-2 lg:grid-cols-4">
+    <div className="card rise grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {PLATFORMS.map((p, i) => {
         const last = platformLastPosted(grouped[p]);
         const cad = platformCadence(grouped[p]);
@@ -36,9 +36,11 @@ export function PlatformStatusRow({
             key={p}
             className={cn(
               "relative p-5",
-              // hairline dividers between cells, not around them
-              i % 2 === 1 && "border-l border-border/70",
-              i >= 2 && "border-t border-border/70",
+              // hairline dividers between cells, not around them:
+              // stacked on phones, 2x2 from sm, one row from lg
+              i > 0 && "border-t border-border/70",
+              i === 1 && "sm:border-t-0",
+              i % 2 === 1 && "sm:border-l sm:border-border/70",
               "lg:border-t-0",
               i > 0 && "lg:border-l lg:border-border/70",
             )}

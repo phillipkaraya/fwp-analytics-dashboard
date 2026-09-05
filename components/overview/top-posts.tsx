@@ -68,7 +68,7 @@ export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number })
                   <td className="px-2 py-3">
                     <PlatformBadge platform={p.platform} />
                   </td>
-                  <td className="px-2 py-3 text-ink-muted">
+                  <td className="whitespace-nowrap px-2 py-3 text-ink-muted">
                     {fmtDate(p.date)}
                   </td>
                   <td className="px-2 py-3 max-w-[460px] truncate text-ink">

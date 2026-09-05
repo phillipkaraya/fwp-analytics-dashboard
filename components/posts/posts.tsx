@@ -128,7 +128,7 @@ export function Posts() {
                   }
                 >
                   <span className="tabular font-medium">{fmt(row.posts)}</span>
-                  <span className="tabular w-16 text-right font-mono text-[11px] text-white/55">
+                  <span className="tabular min-w-16 whitespace-nowrap text-right font-mono text-[11px] text-white/55">
                     {fmt(row.views)} views
                   </span>
                 </HeroRow>
@@ -224,7 +224,7 @@ export function Posts() {
                 <td className="px-5 py-2">
                   <PlatformBadge platform={p.platform} />
                 </td>
-                <td className="px-2 py-2 text-ink-muted">
+                <td className="whitespace-nowrap px-2 py-2 text-ink-muted">
                   {fmtDate(p.date)}
                 </td>
                 <td className="px-2 py-2 max-w-[440px] truncate text-ink">

@@ -39,7 +39,9 @@ export function Section({
           </h3>
           {hint && <p className="mt-1 max-w-prose text-sm text-ink-muted">{hint}</p>}
         </div>
-        {action && <div className="shrink-0">{action}</div>}
+        {/* max-w-full lets a wide action (a tab group) wrap inside the card on
+            phones instead of sticking out past the edge. */}
+        {action && <div className="max-w-full shrink-0">{action}</div>}
       </header>
       <div className={bodyClassName}>{children}</div>
     </section>

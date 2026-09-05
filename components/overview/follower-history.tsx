@@ -33,13 +33,14 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
           title="Follower History"
           hint={`Chart appears at ${MIN_POINTS} snapshots. ${sorted.length} so far.`}
         >
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+          <div className="grid min-w-0 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <p className="text-sm text-ink-soft">
               Every run of the scraper on a new day appends one snapshot of
               all four follower counts to <code className="font-mono text-xs">follower_history.json</code>.
               Once there are {MIN_POINTS}, this card turns into a line chart per platform. Until then,
               here are the points recorded so far.
             </p>
+            <div className="min-w-0 overflow-x-auto">
             <table className="data-table tabular w-full text-sm">
               <thead>
                 <tr className="border-y border-border bg-muted/40 text-left">
@@ -77,6 +78,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
                 )}
               </tbody>
             </table>
+            </div>
           </div>
         </Section>
       </Numbered>

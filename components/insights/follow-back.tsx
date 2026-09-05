@@ -24,7 +24,7 @@ export function DoesntFollowBack({ data }: FollowBackProps) {
       title="Doesn't Follow Back"
       hint="Accounts you follow that do not follow you back"
       action={
-        <div className="flex gap-1 rounded border border-border p-0.5">
+        <div className="flex flex-wrap gap-1 rounded border border-border p-0.5">
           {TABS.map((t) => {
             const count = data[t]?.dontFollowBack?.length ?? 0;
             return (
@@ -44,7 +44,7 @@ export function DoesntFollowBack({ data }: FollowBackProps) {
           })}
         </div>
       }
-      bodyClassName="-mx-5 max-h-[420px] overflow-y-auto"
+      bodyClassName="-mx-5 max-h-[420px] overflow-auto"
     >
       {scrapedAt && (
         <StaleNote
@@ -82,7 +82,7 @@ export function DoesntFollowBack({ data }: FollowBackProps) {
                 <td className="px-5 py-1.5 font-mono text-brand">
                   @{u.username}
                 </td>
-                <td className="px-2 py-1.5 text-ink-soft truncate">
+                <td className="max-w-[200px] truncate px-2 py-1.5 text-ink-soft">
                   {u.fullName ?? "—"}
                 </td>
                 <td className="px-5 py-1.5 text-right text-ink-muted">
