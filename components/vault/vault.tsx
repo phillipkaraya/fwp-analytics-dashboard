@@ -298,7 +298,7 @@ export function Vault() {
 
       {/* Cards */}
       {visible.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-border bg-card/60 p-12 text-center">
+        <div className="rounded-lg bg-card/50 p-12 text-center outline-dashed outline-1 -outline-offset-1 outline-border">
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted">
             Nothing here
           </p>
@@ -381,12 +381,14 @@ function Chip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "group inline-flex items-baseline gap-2 rounded-lg border px-3 py-2 text-sm transition-colors",
+        // Same surface language as the cards: no hairline border, soft shadow,
+        // brand fill when selected. "Other" stays deliberately quieter.
+        "group inline-flex items-baseline gap-2 rounded-lg px-3 py-2 text-sm transition",
         active
-          ? "border-brand bg-brand text-white shadow-sm"
+          ? "bg-brand text-white shadow-[0_8px_22px_-10px_rgb(30_111_217/0.65)] ring-1 ring-brand"
           : muted
-            ? "border-dashed border-border bg-card/60 text-ink-muted hover:border-brand/40 hover:text-ink"
-            : "border-border bg-card text-ink hover:border-brand/40",
+            ? "bg-card/50 text-ink-muted outline-dashed outline-1 -outline-offset-1 outline-border hover:text-ink hover:outline-brand/40"
+            : "card card-hover text-ink hover:text-brand-deep",
       )}
     >
       <span className="font-medium">{label}</span>
