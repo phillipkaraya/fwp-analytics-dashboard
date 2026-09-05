@@ -36,6 +36,7 @@ export const dataPaths = {
   tiktok: `${DATA_BASE}/tiktok_posts.json`,
   youtube: `${DATA_BASE}/youtube_posts.json`,
   threads: `${DATA_BASE}/threads_posts.json`,
+  linkedin: `${DATA_BASE}/linkedin_posts.json`,
   comments: `${DATA_BASE}/comments.json`,
   analytics: `${DATA_BASE}/analytics.json`,
   followData: `${DATA_BASE}/follow_data.json`,
@@ -49,16 +50,18 @@ export const loadPosts = {
   tiktok: () => fetchJson<Post[]>(dataPaths.tiktok, { fallback: [] }),
   youtube: () => fetchJson<Post[]>(dataPaths.youtube, { fallback: [] }),
   threads: () => fetchJson<Post[]>(dataPaths.threads, { fallback: [] }),
+  linkedin: () => fetchJson<Post[]>(dataPaths.linkedin, { fallback: [] }),
 };
 
 export async function loadAllPosts(): Promise<Post[]> {
-  const [ig, tt, yt, th] = await Promise.all([
+  const [ig, tt, yt, th, li] = await Promise.all([
     loadPosts.instagram(),
     loadPosts.tiktok(),
     loadPosts.youtube(),
     loadPosts.threads(),
+    loadPosts.linkedin(),
   ]);
-  return [...ig, ...tt, ...yt, ...th];
+  return [...ig, ...tt, ...yt, ...th, ...li];
 }
 
 export const loadComments = () =>
@@ -78,7 +81,7 @@ export const loadFollowData = () =>
 export const loadScrapeState = () =>
   fetchJson<ScrapeState>(dataPaths.scrapeState, {
     fallback: {
-      followers: { instagram: 0, tiktok: 0, youtube: 0, threads: 0 },
+      followers: { instagram: 0, tiktok: 0, youtube: 0, threads: 0, linkedin: 0 },
     },
   });
 

@@ -28,7 +28,7 @@ const NICHES = [
   "other",
 ];
 
-const PLATFORMS: Platform[] = ["instagram", "tiktok", "youtube", "threads"];
+const PLATFORMS: Platform[] = ["instagram", "tiktok", "youtube", "threads", "linkedin"];
 
 export function Creators() {
   const creators = useDashboardStore((s) => s.creators);

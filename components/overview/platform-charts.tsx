@@ -11,6 +11,8 @@ const PLATFORM_COLOR: Record<string, string> = {
   YouTube: "var(--yt)",
   Threads: "var(--th)",
   "Threads (likes)": "var(--th)",
+  LinkedIn: "var(--li)",
+  "LinkedIn (likes)": "var(--li)",
 };
 
 export function PlatformCharts({ posts }: { posts: Post[] }) {
@@ -20,7 +22,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
     rate: Number(avgEngagementRate(grouped[p]).toFixed(2)),
   }));
 
-  // Threads publishes no view count, so its reach bar is likes and says so.
+  // Viewless platforms (Threads, LinkedIn) get a likes bar that says so.
   const viewsData = PLATFORMS.map((p) => ({
     platform: hasViews(p) ? platformLabel[p] : `${platformLabel[p]} (likes)`,
     views: hasViews(p) ? totals(grouped[p]).views : totals(grouped[p]).likes,
@@ -30,7 +32,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
     <div className="grid gap-4 lg:grid-cols-2">
       <Numbered n={3}>
         <Section kicker="By platform"
-          title="Engagement Rate" hint="Average % per post. Threads is measured against followers, since it has no view count.">
+          title="Engagement Rate" hint="Average % per post. Threads and LinkedIn are measured against followers, since they publish no view count.">
           <BarChart
             data={engagementData}
             xKey="platform"
@@ -42,7 +44,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
       </Numbered>
       <Numbered n={4}>
         <Section kicker="By platform"
-          title="Reach" hint="Lifetime views. Threads counts likes, since it publishes no view count.">
+          title="Reach" hint="Lifetime views. Threads and LinkedIn count likes, since they publish no view count.">
           <BarChart
             data={viewsData}
             xKey="platform"

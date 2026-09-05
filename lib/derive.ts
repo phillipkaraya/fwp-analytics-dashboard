@@ -9,6 +9,7 @@ export const PLATFORMS: Platform[] = [
   "tiktok",
   "youtube",
   "threads",
+  "linkedin",
 ];
 
 /**
@@ -17,7 +18,7 @@ export const PLATFORMS: Platform[] = [
  * averages or ranks by views must leave Threads out (or show likes instead)
  * rather than present that zero as a measurement (Phil, 2026-09-04).
  */
-export const VIEWLESS_PLATFORMS: ReadonlySet<Platform> = new Set<Platform>(["threads"]);
+export const VIEWLESS_PLATFORMS: ReadonlySet<Platform> = new Set<Platform>(["threads", "linkedin"]);
 
 export function hasViews(platform: Platform): boolean {
   return !VIEWLESS_PLATFORMS.has(platform);
@@ -65,6 +66,7 @@ export function byPlatform<T>(
     tiktok: [],
     youtube: [],
     threads: [],
+    linkedin: [],
   };
   for (const it of items) out[pick(it)].push(it);
   return out;
@@ -167,7 +169,7 @@ export interface FollowerDeltas {
 export function followerDeltas(history: FollowerSnapshot[]): FollowerDeltas {
   const empty: FollowerDeltas = {
     since: null,
-    byPlatform: { instagram: null, tiktok: null, youtube: null, threads: null },
+    byPlatform: { instagram: null, tiktok: null, youtube: null, threads: null, linkedin: null },
     total: null,
   };
   const sorted = [...history]
@@ -179,6 +181,11 @@ export function followerDeltas(history: FollowerSnapshot[]): FollowerDeltas {
   const byPlatform = { ...empty.byPlatform };
   let total = 0;
   for (const p of PLATFORMS) {
+    // A platform missing from the earlier snapshot has no delta yet.
+    if (prev[p] === undefined || last[p] === undefined) {
+      byPlatform[p] = null;
+      continue;
+    }
     const d = toNum(last[p]) - toNum(prev[p]);
     byPlatform[p] = d;
     total += d;
@@ -218,6 +225,9 @@ export function platformCadence(posts: Post[]): {
   };
 }
 
+/** Labels come from scrape/sentiment.py and live in comments.json. The UI
+ *  never re-classifies; a missing label counts as neutral. `question` is the
+ *  number of comments flagged as questions, independent of sentiment. */
 export function sentimentBreakdown(comments: Comment[]) {
   const out = { positive: 0, neutral: 0, negative: 0, question: 0 };
   for (const c of comments) {
@@ -225,7 +235,4 @@ export function sentimentBreakdown(comments: Comment[]) {
     if (c.isQuestion) out.question += 1;
   }
   return out;
-/** Labels come from scrape/sentiment.py and live in comments.json. The UI
- *  never re-classifies; a missing label counts as neutral. `question` is the
- *  number of comments flagged as questions, independent of sentiment. */
 }

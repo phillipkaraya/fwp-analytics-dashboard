@@ -1,7 +1,7 @@
 # FWP Scraper
 
 Python (stdlib + `websocket-client`) that re-scrapes Instagram / TikTok /
-YouTube / Threads through the Chrome that is **already running** on this Mac,
+YouTube / Threads / LinkedIn through the Chrome that is **already running** on this Mac,
 then rebuilds every derived JSON the dashboard reads.
 
 ```bash
@@ -13,7 +13,7 @@ pip install websocket-client     # one-time
 ```bash
 cd ~/projects/fwp-analytics-dashboard
 
-python3 scrape/run.py                          # incremental, all four platforms
+python3 scrape/run.py                          # incremental, all five platforms
 python3 scrape/run.py --platforms instagram    # one platform
 python3 scrape/run.py --full                   # master sweep (see below)
 python3 scrape/run.py --analyze-only           # just rebuild analytics/vault JSON
@@ -42,7 +42,7 @@ Run it deliberately, not on a schedule.
 ## Chrome: use the shared one, never relaunch it
 
 The scraper connects to the Chrome on `CHROME_CDP_PORT` (default 9222),
-which carries Phil's logins for all four platforms. It opens **its own tabs**
+which carries Phil's logins for all five platforms. It opens **its own tabs**
 and closes them on every exit path. It never navigates or closes a tab it
 did not create, so it is safe to run while other sessions use the browser.
 
@@ -121,5 +121,6 @@ scrape/
     ├── instagram.py  web_profile_info + feed API via fetch() in page context
     ├── tiktok.py     DOM tile extraction while scrolling
     ├── youtube.py    ytInitialData + innertube continuations (videos + shorts)
-    └── threads.py    XHR hook capturing /graphql/query while scrolling
+    ├── threads.py    XHR hook capturing /graphql/query while scrolling
+    └── linkedin.py   reads the rendered activity feed cards (no catchable XHR); likes are its reach
 ```

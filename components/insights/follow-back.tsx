@@ -11,7 +11,7 @@ interface FollowBackProps {
   data: FollowData;
 }
 
-const TABS: Platform[] = ["instagram", "tiktok", "youtube", "threads"];
+const TABS: Platform[] = ["instagram", "tiktok", "youtube", "threads", "linkedin"];
 
 export function DoesntFollowBack({ data }: FollowBackProps) {
   const [active, setActive] = useState<Platform>("instagram");

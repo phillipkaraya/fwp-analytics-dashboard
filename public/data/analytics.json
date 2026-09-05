@@ -37,9 +37,9 @@
     "avgViews": 458
    },
    {
-    "count": 14,
-    "avgEngagement": 4.72,
-    "avgViews": 594
+    "count": 15,
+    "avgEngagement": 4.51,
+    "avgViews": 555
    },
    {
     "count": 0,
@@ -62,9 +62,9 @@
     "avgViews": 757
    },
    {
-    "count": 11,
-    "avgEngagement": 1.77,
-    "avgViews": 893
+    "count": 12,
+    "avgEngagement": 1.63,
+    "avgViews": 818
    },
    {
     "count": 34,
@@ -179,9 +179,9 @@
     "avgViews": 536
    },
    {
-    "count": 13,
-    "avgEngagement": 4.86,
-    "avgViews": 446242
+    "count": 14,
+    "avgEngagement": 4.53,
+    "avgViews": 414367
    },
    {
     "count": 14,
@@ -194,9 +194,9 @@
     "avgViews": 775
    },
    {
-    "count": 23,
-    "avgEngagement": 2.46,
-    "avgViews": 18858
+    "count": 24,
+    "avgEngagement": 2.42,
+    "avgViews": 18072
    },
    {
     "count": 21,
@@ -204,14 +204,14 @@
     "avgViews": 2111
    },
    {
-    "count": 31,
+    "count": 35,
     "avgEngagement": 2.15,
-    "avgViews": 1909
+    "avgViews": 1691
    },
    {
-    "count": 21,
-    "avgEngagement": 4.56,
-    "avgViews": 2502
+    "count": 22,
+    "avgEngagement": 4.44,
+    "avgViews": 2388
    },
    {
     "count": 19,
@@ -239,9 +239,9 @@
     "avgViews": 774
    },
    {
-    "count": 11,
-    "avgEngagement": 2.31,
-    "avgViews": 2285
+    "count": 12,
+    "avgEngagement": 2.18,
+    "avgViews": 2094
    }
   ],
   [
@@ -341,9 +341,9 @@
     "avgViews": 1660
    },
    {
-    "count": 23,
-    "avgEngagement": 2.39,
-    "avgViews": 932
+    "count": 24,
+    "avgEngagement": 2.3,
+    "avgViews": 894
    },
    {
     "count": 14,
@@ -418,9 +418,9 @@
     "avgViews": 859
    },
    {
-    "count": 34,
-    "avgEngagement": 2.34,
-    "avgViews": 1550
+    "count": 35,
+    "avgEngagement": 2.28,
+    "avgViews": 1506
    },
    {
     "count": 4,
@@ -438,9 +438,9 @@
     "avgViews": 1202
    },
    {
-    "count": 13,
-    "avgEngagement": 2.66,
-    "avgViews": 9313
+    "count": 14,
+    "avgEngagement": 2.64,
+    "avgViews": 8648
    },
    {
     "count": 25,
@@ -453,9 +453,9 @@
     "avgViews": 34424
    },
    {
-    "count": 28,
-    "avgEngagement": 2.74,
-    "avgViews": 1228
+    "count": 29,
+    "avgEngagement": 2.72,
+    "avgViews": 1186
    },
    {
     "count": 14,
@@ -580,9 +580,9 @@
     "avgViews": 1859
    },
    {
-    "count": 14,
-    "avgEngagement": 3.64,
-    "avgViews": 1374
+    "count": 15,
+    "avgEngagement": 4.12,
+    "avgViews": 1282
    },
    {
     "count": 26,
@@ -687,9 +687,9 @@
     "avgViews": 2306
    },
    {
-    "count": 12,
-    "avgEngagement": 5.37,
-    "avgViews": 1612
+    "count": 13,
+    "avgEngagement": 5.08,
+    "avgViews": 1488
    },
    {
     "count": 35,
@@ -859,9 +859,9 @@
   {
    "day": 1,
    "hour": 11,
-   "count": 13,
-   "avgEngagement": 4.86,
-   "avgViews": 446242
+   "count": 14,
+   "avgEngagement": 4.53,
+   "avgViews": 414367
   },
   {
    "day": 3,
@@ -880,9 +880,9 @@
   {
    "day": 1,
    "hour": 14,
-   "count": 23,
-   "avgEngagement": 2.46,
-   "avgViews": 18858
+   "count": 24,
+   "avgEngagement": 2.42,
+   "avgViews": 18072
   },
   {
    "day": 0,
@@ -894,9 +894,9 @@
   {
    "day": 3,
    "hour": 14,
-   "count": 13,
-   "avgEngagement": 2.66,
-   "avgViews": 9313
+   "count": 14,
+   "avgEngagement": 2.64,
+   "avgViews": 8648
   },
   {
    "day": 4,
@@ -964,9 +964,9 @@
   {
    "day": 1,
    "hour": 17,
-   "count": 21,
-   "avgEngagement": 4.56,
-   "avgViews": 2502
+   "count": 22,
+   "avgEngagement": 4.44,
+   "avgViews": 2388
   },
   {
    "day": 6,
@@ -990,95 +990,95 @@
    "avgViews": 2306
   },
   {
-   "day": 1,
-   "hour": 23,
-   "count": 11,
-   "avgEngagement": 2.31,
-   "avgViews": 2285
+   "day": 3,
+   "hour": 15,
+   "count": 25,
+   "avgEngagement": 2.74,
+   "avgViews": 2222
   }
  ],
  "contentCategories": {
   "comedy": {
-   "count": 791,
+   "count": 794,
    "avgViews": 16826,
-   "avgLikes": 498,
+   "avgLikes": 496,
    "avgEngagement": 3.34,
    "totalViews": 8715963
   },
   "other": {
-   "count": 470,
+   "count": 471,
    "avgViews": 1598,
    "avgLikes": 44,
    "avgEngagement": 5.3,
    "totalViews": 453856
   },
   "education": {
-   "count": 349,
+   "count": 358,
    "avgViews": 2418,
-   "avgLikes": 113,
+   "avgLikes": 112,
    "avgEngagement": 8.21,
    "totalViews": 590131
   },
   "finance": {
-   "count": 328,
+   "count": 334,
    "avgViews": 1989,
-   "avgLikes": 80,
+   "avgLikes": 79,
    "avgEngagement": 4.36,
    "totalViews": 529136
   },
   "cars": {
-   "count": 298,
+   "count": 299,
    "avgViews": 11279,
-   "avgLikes": 589,
+   "avgLikes": 587,
    "avgEngagement": 3.64,
    "totalViews": 2402638
   },
   "entrepreneurship": {
-   "count": 265,
+   "count": 274,
    "avgViews": 7117,
-   "avgLikes": 376,
+   "avgLikes": 365,
    "avgEngagement": 4.9,
    "totalViews": 1366470
   },
   "travel": {
-   "count": 226,
+   "count": 229,
    "avgViews": 3324,
-   "avgLikes": 104,
+   "avgLikes": 103,
    "avgEngagement": 3.66,
    "totalViews": 468804
   },
   "real_estate": {
-   "count": 201,
+   "count": 202,
    "avgViews": 3293,
    "avgLikes": 124,
    "avgEngagement": 3.81,
    "totalViews": 474192
   },
   "lifestyle": {
-   "count": 190,
+   "count": 197,
    "avgViews": 4679,
-   "avgLikes": 170,
+   "avgLikes": 166,
    "avgEngagement": 4.19,
    "totalViews": 584965
   },
   "sports": {
-   "count": 185,
+   "count": 187,
    "avgViews": 7169,
-   "avgLikes": 312,
+   "avgLikes": 309,
    "avgEngagement": 3.44,
    "totalViews": 803005
   },
   "family": {
-   "count": 154,
+   "count": 159,
    "avgViews": 2897,
-   "avgLikes": 131,
+   "avgLikes": 129,
    "avgEngagement": 5.67,
    "totalViews": 266586
   },
   "motivation": {
-   "count": 145,
+   "count": 150,
    "avgViews": 2427,
-   "avgLikes": 133,
+   "avgLikes": 130,
    "avgEngagement": 13.38,
    "totalViews": 216083
   },
@@ -1090,9 +1090,9 @@
    "totalViews": 51756
   },
   "africa": {
-   "count": 23,
+   "count": 26,
    "avgViews": 5460,
-   "avgLikes": 177,
+   "avgLikes": 160,
    "avgEngagement": 3.24,
    "totalViews": 65521
   }
@@ -1961,6 +1961,13 @@
    "avgComments": 0,
    "avgEngagement": 0.0,
    "posts": 564
+  },
+  "linkedin": {
+   "avgViews": 0,
+   "avgLikes": 30,
+   "avgComments": 3,
+   "avgEngagement": 0.0,
+   "posts": 16
   }
  },
  "engagementFunnel": {
@@ -1996,6 +2003,15 @@
    "likes": 297,
    "comments": 40,
    "shares": 12,
+   "likeRate": 0,
+   "commentRate": 0,
+   "shareRate": 0
+  },
+  "linkedin": {
+   "views": 0,
+   "likes": 487,
+   "comments": 48,
+   "shares": 17,
    "likeRate": 0,
    "commentRate": 0,
    "shareRate": 0
@@ -2261,7 +2277,8 @@
    "instagram": 1880,
    "tiktok": 1545,
    "youtube": 124,
-   "threads": 20
+   "threads": 20,
+   "linkedin": 0
   }
  },
  "topCommenters": [
@@ -2482,100 +2499,17 @@
  ],
  "highValueComments": [
   {
-   "id": "tt_c_682",
-   "postId": "tt_7034256779999464710",
-   "platform": "tiktok",
-   "username": "@yony_loko",
-   "text": "This is why they charge an additional 100+ cleaning fee :(",
-   "sentiment": "question",
-   "likes": 839,
-   "date": "2021-11-25",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
-   "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
-  },
-  {
-   "id": "tt_c_0",
-   "postId": "tt_7031283140316499205",
-   "platform": "tiktok",
-   "username": "@comedy_king223",
-   "text": "This is why I refuse to put my car on turo",
-   "sentiment": "question",
-   "likes": 699,
-   "date": "2021-11-17",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031283140316499205",
-   "postTitle": "Fun fact: The day after this happened someone broke in one of my other cars & stole my laptop \ud83d\ude12 #dontletthisflop  #turo"
-  },
-  {
-   "id": "tt_c_683",
-   "postId": "tt_7034256779999464710",
-   "platform": "tiktok",
-   "username": "@asiah_thoo",
-   "text": "Idk why ppl do this because they were probably charged 2k for damages",
-   "sentiment": "question",
-   "likes": 234,
-   "date": "2021-11-26",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
-   "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
-  },
-  {
-   "id": "tt_c_1047",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@queenbelleallure",
-   "text": "I would rather just pay the rent. 25%!? No ma\u2019am that\u2019s too much",
-   "sentiment": "question",
-   "likes": 154,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
-   "id": "tt_c_1051",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@the.ttresor",
-   "text": "25% that\u2019s crazy! Plus I gotta still pay regular rent??? \ud83d\ude35\u200d\ud83d\udcab\ud83d\ude35\u200d\ud83d\udcab",
-   "sentiment": "question",
-   "likes": 80,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
-   "id": "tt_c_1054",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@jaysocooly",
-   "text": "When she said \u201cso there\u2019s that\u201dyou already know what\u2019s up \ud83d\ude05",
-   "sentiment": "question",
-   "likes": 76,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
    "id": "tt_c_3",
    "postId": "tt_7031283140316499205",
    "platform": "tiktok",
    "username": "@kenyantrucker",
    "text": "I see the passport on your wrist. Are you kenyan \ud83c\uddf0\ud83c\uddea?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 59,
    "date": "2021-11-17",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031283140316499205",
    "postTitle": "Fun fact: The day after this happened someone broke in one of my other cars & stole my laptop \ud83d\ude12 #dontletthisflop  #turo"
-  },
-  {
-   "id": "tt_c_1354",
-   "postId": "tt_7032681378764393775",
-   "platform": "tiktok",
-   "username": "@rish.motors",
-   "text": "dude works for himself and is making money by finding his own path instead of just being told what to do by a boss. sounds like an entrepreneur to me",
-   "sentiment": "question",
-   "likes": 51,
-   "date": "2021-11-21",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7032681378764393775",
-   "postTitle": "Reply to @freedom_in_sight #greenscreen"
   },
   {
    "id": "tt_c_685",
@@ -2583,59 +2517,25 @@
    "platform": "tiktok",
    "username": "@adamoreve",
    "text": "What happened after? You charged the customer for damages, but what if they retaliate with bad reviews, refusal to pay, etc?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 44,
    "date": "2021-12-04",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
    "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
   },
   {
-   "id": "tt_c_686",
-   "postId": "tt_7034256779999464710",
+   "id": "tt_c_1224",
+   "postId": "tt_7031995022216301870",
    "platform": "tiktok",
-   "username": "@watchmegrowmymoney",
-   "text": "When it rains it poors keep your head it up you got this",
-   "sentiment": "question",
-   "likes": 39,
-   "date": "2021-11-25",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
-   "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
-  },
-  {
-   "id": "tt_c_1058",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@ladyoga10",
-   "text": "25%!!!!? \ud83d\ude43",
-   "sentiment": "question",
-   "likes": 35,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
-   "id": "tt_c_1492",
-   "postId": "tt_7031996709731503406",
-   "platform": "tiktok",
-   "username": "@channylite",
-   "text": "You got to love how people are underestimating your abilities. \ud83e\udd70",
-   "sentiment": "question",
-   "likes": 33,
+   "username": "@thebeltrans",
+   "text": "We need an update if turo gives you more $$",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 20,
    "date": "2021-11-18",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031996709731503406",
-   "postTitle": "Reply to @bigmike_keepnitreal"
-  },
-  {
-   "id": "tt_c_1055",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@reggier3gg",
-   "text": "I would've asked so what's stopping me from just not telling you guys \ud83d\ude02",
-   "sentiment": "question",
-   "likes": 27,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031995022216301870",
+   "postTitle": "Reply to @starmena3 #greenscreen"
   },
   {
    "id": "tt_c_694",
@@ -2643,23 +2543,12 @@
    "platform": "tiktok",
    "username": "@by_ahsha",
    "text": "Bruhhhh where is the deposit ?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 19,
    "date": "2021-11-24",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
    "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
-  },
-  {
-   "id": "tt_c_1248",
-   "postId": "tt_7031996016392097070",
-   "platform": "tiktok",
-   "username": "@maurtinez",
-   "text": "People in the tiktok comments always the experts and know what they talking about\ud83d\ude02",
-   "sentiment": "question",
-   "likes": 16,
-   "date": "2021-11-18",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031996016392097070",
-   "postTitle": "Reply to @nemracy1k"
   },
   {
    "id": "tt_c_684",
@@ -2667,23 +2556,12 @@
    "platform": "tiktok",
    "username": "@danniimarie332",
    "text": "Wait you from the east too ?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 15,
    "date": "2021-11-25",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
    "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
-  },
-  {
-   "id": "tt_c_1052",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@cashmeredimee",
-   "text": "She knew she was talking back when she said that \u201c25% from it so um there\u2019s that\u201d + the lil laugh. Girl bye.",
-   "sentiment": "question",
-   "likes": 13,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
   },
   {
    "id": "tt_c_1714",
@@ -2691,7 +2569,8 @@
    "platform": "tiktok",
    "username": "@pimpinblu",
    "text": "do you have programs that help people start a turo business?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 12,
    "date": "2021-12-06",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7038348564766166319",
@@ -2703,21 +2582,10 @@
    "platform": "instagram",
    "username": "@nai_hex",
    "text": "@phillip.karaya I\u2019m sorry but can we please get the story on what happened here because I\u2019m lost for words \ud83d\ude05",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 9,
    "date": "2023-06-06",
-   "postUrl": "",
-   "postTitle": ""
-  },
-  {
-   "id": "ig_c_2618",
-   "postId": "ig_2789751183412286160",
-   "platform": "instagram",
-   "username": "@mixedby601",
-   "text": "\ud83d\udde3The things you had to do to get where you\u2019re going aren\u2019t the things you need to do to sustain it.\n\nSay it again for the people in the back",
-   "sentiment": "question",
-   "likes": 9,
-   "date": "2022-03-08",
    "postUrl": "",
    "postTitle": ""
   },
@@ -2727,7 +2595,8 @@
    "platform": "youtube",
    "username": "@randomtube2476",
    "text": "This story doesnt sound profitable to me.  I dont see how the down payment price matters.  I can get a tesla for $0 down rn.  That doesn't make it a good investment.  Also Isnt buying assets while the prices are at their highest a bad idea?",
-   "sentiment": "question",
+   "sentiment": "negative",
+   "isQuestion": true,
    "likes": 9,
    "date": "2025-03-29",
    "postUrl": "https://www.youtube.com/shorts/yxnxn4-1p7I",
@@ -2739,7 +2608,8 @@
    "platform": "tiktok",
    "username": "@king_kaison",
    "text": "Where do you get the pre-approval letter?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 8,
    "date": "2021-12-29",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7047144385993116934",
@@ -2751,35 +2621,12 @@
    "platform": "tiktok",
    "username": "@leyenduh",
    "text": "Can you share the solution once it happens ?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 7,
    "date": "2021-11-19",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031995022216301870",
    "postTitle": "Reply to @starmena3 #greenscreen"
-  },
-  {
-   "id": "tt_c_1516",
-   "postId": "tt_7036829705345043718",
-   "platform": "tiktok",
-   "username": "@steeviestash",
-   "text": "Be what we needed \ud83e\udd1e\ud83c\udffe\u2764\ufe0f",
-   "sentiment": "question",
-   "likes": 7,
-   "date": "2021-12-01",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7036829705345043718",
-   "postTitle": "He liked my Kenyan\ud83c\uddf0\ud83c\uddea bracelet, so I gave it to him for promising he\u2019d never stop believing in himself. #motivation #disn"
-  },
-  {
-   "id": "tt_c_1517",
-   "postId": "tt_7036829705345043718",
-   "platform": "tiktok",
-   "username": "@arthurgaxiola",
-   "text": "he\u2019ll remember this, i used to be this kid. and he\u2019ll have his own interaction too. what a wonderful world",
-   "sentiment": "question",
-   "likes": 7,
-   "date": "2021-12-01",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7036829705345043718",
-   "postTitle": "He liked my Kenyan\ud83c\uddf0\ud83c\uddea bracelet, so I gave it to him for promising he\u2019d never stop believing in himself. #motivation #disn"
   },
   {
    "id": "ig_c_443",
@@ -2787,21 +2634,10 @@
    "platform": "instagram",
    "username": "@foreignsteph",
    "text": "Now the real question is, can you do this without the trampoline? \ud83e\udd14 Cause that\u2019s something I\u2019ve always wanted to learn how to do lol",
-   "sentiment": "question",
+   "sentiment": "positive",
+   "isQuestion": true,
    "likes": 6,
    "date": "2023-10-19",
-   "postUrl": "",
-   "postTitle": ""
-  },
-  {
-   "id": "ig_c_1089",
-   "postId": "ig_2880852134209925575",
-   "platform": "instagram",
-   "username": "@drwreilly",
-   "text": "\ud83d\ude02 She even laughed after saying \u201c25%\u201d\ud83d\ude02 what a ridiculous scam not even offering any support in exchange for that fee",
-   "sentiment": "question",
-   "likes": 6,
-   "date": "2022-07-12",
    "postUrl": "",
    "postTitle": ""
   },
@@ -2811,35 +2647,12 @@
    "platform": "tiktok",
    "username": "@theblackknightz",
    "text": "Is this not considered hustling?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 6,
    "date": "2021-11-26",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7032681378764393775",
    "postTitle": "Reply to @freedom_in_sight #greenscreen"
-  },
-  {
-   "id": "tt_c_1431",
-   "postId": "tt_7119540138429992234",
-   "platform": "tiktok",
-   "username": "@itsmikeloowrey",
-   "text": "wait a minute... Turo makes renters AND owners pay insurance? double coverage? wtf",
-   "sentiment": "question",
-   "likes": 6,
-   "date": "2022-07-12",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119540138429992234",
-   "postTitle": "When #turo things go correctly \ud83d\ude07 Horror stories get the views but things are not always terrible \ud83d\ude02\ud83d\ude02\ud83d\ude02"
-  },
-  {
-   "id": "tt_c_1638",
-   "postId": "tt_7228993374592814379",
-   "platform": "tiktok",
-   "username": "@tabby_banks_",
-   "text": "Crickets now that you have shown the proof",
-   "sentiment": "question",
-   "likes": 6,
-   "date": "2023-05-03",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7228993374592814379",
-   "postTitle": "Replying to @Dallas Kenney Here\u2019s proof of my $2.1M business aqcuisition story. (Check out the video he commented on for"
   },
   {
    "id": "ig_c_2978",
@@ -2847,7 +2660,8 @@
    "platform": "instagram",
    "username": "@officialdalvinj",
    "text": "He bit it ?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 5,
    "date": "2023-12-11",
    "postUrl": "",
@@ -2859,47 +2673,12 @@
    "platform": "tiktok",
    "username": "@indespoiled",
    "text": "\ud83d\ude33 Is this the first complex in Atlanta accepting this?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 5,
    "date": "2022-07-13",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
    "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
-   "id": "tt_c_1074",
-   "postId": "tt_7119537947053002026",
-   "platform": "tiktok",
-   "username": "@darknights_brightdays",
-   "text": "Rent PLUS the 25%?!?! And my guest would have to pay to park! That\u2019s crazy!",
-   "sentiment": "question",
-   "likes": 5,
-   "date": "2022-07-13",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
-   "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
-   "id": "tt_c_1251",
-   "postId": "tt_7031996016392097070",
-   "platform": "tiktok",
-   "username": "@thotpieces",
-   "text": "Like it\u2019s a NEW CAR. NEW BODY. NEW MODEL. so the parts literally have to be from Nissan\u2026 Why do people open their mouths on things they know nun about",
-   "sentiment": "question",
-   "likes": 5,
-   "date": "2021-11-21",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031996016392097070",
-   "postTitle": "Reply to @nemracy1k"
-  },
-  {
-   "id": "tt_c_1535",
-   "postId": "tt_7026722029747457285",
-   "platform": "tiktok",
-   "username": "@financewithphil",
-   "text": "Never close your first CC! (Unless it\u2019s costing you more than it\u2019s worth) When you close your 1st CC, you erase the credit history attatched to it",
-   "sentiment": "question",
-   "likes": 5,
-   "date": "2021-11-04",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7026722029747457285",
-   "postTitle": "I put a #credithack I wish I would\u2019ve learned before I got my 1st #creditcard in the comments section."
   },
   {
    "id": "tt_c_1613",
@@ -2907,7 +2686,8 @@
    "platform": "tiktok",
    "username": "@dirty30something",
    "text": "Can you help me get multiple things to pay me money. I\u2019m grateful to be employed but I\u2019m tired",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 5,
    "date": "2021-12-06",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7038693625940675887",
@@ -2919,59 +2699,38 @@
    "platform": "instagram",
    "username": "@joshokla142",
    "text": "5% maintenance fee \n5% service fee\n5% allowance fee\n5% fee fee\n5% ..shit..so u not gon do it?\ud83e\udd37\ud83c\udffd\u200d\u2642\ufe0ffee",
-   "sentiment": "question",
+   "sentiment": "negative",
+   "isQuestion": true,
    "likes": 4,
    "date": "2022-07-12",
    "postUrl": "",
    "postTitle": ""
   },
   {
-   "id": "tt_c_762",
-   "postId": "tt_7034256779999464710",
-   "platform": "tiktok",
-   "username": "@jameshaaaaaaa",
-   "text": "so no one's gonna mention the condom wrapper in the trash can??? that's why the bed is broke lol",
-   "sentiment": "question",
+   "id": "ig_c_4459",
+   "postId": "ig_3399379498690430397",
+   "platform": "instagram",
+   "username": "@jefedabarber",
+   "text": "Can share your resources to purchase in Kenya",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 4,
-   "date": "2021-11-25",
-   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
-   "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
+   "date": "2024-06-26",
+   "postUrl": "",
+   "postTitle": ""
   },
   {
-   "id": "tt_c_1066",
+   "id": "tt_c_1068",
    "postId": "tt_7119537947053002026",
    "platform": "tiktok",
-   "username": "@vd.babe",
-   "text": "25% plus rent? Oh nah",
-   "sentiment": "question",
+   "username": "@animawehlcsw",
+   "text": "Did you see they take 25%",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 4,
-   "date": "2022-07-13",
+   "date": "2022-07-12",
    "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119537947053002026",
    "postTitle": "For the people doing #airbnb in #atlanta this is for you \ud83d\ude0e #realestate #fyp"
-  },
-  {
-   "id": "yt_c_4",
-   "postId": "yt_iOvolwJFn68",
-   "platform": "youtube",
-   "username": "@FloridianMenace",
-   "text": "Fun fact: because a good chunk of the Internet is racist, most generally trained AIs are also racist.",
-   "sentiment": "question",
-   "likes": 4,
-   "date": "2025-05-29",
-   "postUrl": "https://www.youtube.com/shorts/iOvolwJFn68",
-   "postTitle": "What do you think the self checkout was thinking ? \ud83e\udd14, 13 thousand views"
-  },
-  {
-   "id": "yt_c_9",
-   "postId": "yt_u_muIF9532c",
-   "platform": "youtube",
-   "username": "@GADRIELXDIABLO",
-   "text": "Mold ?",
-   "sentiment": "question",
-   "likes": 4,
-   "date": "2024-03-29",
-   "postUrl": "https://www.youtube.com/shorts/u_muIF9532c",
-   "postTitle": "New Fear Unlocked \ud83d\ude02 #ohno #turo #welp, 10 thousand views"
   },
   {
    "id": "ig_c_832",
@@ -2979,21 +2738,10 @@
    "platform": "instagram",
    "username": "@etribbs",
    "text": "I mean, how long did they have the car to grow that much mold? This is disgusting \ud83e\udd22",
-   "sentiment": "question",
+   "sentiment": "negative",
+   "isQuestion": true,
    "likes": 3,
    "date": "2023-06-06",
-   "postUrl": "",
-   "postTitle": ""
-  },
-  {
-   "id": "ig_c_960",
-   "postId": "ig_3301353204809647550",
-   "platform": "instagram",
-   "username": "@vics.vibes",
-   "text": "Yeooooo \ud83d\ude2d\ud83d\ude2d if I say \u201cmannn, see back when I was a kid\u201d one more time",
-   "sentiment": "question",
-   "likes": 3,
-   "date": "2024-02-12",
    "postUrl": "",
    "postTitle": ""
   },
@@ -3003,7 +2751,8 @@
    "platform": "instagram",
    "username": "@mylezkeith",
    "text": "Bro what do you not do?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 3,
    "date": "2021-05-21",
    "postUrl": "",
@@ -3015,21 +2764,10 @@
    "platform": "instagram",
    "username": "@sooo_sequoya",
    "text": "The moldy interior is crazy- did they leave windows down and it rained?",
-   "sentiment": "question",
+   "sentiment": "negative",
+   "isQuestion": true,
    "likes": 3,
    "date": "2024-07-16",
-   "postUrl": "",
-   "postTitle": ""
-  },
-  {
-   "id": "ig_c_3145",
-   "postId": "ig_3426586916244930715",
-   "platform": "instagram",
-   "username": "@k.3.r.n",
-   "text": "Full court press in them headphones \ud83e\udd23. He got what he deserved lol.",
-   "sentiment": "question",
-   "likes": 3,
-   "date": "2024-08-03",
    "postUrl": "",
    "postTitle": ""
   },
@@ -3039,7 +2777,8 @@
    "platform": "instagram",
    "username": "@saywayne",
    "text": "She talking about the shot right? lol",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 3,
    "date": "2023-04-19",
    "postUrl": "",
@@ -3051,7 +2790,8 @@
    "platform": "instagram",
    "username": "@_jtashe",
    "text": "Did Stone ever get his paddle?",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 3,
    "date": "2025-06-25",
    "postUrl": "",
@@ -3063,23 +2803,350 @@
    "platform": "instagram",
    "username": "@grdnofiii",
    "text": "Wait he just stepped on it and slid it in his pocket??",
-   "sentiment": "question",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 3,
    "date": "2023-09-13",
    "postUrl": "",
    "postTitle": ""
   },
   {
-   "id": "ig_c_5548",
-   "postId": "ig_2195561358534264237",
-   "platform": "instagram",
-   "username": "@nashbiofficial",
-   "text": "Phillip is a different kind of human. Definitely fully tapped Into the gifts God has sown in him. Truly grateful to call you brother and friend. I can\u2019t wait to see what God is about to do with you man, cause he\u2019s already done so much and it\u2019s just the beginning. Here for you always \ud83d\ude4f\ud83c\udffe\ud83d\udcaa\ud83c\udffe",
-   "sentiment": "question",
+   "id": "tt_c_716",
+   "postId": "tt_7034256779999464710",
+   "platform": "tiktok",
+   "username": "@nostar580",
+   "text": "Wat was they even doin \ud83d\udc80\ud83d\udc80",
+   "sentiment": "neutral",
+   "isQuestion": true,
    "likes": 3,
-   "date": "2019-12-09",
+   "date": "2021-11-27",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034256779999464710",
+   "postTitle": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
+  },
+  {
+   "id": "tt_c_1446",
+   "postId": "tt_7031997047842770223",
+   "platform": "tiktok",
+   "username": "@yassine009888",
+   "text": "Did Turo end up paying you\u2019re expense for the repair ??",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 3,
+   "date": "2021-11-18",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031997047842770223",
+   "postTitle": "Reply to @g_233_s"
+  },
+  {
+   "id": "ig_c_32",
+   "postId": "ig_3368729989356093773",
+   "platform": "instagram",
+   "username": "@eugenedaviid",
+   "text": "Why's the house number 6006 \ud83d\ude02\ud83d\ude02\ud83d\ude02. I'm still childish \ud83d\ude02\ud83d\ude02\ud83d\ude02",
+   "sentiment": "positive",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2024-07-11",
    "postUrl": "",
    "postTitle": ""
+  },
+  {
+   "id": "ig_c_895",
+   "postId": "ig_2791011505250983481",
+   "platform": "instagram",
+   "username": "@kid.winen",
+   "text": "How much you want for it \ud83d\udc40",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-03-10",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_988",
+   "postId": "ig_2814141483018364237",
+   "platform": "instagram",
+   "username": "@rion.eth",
+   "text": "Yo who are your enemies???",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-04-11",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1085",
+   "postId": "ig_2880852134209925575",
+   "platform": "instagram",
+   "username": "@carolinasownn",
+   "text": "Why not list it on other platforms and dial back the BNB bookings over time \ud83e\udd2f\ud83e\udd2f",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-07-12",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1215",
+   "postId": "ig_3681215203674261150",
+   "platform": "instagram",
+   "username": "@_sincerelybetty",
+   "text": "did my new favorite show just drop?! \ud83d\ude2d\ud83d\udd25 i\u2019m already tuned in and crying!!! congrats to your sisterrrrr \ud83e\udd79\ud83d\udc95",
+   "sentiment": "positive",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2025-07-20",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1319",
+   "postId": "ig_2425722622294768177",
+   "platform": "instagram",
+   "username": "@rellisheffect",
+   "text": "I want some advice",
+   "sentiment": "positive",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2020-10-22",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1336",
+   "postId": "ig_2988127248520526207",
+   "platform": "instagram",
+   "username": "@mercy_orangi",
+   "text": "Ey!!! When\u2019s the album dropping?",
+   "sentiment": "positive",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-12-07",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1593",
+   "postId": "ig_3081799463107450755",
+   "platform": "instagram",
+   "username": "@yisseldarhoc",
+   "text": "Why are you on a roof?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2023-04-15",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1834",
+   "postId": "ig_2419411032301714412",
+   "platform": "instagram",
+   "username": "@kristinaalexus",
+   "text": "how do you manage having so many cards?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2020-10-13",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_1848",
+   "postId": "ig_2419411032301714412",
+   "platform": "instagram",
+   "username": "@kristinaalexus",
+   "text": "how do you manage having so many cards?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2020-10-13",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_2500",
+   "postId": "ig_3627693935464375158",
+   "platform": "instagram",
+   "username": "@_missxoxo",
+   "text": "Do you know how much you saved doing this? lol",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2025-05-09",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_2932",
+   "postId": "ig_3079537774475526571",
+   "platform": "instagram",
+   "username": "@perfect9z",
+   "text": "Which trackers and switches do you use? I need to add them to my fleet.",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2023-04-12",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_3023",
+   "postId": "ig_2456321976596186862",
+   "platform": "instagram",
+   "username": "@adikamtaro13",
+   "text": "Have y\u2019all started grubbing and clearing the site? Very satisfying to watch lol",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2020-12-03",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_3367",
+   "postId": "ig_2988121985395127009",
+   "platform": "instagram",
+   "username": "@tpgent",
+   "text": "Wait a logo already?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-12-07",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_3985",
+   "postId": "ig_2746959901147782574",
+   "platform": "instagram",
+   "username": "@kid.winen",
+   "text": "Dude got a sister? Asking for a friend \ud83e\udd74",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-01-08",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_5063",
+   "postId": "ig_3686880851087826785",
+   "platform": "instagram",
+   "username": "@valueaddmike",
+   "text": "If it\u2019s pre-revenue what do you have to account for \ud83d\ude02",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2025-07-29",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "ig_c_5178",
+   "postId": "ig_3096074139958513897",
+   "platform": "instagram",
+   "username": "@juliancolvard",
+   "text": "Why did it fall apart, not enough financial documents from the seller?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2023-05-05",
+   "postUrl": "",
+   "postTitle": ""
+  },
+  {
+   "id": "tt_c_14",
+   "postId": "tt_7031283140316499205",
+   "platform": "tiktok",
+   "username": "@sugashayd",
+   "text": "Why on earth would you even rent out your car.",
+   "sentiment": "negative",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2021-11-27",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031283140316499205",
+   "postTitle": "Fun fact: The day after this happened someone broke in one of my other cars & stole my laptop \ud83d\ude12 #dontletthisflop  #turo"
+  },
+  {
+   "id": "tt_c_1404",
+   "postId": "tt_7034583682040040751",
+   "platform": "tiktok",
+   "username": "@12889te",
+   "text": "Did he say no shit?\ud83d\ude02",
+   "sentiment": "positive",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2021-11-28",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7034583682040040751",
+   "postTitle": "Reply to @mmmmmray"
+  },
+  {
+   "id": "tt_c_1423",
+   "postId": "tt_7040131696024407301",
+   "platform": "tiktok",
+   "username": "@nataliekingstro",
+   "text": "nice video, you mentioned you have private insurance & turo insurance, what private insurance are you using? if I may ask.",
+   "sentiment": "positive",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2021-12-11",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7040131696024407301",
+   "postTitle": "Reply to @diulaylomomfer #turo #ohno #success #hacks #entrepreneur  \ud83d\ude07 Don\u2019t we all love a happy ending !"
+  },
+  {
+   "id": "tt_c_1432",
+   "postId": "tt_7119540138429992234",
+   "platform": "tiktok",
+   "username": "@sm.0598",
+   "text": "But why do you have to pay 250 deductible if a renter crashes it?",
+   "sentiment": "negative",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2022-07-12",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7119540138429992234",
+   "postTitle": "When #turo things go correctly \ud83d\ude07 Horror stories get the views but things are not always terrible \ud83d\ude02\ud83d\ude02\ud83d\ude02"
+  },
+  {
+   "id": "tt_c_1493",
+   "postId": "tt_7031996709731503406",
+   "platform": "tiktok",
+   "username": "@htx_auto_sales",
+   "text": "So does Turo\u2019s insurance cover it or your personal insurance? Who\u2019s insurance took the the claim?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2021-11-18",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031996709731503406",
+   "postTitle": "Reply to @bigmike_keepnitreal"
+  },
+  {
+   "id": "tt_c_1494",
+   "postId": "tt_7031996709731503406",
+   "platform": "tiktok",
+   "username": "@dodatderr",
+   "text": "So if insurance is covering how are you paying over $1,900 to get it fixed if the deductible is only $500?",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2021-11-18",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031996709731503406",
+   "postTitle": "Reply to @bigmike_keepnitreal"
+  },
+  {
+   "id": "tt_c_1587",
+   "postId": "tt_7031995629941296431",
+   "platform": "tiktok",
+   "username": "@myleftnut2",
+   "text": "and how much do u usually charge for a car like the blue nissan",
+   "sentiment": "neutral",
+   "isQuestion": true,
+   "likes": 2,
+   "date": "2021-11-18",
+   "postUrl": "https://www.tiktok.com/@phillip.karaya/video/7031995629941296431",
+   "postTitle": "Reply to @comedy_king223"
   }
  ],
  "hashtagPerformance": [
@@ -3093,9 +3160,9 @@
   },
   {
    "tag": "#entrepreneurship",
-   "count": 13,
+   "count": 14,
    "avgViews": 96451,
-   "avgLikes": 5695,
+   "avgLikes": 5290,
    "avgEngagement": 4.9,
    "totalViews": 964518
   },
@@ -3245,9 +3312,9 @@
   },
   {
    "tag": "#atlanta",
-   "count": 52,
+   "count": 53,
    "avgViews": 5356,
-   "avgLikes": 158,
+   "avgLikes": 155,
    "avgEngagement": 3.6,
    "totalViews": 203548
   },
@@ -3261,9 +3328,9 @@
   },
   {
    "tag": "#business",
-   "count": 14,
+   "count": 15,
    "avgViews": 5252,
-   "avgLikes": 264,
+   "avgLikes": 249,
    "avgEngagement": 6.22,
    "totalViews": 57772
   },
@@ -3655,10 +3722,10 @@
   },
   {
    "month": "2020-02",
-   "posts": 4,
+   "posts": 5,
    "views": 0,
-   "likes": 1035,
-   "comments": 80
+   "likes": 1067,
+   "comments": 83
   },
   {
    "month": "2020-05",
@@ -3690,17 +3757,17 @@
   },
   {
    "month": "2020-09",
-   "posts": 5,
+   "posts": 8,
    "views": 3004,
-   "likes": 659,
-   "comments": 169
+   "likes": 700,
+   "comments": 172
   },
   {
    "month": "2020-10",
-   "posts": 7,
+   "posts": 8,
    "views": 5286,
-   "likes": 1294,
-   "comments": 215
+   "likes": 1324,
+   "comments": 217
   },
   {
    "month": "2020-11",
@@ -3746,10 +3813,10 @@
   },
   {
    "month": "2021-05",
-   "posts": 9,
+   "posts": 10,
    "views": 16990,
-   "likes": 2915,
-   "comments": 449
+   "likes": 3066,
+   "comments": 483
   },
   {
    "month": "2021-06",
@@ -3760,17 +3827,17 @@
   },
   {
    "month": "2021-07",
-   "posts": 2,
+   "posts": 3,
    "views": 2377,
-   "likes": 269,
+   "likes": 308,
    "comments": 70
   },
   {
    "month": "2021-08",
-   "posts": 7,
+   "posts": 9,
    "views": 24643,
-   "likes": 1271,
-   "comments": 149
+   "likes": 1345,
+   "comments": 150
   },
   {
    "month": "2021-09",
@@ -3837,10 +3904,10 @@
   },
   {
    "month": "2022-06",
-   "posts": 15,
+   "posts": 17,
    "views": 42179,
-   "likes": 2071,
-   "comments": 243
+   "likes": 2077,
+   "comments": 244
   },
   {
    "month": "2022-07",
@@ -3865,10 +3932,10 @@
   },
   {
    "month": "2022-11",
-   "posts": 11,
+   "posts": 14,
    "views": 16547,
-   "likes": 836,
-   "comments": 75
+   "likes": 914,
+   "comments": 78
   },
   {
    "month": "2022-12",
@@ -3879,16 +3946,16 @@
   },
   {
    "month": "2023-01",
-   "posts": 3,
+   "posts": 4,
    "views": 1670,
-   "likes": 50,
-   "comments": 8
+   "likes": 79,
+   "comments": 9
   },
   {
    "month": "2023-02",
-   "posts": 1,
+   "posts": 2,
    "views": 17,
-   "likes": 1,
+   "likes": 8,
    "comments": 0
   },
   {
@@ -16483,6 +16550,7 @@
    "title": "The assignment I gave the students last week was to write out in a story format of what a successful life looks like for",
    "platforms": [
     "instagram",
+    "linkedin",
     "threads",
     "youtube"
    ],
@@ -16510,6 +16578,14 @@
      "likes": 0,
      "date": "2025-07-31",
      "url": "https://www.threads.com/@phillip.karaya/post/DMyPTXRKLCS"
+    },
+    {
+     "id": "li_7023399364442169344",
+     "platform": "linkedin",
+     "views": 0,
+     "likes": 29,
+     "date": "2023-01-23",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:7023399364442169344/"
     }
    ],
    "bestPlatform": "instagram",
@@ -18041,6 +18117,33 @@
    "viewDiff": 1131
   },
   {
+   "title": "It\u2019s been a great chapter of life being able to teach at the same school I went to the past year and a half. I\u2019ve been a",
+   "platforms": [
+    "instagram",
+    "linkedin"
+   ],
+   "posts": [
+    {
+     "id": "ig_2622850123807320002_5251656103",
+     "platform": "instagram",
+     "views": 1122,
+     "likes": 106,
+     "date": "2021-07-21",
+     "url": "https://www.instagram.com/p/CRmPEqIn-fC/"
+    },
+    {
+     "id": "li_6823681914960920576",
+     "platform": "linkedin",
+     "views": 0,
+     "likes": 39,
+     "date": "2021-07-21",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:6823681914960920576/"
+    }
+   ],
+   "bestPlatform": "instagram",
+   "viewDiff": 1122
+  },
+  {
    "title": "Check out last Post for more Context \ud83e\udee0",
    "platforms": [
     "instagram",
@@ -18983,6 +19086,33 @@
    "viewDiff": 613
   },
   {
+   "title": "Atlanta Friendship Initiative and the Bridge took a field trip to Montgomery AL to visit the National Memorial for Peace",
+   "platforms": [
+    "instagram",
+    "linkedin"
+   ],
+   "posts": [
+    {
+     "id": "ig_2971432966766682988_5251656103",
+     "platform": "instagram",
+     "views": 540,
+     "likes": 49,
+     "date": "2022-11-14",
+     "url": "https://www.instagram.com/p/Ck8poo6A2Ns/"
+    },
+    {
+     "id": "li_6998007659547303936",
+     "platform": "linkedin",
+     "views": 0,
+     "likes": 21,
+     "date": "2022-11-14",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:6998007659547303936/"
+    }
+   ],
+   "bestPlatform": "instagram",
+   "viewDiff": 540
+  },
+  {
    "title": "For more travel tips comment the word \u201cTrips\u201d! I\u2019ll send you an invite to Free Finance Fridays. #traveltok #travelhacks",
    "platforms": [
     "tiktok",
@@ -19413,6 +19543,33 @@
    ],
    "bestPlatform": "youtube",
    "viewDiff": 413
+  },
+  {
+   "title": "\"No program is gonna change brutality if we still have a bunch of poverty. Poverty breeds criminality which breeds over-",
+   "platforms": [
+    "instagram",
+    "linkedin"
+   ],
+   "posts": [
+    {
+     "id": "ig_2399048180907016761_5251656103",
+     "platform": "instagram",
+     "views": 407,
+     "likes": 28,
+     "date": "2020-09-15",
+     "url": "https://www.instagram.com/p/CFLIZweAoI5/"
+    },
+    {
+     "id": "li_6711771616692465664",
+     "platform": "linkedin",
+     "views": 0,
+     "likes": 5,
+     "date": "2020-09-15",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:6711771616692465664/"
+    }
+   ],
+   "bestPlatform": "instagram",
+   "viewDiff": 407
   },
   {
    "title": "What\u2019s the best advice you ever heard? #wealthtips #jackofalltrades",
@@ -20111,6 +20268,60 @@
      "likes": 1,
      "date": "2025-03-08",
      "url": "https://www.threads.com/@phillip.karaya/post/DG8Z4fVxcsS"
+    }
+   ],
+   "bestPlatform": "instagram",
+   "viewDiff": 0
+  },
+  {
+   "title": "4 years ago I was leading as my fellow classmates as a President of Model African Union and now I\u2019m getting to lead a ch",
+   "platforms": [
+    "instagram",
+    "linkedin"
+   ],
+   "posts": [
+    {
+     "id": "ig_2631634318687859134_5251656103",
+     "platform": "instagram",
+     "views": 0,
+     "likes": 362,
+     "date": "2021-08-02",
+     "url": "https://www.instagram.com/p/CSFcXhIHfG-/"
+    },
+    {
+     "id": "li_6828054716853841921",
+     "platform": "linkedin",
+     "views": 0,
+     "likes": 51,
+     "date": "2021-08-02",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:6828054716853841921/"
+    }
+   ],
+   "bestPlatform": "instagram",
+   "viewDiff": 0
+  },
+  {
+   "title": "Just a first generation student who started a few businesses, became a professor, started a nonprofit to keep kids in sc",
+   "platforms": [
+    "instagram",
+    "linkedin"
+   ],
+   "posts": [
+    {
+     "id": "ig_2567263130595655879_5251656103",
+     "platform": "instagram",
+     "views": 0,
+     "likes": 979,
+     "date": "2021-05-05",
+     "url": "https://www.instagram.com/p/COgwDcgHIDH/"
+    },
+    {
+     "id": "li_6796192211257085952",
+     "platform": "linkedin",
+     "views": 0,
+     "likes": 151,
+     "date": "2021-05-06",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:6796192211257085952/"
     }
    ],
    "bestPlatform": "instagram",
@@ -20840,15 +21051,16 @@
    "instagram": 11000,
    "tiktok": 14000,
    "youtube": 5020,
-   "threads": 1787
+   "threads": 1787,
+   "linkedin": 1714
   }
  ],
  "hookTypes": [
   {
    "type": "other",
-   "count": 1429,
+   "count": 1443,
    "avgViews": 4937,
-   "avgLikes": 219,
+   "avgLikes": 217,
    "avgEngagement": 5.31,
    "totalViews": 4517716,
    "topPost": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
@@ -20882,18 +21094,18 @@
   },
   {
    "type": "controversy",
-   "count": 52,
+   "count": 53,
    "avgViews": 3657,
-   "avgLikes": 98,
+   "avgLikes": 97,
    "avgEngagement": 3.1,
    "totalViews": 113375,
    "topPost": "\u201cNobody does anything significant by themselves!\u201d Things are never hard with the proper guidance\ud83d\ude0e#realestate #entreprene"
   },
   {
    "type": "story",
-   "count": 30,
+   "count": 31,
    "avgViews": 1241,
-   "avgLikes": 64,
+   "avgLikes": 63,
    "avgEngagement": 2.62,
    "totalViews": 23584,
    "topPost": "Based on a true story unfortunately \ud83e\udd72"
@@ -20945,6 +21157,13 @@
    "lastTitle": "\ud83d\udd7a\ud83c\udffe\ud83d\ude02",
    "lastId": "th_3913149855149112734",
    "totalPosts": 564
+  },
+  "linkedin": {
+   "lastDate": "2023-02-08",
+   "daysSince": 1305,
+   "lastTitle": "Awesome time with some awesome people! The future is definitely bright!",
+   "lastId": "li_7029102857215778816",
+   "totalPosts": 16
   }
  },
  "cadenceStats": {
@@ -20975,6 +21194,13 @@
    "postsPerMonth": 23.7,
    "longestGap": 97,
    "totalPosts": 560
+  },
+  "linkedin": {
+   "avgDaysBetween": 71.9,
+   "postsPerWeek": 0.1,
+   "postsPerMonth": 0.4,
+   "longestGap": 303,
+   "totalPosts": 16
   }
  },
  "followData": {
@@ -28565,16 +28791,18 @@
    "totalMutual": 4588
   }
  },
- "generatedAt": "2026-09-05T04:16:02+00:00",
+ "generatedAt": "2026-09-05T20:00:01+00:00",
  "dataAsOf": {
-  "posts": "2026-09-05T04:16:02+00:00",
+  "posts": "2026-09-05T18:58:40+00:00",
   "comments": "2026-02-22"
  },
- "questionCount": 932,
+ "questionCount": 559,
  "commentSentiment": {
-  "neutral": 6468,
-  "question": 932,
-  "positive": 526,
-  "negative": 73
+  "positive": 5300,
+  "neutral": 2187,
+  "negative": 512
+ },
+ "sentimentSources": {
+  "llm": 7999
  }
 }

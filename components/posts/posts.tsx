@@ -80,8 +80,12 @@ export function Posts() {
     return {
       ...t,
       engagement: avgEngagementRate(filtered),
-      // False when the slice is Threads only: no platform in it reports views.
+      // False when every post in the slice is from a platform without a view
+      // count (Threads, LinkedIn).
       viewsKnown: filtered.some((p) => hasViews(p.platform)),
+      viewlessLabel: PLATFORMS.filter((pl) => !hasViews(pl) && grouped[pl].length > 0)
+        .map((pl) => platformLabel[pl])
+        .join(" and "),
       perPlatform: PLATFORMS.map((pl) => ({
         platform: pl,
         posts: grouped[pl].length,
@@ -109,7 +113,7 @@ export function Posts() {
             value: fmtShort(filtered.length),
             hint: filtered.length === posts.length ? "all platforms" : `of ${fmt(posts.length)}`,
           },
-          // A Threads-only slice has no view count, so likes are the reach
+          // A slice with no view-reporting platform uses likes as the reach
           // number and engagement is measured against followers.
           slice.viewsKnown
             ? {
@@ -120,7 +124,7 @@ export function Posts() {
             : {
                 label: "Likes as reach",
                 value: fmtShort(slice.likes),
-                hint: "Threads publishes no view count",
+                hint: `${slice.viewlessLabel || "This platform"} publishes no view count`,
               },
           { label: "Likes", value: fmtShort(slice.likes), hint: `${fmt(slice.comments)} comments` },
           {
@@ -249,7 +253,7 @@ export function Posts() {
                   {hasViews(p.platform) ? (
                     fmt(p.views)
                   ) : (
-                    <span className="text-ink-soft" title="Threads publishes no view count; likes are its reach">
+                    <span className="text-ink-soft" title="No view count on this platform; likes are its reach">
                       {fmt(p.likes)}
                       <span className="ml-1 font-mono text-[10px] text-ink-muted">likes</span>
                     </span>

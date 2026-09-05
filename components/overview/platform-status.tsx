@@ -10,7 +10,7 @@ import {
 import type { FollowerSnapshot, Platform, Post, ScrapeState } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-/** One card, four cells: each platform's followers, delta, cadence and last post. */
+/** One card, one cell per platform: followers, delta, cadence and last post. */
 export function PlatformStatusRow({
   posts,
   scrape,
@@ -24,7 +24,7 @@ export function PlatformStatusRow({
   const deltas = followerDeltas(history);
 
   return (
-    <div className="card rise grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="card rise grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
       {PLATFORMS.map((p, i) => {
         const last = platformLastPosted(grouped[p]);
         const cad = platformCadence(grouped[p]);

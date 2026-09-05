@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 V1_DIR = ROOT / "v1-archive" / "data"
 V2_DIR = ROOT / "public" / "data"
 
-PLATFORMS = ["instagram", "tiktok", "youtube", "threads"]
+PLATFORMS = ["instagram", "tiktok", "youtube", "threads", "linkedin"]
 
 # Fields to backfill if the v2 value is "empty" (0, "", "0.00")
 NUMERIC_FIELDS = ["likes", "comments", "shares", "saves", "views"]

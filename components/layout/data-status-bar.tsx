@@ -38,6 +38,7 @@ export function DataStatusBar({ tone = "light" }: { tone?: "light" | "dark" }) {
           s.tiktok?.lastScrapedDate,
           s.youtube?.lastScrapedDate,
           s.threads?.lastScrapedDate,
+          s.linkedin?.lastScrapedDate,
           s.lastAutoCheck,
         ]
           .filter((d): d is string => !!d)

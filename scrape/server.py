@@ -38,7 +38,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from scrape import analyze  # noqa: E402
 from scrape.cdp import CDPError  # noqa: E402
-from scrape.platforms import instagram, tiktok, youtube, threads  # noqa: E402
+from scrape.platforms import instagram, linkedin, tiktok, youtube, threads  # noqa: E402
 
 PORT = 5556
 VERSION = "0.3.0"
@@ -53,7 +53,7 @@ SCRAPE_STATE = DATA_DIR / "scrape_state.json"
 JOBS: dict[str, dict] = {}
 JOBS_LOCK = threading.Lock()
 
-PLATFORMS = ["instagram", "tiktok", "youtube", "threads"]
+PLATFORMS = ["instagram", "tiktok", "youtube", "threads", "linkedin"]
 
 
 def now_iso() -> str:
@@ -92,6 +92,7 @@ PLATFORM_RUNNERS = {
     "tiktok": tiktok.scrape,
     "youtube": youtube.scrape,
     "threads": threads.scrape,
+    "linkedin": linkedin.scrape,
 }
 
 
@@ -283,7 +284,7 @@ def main() -> None:
     print(f"FWP Scraper service v{VERSION} on http://localhost:{PORT}")
     print(f"  data dir: {DATA_DIR}")
     print(f"  Chrome CDP port: {default_port()} (override with CHROME_CDP_PORT)")
-    print("  platforms: instagram, tiktok, youtube, threads (all real, Chrome-CDP)")
+    print("  platforms: instagram, tiktok, youtube, threads, linkedin (all real, Chrome-CDP)")
     print("  endpoints: GET /ping  POST /scrape {platforms?, mode?: 'full'}  GET /scrape-status?id=<jobId>")
     HTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
 

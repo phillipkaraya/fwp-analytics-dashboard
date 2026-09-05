@@ -1,14 +1,7 @@
 "use client";
 
 import { fmt, fmtDate, fmtShort, numeralShift, platformLabel, relativeTime } from "@/lib/format";
-import {
-  PLATFORMS,
-  followerDeltas,
-  pctChange,
-  platformLastPosted,
-  windowLabel,
-  windowTotals,
-} from "@/lib/derive";
+import { PLATFORMS, followerDeltas, pctChange, platformLastPosted, toNum, windowLabel, windowTotals } from "@/lib/derive";
 import type { FollowerSnapshot, Post, ScrapeState } from "@/lib/types";
 import { PlatformDot } from "@/components/charts/platform-badge";
 import { HeroPanel, HeroRow, PageHero, SignedCount } from "@/components/layout/page-hero";
@@ -34,7 +27,7 @@ export function Hero({ posts, scrape, history, days }: HeroProps) {
 
   return (
     <PageHero
-      eyebrow={`${windowLabel(days)} · all four platforms`}
+      eyebrow={`${windowLabel(days)} · all platforms`}
       stats={[
         { label: "Views", value: fmtShort(cur.views), pct: pctChange(cur.views, prev.views) },
         { label: "Posts published", value: fmtShort(cur.posts), pct: pctChange(cur.posts, prev.posts) },
@@ -100,7 +93,7 @@ function Sparkline({ history }: { history: FollowerSnapshot[] }) {
   const pts = [...history]
     .filter((h) => h && h.date)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .map((h) => h.instagram + h.tiktok + h.youtube + h.threads);
+    .map((h) => PLATFORMS.reduce((sum, p) => sum + toNum(h[p]), 0));
   if (pts.length < 3) return null;
   const w = 280;
   const h = 48;

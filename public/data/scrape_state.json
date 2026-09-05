@@ -31,12 +31,21 @@
     "instagram": 11000,
     "tiktok": 14000,
     "youtube": 5020,
-    "threads": 1787
+    "threads": 1787,
+    "linkedin": 1714
   },
   "followersUpdated": {
     "instagram": "2026-09-05T04:15:29+00:00",
     "tiktok": "2026-09-05T04:15:36+00:00",
     "youtube": "2026-09-05T04:15:43+00:00",
-    "threads": "2026-09-05T04:16:02+00:00"
+    "threads": "2026-09-05T04:16:02+00:00",
+    "linkedin": "2026-09-05T18:58:40+00:00"
+  },
+  "linkedin": {
+    "lastScrapedDate": "2026-09-05T18:58:40+00:00",
+    "status": "complete",
+    "totalScraped": 16,
+    "lastPostId": "li_7029102857215778816",
+    "lastRunNewPosts": 16
   }
 }

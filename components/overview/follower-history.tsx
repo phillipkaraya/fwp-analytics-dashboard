@@ -36,7 +36,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
           <div className="grid min-w-0 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <p className="text-sm text-ink-soft">
               Every run of the scraper on a new day appends one snapshot of
-              all four follower counts to <code className="font-mono text-xs">follower_history.json</code>.
+              every follower count to <code className="font-mono text-xs">follower_history.json</code>.
               Once there are {MIN_POINTS}, this card turns into a line chart per platform. Until then,
               here are the points recorded so far.
             </p>
@@ -60,7 +60,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
               <tbody>
                 {sorted.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-3 py-6 text-center text-sm text-ink-muted">
+                    <td colSpan={PLATFORMS.length + 1} className="px-3 py-6 text-center text-sm text-ink-muted">
                       No snapshots yet.
                     </td>
                   </tr>
@@ -87,10 +87,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
 
   const data = sorted.map((h) => ({
     date: parseDate(h.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" }),
-    instagram: toNum(h.instagram),
-    tiktok: toNum(h.tiktok),
-    youtube: toNum(h.youtube),
-    threads: toNum(h.threads),
+    ...Object.fromEntries(PLATFORMS.map((p) => [p, h[p] === undefined ? null : toNum(h[p])])),
   }));
   const first = sorted[0];
   const last = sorted[sorted.length - 1];
@@ -104,7 +101,9 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
         action={
           <ul className="flex flex-wrap gap-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted">
             {PLATFORMS.map((p) => {
-              const d = toNum(last[p]) - toNum(first[p]);
+              // Measure from the first snapshot that has this platform.
+              const firstWith = sorted.find((h) => h[p] !== undefined) ?? first;
+              const d = toNum(last[p]) - toNum(firstWith[p]);
               return (
                 <li key={p} className="flex items-center gap-1.5">
                   <PlatformDot platform={p} />

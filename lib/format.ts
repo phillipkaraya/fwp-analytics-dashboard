@@ -72,6 +72,7 @@ export const platformLabel: Record<Platform, string> = {
   tiktok: "TikTok",
   youtube: "YouTube",
   threads: "Threads",
+  linkedin: "LinkedIn",
 };
 
 export const platformShort: Record<Platform, string> = {
@@ -79,6 +80,7 @@ export const platformShort: Record<Platform, string> = {
   tiktok: "TT",
   youtube: "YT",
   threads: "TH",
+  linkedin: "LI",
 };
 
 export const platformColor: Record<Platform, string> = {
@@ -86,6 +88,7 @@ export const platformColor: Record<Platform, string> = {
   tiktok: "var(--tt)",
   youtube: "var(--yt)",
   threads: "var(--th)",
+  linkedin: "var(--li)",
 };
 
 /**

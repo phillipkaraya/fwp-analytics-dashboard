@@ -103,7 +103,7 @@ export function ScrapeDialog({
           </DialogTitle>
           <DialogDescription>
             Runs the incremental scrape for Instagram, TikTok, YouTube and
-            Threads through the local scraper service.
+            Threads and LinkedIn through the local scraper service.
           </DialogDescription>
         </DialogHeader>
 
@@ -201,7 +201,7 @@ function ReadyToStart() {
   return (
     <div className="space-y-2 text-sm text-ink-soft">
       <p>
-        Looks for posts newer than the last run on all four platforms, then
+        Looks for posts newer than the last run on all five platforms, then
         regenerates the Insights and Vault files. Freshness timestamps update
         as each platform finishes.
       </p>

@@ -6,7 +6,7 @@ Rebuild the derived JSON the dashboard reads, from the raw scraped posts.
 
 Inputs  (public/data/):  instagram_posts.json, tiktok_posts.json,
                          youtube_posts.json, threads_posts.json,
-                         comments.json, scrape_state.json
+                         linkedin_posts.json, comments.json, scrape_state.json
 Outputs (public/data/):  analytics.json        -> Insights tab (lib/types.ts AnalyticsBundle)
                          content_vault.json    -> Content Vault tab
                          follower_history.json -> follower growth series (appended, never rewritten)
@@ -40,7 +40,7 @@ from scrape.sentiment import classify_comments  # noqa: E402
 DATA_DIR = ROOT / "public" / "data"
 CATEGORIES_FILE = Path(__file__).resolve().parent / "categories.json"
 
-PLATFORMS = ["instagram", "tiktok", "youtube", "threads"]
+PLATFORMS = ["instagram", "tiktok", "youtube", "threads", "linkedin"]
 POST_FILES = {p: DATA_DIR / f"{p}_posts.json" for p in PLATFORMS}
 COMMENTS_FILE = DATA_DIR / "comments.json"
 SCRAPE_STATE_FILE = DATA_DIR / "scrape_state.json"

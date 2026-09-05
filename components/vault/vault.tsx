@@ -434,6 +434,7 @@ const PLATFORM_TINT: Record<Platform, string> = {
   tiktok: "color-mix(in oklab, var(--tt) 8%, white)",
   youtube: "color-mix(in oklab, var(--yt) 12%, white)",
   threads: "color-mix(in oklab, var(--th) 8%, white)",
+  linkedin: "color-mix(in oklab, var(--li) 12%, white)",
 };
 
 function youtubeThumb(post: Post): string | null {

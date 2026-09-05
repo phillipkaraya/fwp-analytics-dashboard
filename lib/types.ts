@@ -1,6 +1,6 @@
 // Shared types — mirror the JSON shapes in /public/data/*.
 
-export type Platform = "instagram" | "tiktok" | "youtube" | "threads";
+export type Platform = "instagram" | "tiktok" | "youtube" | "threads" | "linkedin";
 
 export interface Post {
   id: string;
@@ -46,6 +46,8 @@ export interface FollowerSnapshot {
   tiktok: number;
   youtube: number;
   threads: number;
+  /** Added 2026-09-05; older snapshots do not carry it. */
+  linkedin?: number;
 }
 
 export interface ScrapeState {
@@ -56,6 +58,7 @@ export interface ScrapeState {
   tiktok?: PlatformScrapeState;
   youtube?: PlatformScrapeState;
   threads?: PlatformScrapeState;
+  linkedin?: PlatformScrapeState;
 }
 
 export interface PlatformScrapeState {
@@ -71,6 +74,7 @@ export interface FollowData {
   youtube?: PlatformFollowData;
   threads?: PlatformFollowData;
   summary?: Record<string, unknown>;
+  linkedin?: PlatformFollowData;
 }
 
 export interface HeatmapCell {
@@ -153,11 +157,11 @@ export interface HighValueComment {
   username: string;
   text: string;
   likes: number;
+  isQuestion?: boolean;
   date?: string;
   postUrl?: string;
 }
 
-  isQuestion?: boolean;
 export interface GrowthMonth {
   month: string;
   posts: number;
@@ -206,12 +210,12 @@ export interface AnalyticsBundle {
   /** Number of comments flagged as questions (all of them, not "unreplied"). */
   questionCount?: number;
   commentSentiment?: Record<string, number>;
+  /** How labels were produced: counts by "llm" | "lexicon". */
+  sentimentSources?: Record<string, number>;
   [key: string]: unknown;
 }
 
 export interface FollowUser {
-  /** How labels were produced: counts by "llm" | "lexicon". */
-  sentimentSources?: Record<string, number>;
   id: string;
   username: string;
   fullName?: string;
