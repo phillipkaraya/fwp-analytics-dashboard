@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Finance With Phil Social Media Analytics: Setup Guide</title>
+<style>
+  @page { size: Letter; margin: 0.8in 0.85in 0.9in 0.85in; }
+  :root {
+    --ink: #0f1b2d; --ink-soft: #3a4a60; --ink-muted: #6b7a90;
+    --brand: #1f6fe0; --brand-deep: #0b3d91; --brand-soft: #e8f0fc;
+    --line: #d9e1ec; --card: #f6f8fb; --warn-soft: #fff4e0; --warn: #8a5300;
+    --ok-soft: #e6f6ec; --ok: #1d6b3a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink); font-size: 10.5pt; line-height: 1.5;
+  }
+  code, pre, .mono {
+    font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  code { font-size: 9.4pt; background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 0 3px; }
+  pre {
+    font-size: 9.2pt; line-height: 1.45; background: #0f1b2d; color: #e8eef7; border-radius: 6px;
+    padding: 10px 12px; margin: 8px 0 12px; white-space: pre-wrap; word-break: break-word;
+    page-break-inside: avoid;
+  }
+  pre code { background: transparent; border: 0; padding: 0; color: inherit; font-size: inherit; }
+  h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; }
+  h1 { font-size: 30pt; margin: 0 0 6px; font-weight: 700; }
+  h2 { font-size: 17pt; margin: 26px 0 8px; padding-top: 10px; border-top: 2px solid var(--brand); color: var(--brand-deep); page-break-after: avoid; }
+  h3 { font-size: 12pt; margin: 16px 0 4px; page-break-after: avoid; }
+  p { margin: 6px 0 10px; }
+  ul, ol { margin: 4px 0 10px; padding-left: 22px; }
+  li { margin: 3px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0 14px; font-size: 9.6pt; page-break-inside: auto; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: var(--card); font-size: 8.6pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); }
+  tr { page-break-inside: avoid; }
+  .kicker { font-family: "SF Mono", Menlo, monospace; font-size: 8.5pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
+  .cover { background: linear-gradient(135deg, #0b1e3f 0%, #123f86 55%, #1f6fe0 100%); color: #fff; border-radius: 12px; padding: 34px 34px 30px; margin-bottom: 22px; }
+  .cover .kicker { color: rgba(255,255,255,0.72); }
+  .cover h1 { color: #fff; }
+  .cover p { color: rgba(255,255,255,0.88); font-size: 11.5pt; max-width: 560px; margin-top: 10px; }
+  .cover .meta { display: flex; gap: 26px; margin-top: 22px; flex-wrap: wrap; }
+  .cover .meta div { font-size: 9pt; color: rgba(255,255,255,0.75); }
+  .cover .meta strong { display: block; color: #fff; font-size: 11pt; font-weight: 600; }
+  .callout { border-left: 4px solid var(--brand); background: var(--brand-soft); padding: 8px 12px; border-radius: 0 6px 6px 0; margin: 10px 0 14px; page-break-inside: avoid; }
+  .callout.warn { border-color: #d98b12; background: var(--warn-soft); }
+  .callout.ok { border-color: #2e9e5b; background: var(--ok-soft); }
+  .callout p { margin: 2px 0; }
+  .callout .label { font-family: "SF Mono", Menlo, monospace; font-size: 8pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-muted); display: block; margin-bottom: 2px; }
+  .step { display: flex; gap: 14px; align-items: baseline; margin-top: 24px; page-break-after: avoid; }
+  .step .n { font-family: "SF Mono", Menlo, monospace; font-size: 22pt; font-weight: 700; color: var(--brand); line-height: 1; min-width: 34px; }
+  .step h2 { border: 0; padding: 0; margin: 0; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; page-break-inside: avoid; }
+  .card h4 { margin: 0 0 4px; font-size: 10pt; }
+  .card p { margin: 0; font-size: 9.6pt; color: var(--ink-soft); }
+  .toc { columns: 2; column-gap: 28px; font-size: 9.8pt; }
+  .toc ol { margin: 0; padding-left: 20px; }
+  .toc li { margin: 2px 0; }
+  .small { font-size: 9pt; color: var(--ink-muted); }
+  .pb { page-break-before: always; }
+  pre.map { font-size: 8.2pt; line-height: 1.4; white-space: pre; }
+  footer.end { margin-top: 30px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 8.8pt; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="kicker">Finance With Phil · Internal guide</div>
+  <h1>Social Media Analytics<br>Setup Guide</h1>
+  <p>How to set up the FWP analytics dashboard from a blank Mac to a live, PIN-gated site that tracks Instagram, TikTok, YouTube, Threads and LinkedIn, with model-labeled comment sentiment. Every command here is the one actually used on Phil's machine.</p>
+  <div class="meta">
+    <div><strong>Live site</strong>phillipkaraya.github.io/fwp-analytics-dashboard</div>
+    <div><strong>Repository</strong>github.com/phillipkaraya/fwp-analytics-dashboard</div>
+    <div><strong>Written</strong>September 5, 2026 · matches commit e8d7cfe</div>
+  </div>
+</section>
+
+<div class="kicker">Contents</div>
+<div class="toc">
+  <ol>
+    <li>What you end up with</li>
+    <li>Before you start: the checklist</li>
+    <li>Step 1 · Get the code and install</li>
+    <li>Step 2 · Run it locally and set the PIN</li>
+    <li>Step 3 · Chrome with remote debugging</li>
+    <li>Step 4 · Point the scraper at the right accounts</li>
+    <li>Step 5 · The first data pull</li>
+    <li>Step 6 · Comment sentiment with Groq</li>
+    <li>Step 7 · Topics for the Content Vault</li>
+    <li>Step 8 · Deploy to GitHub Pages</li>
+    <li>The day-to-day routine</li>
+    <li>How the numbers are computed</li>
+    <li>Troubleshooting</li>
+    <li>File map</li>
+    <li>Rules that keep this safe</li>
+  </ol>
+</div>
+
+<h2>1. What you end up with</h2>
+<p>A static Next.js site, exported to plain HTML and JSON and hosted free on GitHub Pages behind a PIN. It has five tabs: <strong>Overview</strong> (followers, a 30/90/365-day window of views, posts, likes and comments, platform strip, reach and engagement by platform, follower history), <strong>Post Analysis</strong> (every post, filterable and sortable), <strong>Comments</strong> (7,999 comments with sentiment and question flags), <strong>Insights</strong> (viral posts, hooks, hashtags, superfans, questions worth answering, cross-posting) and the <strong>Content Vault</strong> (every post filed by topic).</p>
+<p>The data behind it comes from a Python scraper that drives the Chrome you are already signed in to, so there are no API keys for the social platforms and nothing to renew. The only external service is Groq's free tier, used once to label comment sentiment and then only for new comments.</p>
+
+<div class="grid2">
+  <div class="card"><h4>Platforms</h4><p>Instagram, TikTok, YouTube, Threads, LinkedIn. Threads and LinkedIn publish no view count, so their reach is measured in likes and their engagement against followers.</p></div>
+  <div class="card"><h4>Refresh cadence</h4><p>Run the scraper by hand when new posts go out. One run per day is plenty and adds one point to the follower history.</p></div>
+  <div class="card"><h4>Cost</h4><p>Zero. GitHub Pages, GitHub Actions, and Groq's free tier. No paid APIs, no server.</p></div>
+  <div class="card"><h4>Time to set up</h4><p>About an hour, plus a 15 to 30 minute first scrape and a 25 minute first sentiment pass that run on their own.</p></div>
+</div>
+
+<h2>2. Before you start: the checklist</h2>
+<table>
+  <tr><th>You need</th><th>Why</th><th>Check</th></tr>
+  <tr><td>macOS with Google Chrome</td><td>The scraper reads the platforms through your signed-in Chrome.</td><td>Chrome opens and you can sign in to all five platforms.</td></tr>
+  <tr><td>Node 20 and pnpm 10</td><td>Builds the site. The deploy workflow uses the same versions.</td><td><code>node -v</code> and <code>pnpm -v</code></td></tr>
+  <tr><td>Python 3.9 or newer</td><td>Runs the scraper and analyzer. Standard library plus one package.</td><td><code>python3 --version</code></td></tr>
+  <tr><td>git and the GitHub CLI</td><td>Push to the repo and set the one repository secret.</td><td><code>gh auth status</code> shows phillipkaraya</td></tr>
+  <tr><td>Groq account (free)</td><td>Optional. Labels comment sentiment with a model; without it a lexicon does the job.</td><td>A key from console.groq.com stored in Keychain (Step 6).</td></tr>
+  <tr><td><code>secret-sync</code></td><td>Phil's Keychain resolver. Keys reach a process as environment variables and never touch a file.</td><td><code>secret-sync doctor</code></td></tr>
+</table>
+
+<div class="callout warn"><span class="label">Rule</span><p>The dashboard PIN and every API key stay out of the repository. The repo is public. The PIN is stored as a SHA-256 hash in a GitHub secret, the Groq key lives in Keychain, and the scraper never copies cookies out of Chrome.</p></div>
+
+<div class="step"><div class="n">01</div><h2>Get the code and install</h2></div>
+<pre><code>cd ~/projects
+git clone https://github.com/phillipkaraya/fwp-analytics-dashboard.git
+cd fwp-analytics-dashboard
+pnpm install
+pip3 install websocket-client</code></pre>
+<p><code>websocket-client</code> is the only Python dependency. It carries the Chrome DevTools Protocol connection. Everything else in <code>scrape/</code> is standard library, which is why it runs on the Python that ships with macOS.</p>
+
+<div class="step"><div class="n">02</div><h2>Run it locally and set the PIN</h2></div>
+<pre><code>pnpm dev</code></pre>
+<p>Open <code>http://localhost:3000</code>. You will meet the PIN wall. In development the gate accepts a built-in fallback PIN; for anything you deploy, set your own. The site never stores the PIN itself, only its SHA-256 hash, which is compared in the browser with the Web Crypto API and remembered for the tab session.</p>
+<p>Make a hash without the PIN ever appearing in your shell history:</p>
+<pre><code>read -s PIN; printf '%s' "$PIN" | shasum -a 256 | cut -d' ' -f1; unset PIN</code></pre>
+<p>For local development put that hash in <code>.env.local</code> (gitignored):</p>
+<pre><code>NEXT_PUBLIC_DASHBOARD_PIN_HASH=paste-the-64-character-hash-here</code></pre>
+<p>Keep the hash handy. Step 8 puts the same value into a GitHub secret so the live site uses it too.</p>
+<div class="callout"><span class="label">Good to know</span><p>The dev server reads <code>public/data/*.json</code> on every request, so after any scrape you just reload. If styles ever look stale after edits, stop the server and remove <code>.next/dev</code> and <code>.next/cache</code>; Next 16's persistent dev cache occasionally serves an old stylesheet.</p></div>
+
+<div class="step"><div class="n">03</div><h2>Chrome with remote debugging</h2></div>
+<p>The scraper does not log in anywhere. It connects to a Chrome that is already running with the DevTools Protocol enabled on port 9222, opens its own tabs, reads the pages as you would see them, and closes only the tabs it opened. That Chrome must be signed in to Instagram, TikTok, YouTube, Threads and LinkedIn.</p>
+<p>On Phil's Mac the <code>chrome-cdp</code> shell function does this. It is safe to call when Chrome is already listening; it just prints the version. If nothing is listening yet, it quits Chrome and relaunches it with the debugging port, so run it before you start working in Chrome, not in the middle of something.</p>
+<pre><code>chrome-cdp
+curl -s http://127.0.0.1:9222/json/version</code></pre>
+<p>On another Mac without that helper, quit Chrome and launch it once with the flag. The profile is your normal one, so your logins come along:</p>
+<pre><code>open -a "Google Chrome" --args --remote-debugging-port=9222</code></pre>
+<p>Then sign in to each of the five platforms in that Chrome window. Sessions on Instagram, TikTok, YouTube and Threads last a long time. LinkedIn's expires by design every few weeks; when it does, the LinkedIn scrape stops with a message telling you to sign in again, and the other four platforms carry on.</p>
+<div class="callout warn"><span class="label">Never</span><p>Do not relaunch Chrome on a different port to scrape, and do not close tabs you did not open. The scraper coordinates with other automation through <code>ccbrowser</code> when it is present, claims a tab lease for the run, and refuses to start when the Mac is critically low on memory.</p></div>
+
+<div class="step"><div class="n">04</div><h2>Point the scraper at the right accounts</h2></div>
+<p>All handles live in one file, <code>scrape/handles.py</code>. Change them there and nowhere else.</p>
+<pre><code>HANDLES = {
+    "instagram": "phillip.karaya",
+    "tiktok": "phillip.karaya",
+    "youtube": "@phillip.karaya",
+    "threads": "phillip.karaya",
+    "linkedin": "phillip-karaya",
+}
+YOUTUBE_CHANNEL_ID = "UCHTb2yDMGoptvmgxh49UniA"
+INSTAGRAM_USER_ID = "5251656103"</code></pre>
+<p>Two of these are stable identifiers rather than handles. YouTube is scraped by channel ID so a handle rename cannot break it; the handle is only used for display and links. The Instagram user ID is the numeric suffix of every Instagram post ID. When a handle changes (TikTok and YouTube both moved from financewithphil to phillip.karaya in 2026), update the handle here and the next run picks it up.</p>
+
+<div class="step"><div class="n">05</div><h2>The first data pull</h2></div>
+<p>With Chrome listening and signed in, run a master sweep once. It pages every profile to the end and writes one JSON file per platform.</p>
+<pre><code>cd ~/projects/fwp-analytics-dashboard
+python3 scrape/run.py --full</code></pre>
+<p>Budget 15 to 30 minutes. TikTok is the slow one because it scrolls the page. You will see one line per platform as each finishes, like <code>linkedin: +16 new, 16 total, followers 1714 (67s)</code>, then the analyzer runs and prints its summary. After that, the everyday command is the incremental run, which stops each platform after it has seen eight posts in a row that it already knows:</p>
+<pre><code>python3 scrape/run.py                       # incremental, all five platforms
+python3 scrape/run.py --platforms linkedin  # one platform only
+python3 scrape/run.py --analyze-only        # rebuild derived JSON without scraping</code></pre>
+<table>
+  <tr><th>File written</th><th>By</th><th>What it holds</th></tr>
+  <tr><td><code>public/data/&lt;platform&gt;_posts.json</code></td><td>the platform scrapers</td><td>every post with views, likes, comments, shares, date, caption, type</td></tr>
+  <tr><td><code>public/data/scrape_state.json</code></td><td><code>run.py</code></td><td>per-platform status, last run time, follower counts</td></tr>
+  <tr><td><code>public/data/analytics.json</code></td><td><code>analyze.py</code></td><td>every Insights section and the comment sentiment counts</td></tr>
+  <tr><td><code>public/data/content_vault.json</code></td><td><code>analyze.py</code></td><td>posts grouped by topic for the Content Vault</td></tr>
+  <tr><td><code>public/data/follower_history.json</code></td><td><code>analyze.py</code></td><td>one follower snapshot per day a scrape ran, appended, never rewritten</td></tr>
+</table>
+<div class="callout"><span class="label">How each platform is read</span><p><strong>Instagram</strong> hooks the page's own GraphQL timeline responses (direct API calls get throttled). <strong>TikTok</strong> reads the video tiles while scrolling; dates are decoded from the video ID. <strong>YouTube</strong> uses the channel page data plus innertube continuations for shorts and videos. <strong>Threads</strong> hooks the profile GraphQL query and keeps only posts by the handle (a reload can land on the For You feed). <strong>LinkedIn</strong> reads the rendered activity-feed cards from your own profile; the feed is server-rendered so no network hook can see it, and the scraper never reads messaging.</p></div>
+
+<div class="step"><div class="n">06</div><h2>Comment sentiment with Groq</h2></div>
+<p>Comments are labeled by <code>scrape/sentiment.py</code> whenever the analyzer runs. Each comment gets a <code>sentiment</code> of positive, neutral or negative and a separate <code>isQuestion</code> flag, so a comment can be both positive and a question. The labels are written back into <code>comments.json</code>, which makes that file the cache: a rerun only labels comments that have no current label.</p>
+<p>There are two labelers. The <strong>model</strong> path uses Groq's free tier and is the accurate one. The <strong>lexicon</strong> path is an emoji-aware, word-boundary matcher tuned to this audience (congrats, fire, goat, salute, facts) that runs without any key in under a second and fills in whenever the model is unavailable.</p>
+<h3>Store the key once</h3>
+<p>Create a key at console.groq.com, then store it in Keychain. This is the only command that ever sees the key, it prompts with hidden input, and you type it once:</p>
+<pre><code>secret-sync set GROQ_API_KEY</code></pre>
+<h3>Run the labeling pass</h3>
+<pre><code>secret-sync run GROQ_API_KEY -- python3 scrape/run.py --analyze-only</code></pre>
+<p>The resolver hands the key to the process as an environment variable and nothing else. The first full pass over 8,000 comments takes about 320 model calls. Each run is capped at 400 calls, and Groq's free models allow roughly 8,000 tokens a minute each, so expect the log to show 429 rate-limit counts per model. That is normal: a rate-limited model sits out for the seconds Groq asks for while the others keep working. If the first pass ends with some rows still on the lexicon, run the same command again; the second pass only sends those rows and takes about 50 calls.</p>
+<p>The progress line looks like this:</p>
+<pre><code>sentiment: 725 labeled by model so far, 30 calls, 1.7s per call, errors {'http429:gpt-oss-120b': 9, ...}
+sentiment: 1249 by model, 0 by lexicon, 6750 already current, 51 calls</code></pre>
+<div class="callout ok"><span class="label">Result on this corpus</span><p>Positive 5,300 (66%), neutral 2,187 (27%), negative 512 (6%), 559 questions, all 7,999 labeled by the model. The old labels had 81% neutral because they came from a substring matcher with no emoji handling.</p></div>
+<p>If you change the prompt or the lexicon, bump <code>SENTIMENT_VERSION</code> in <code>scrape/sentiment.py</code> and every comment is relabeled on the next run. A Groq 403 with error code 1010 is a Cloudflare user-agent block, not a dead key; the scraper already sends a browser user agent.</p>
+
+<div class="step"><div class="n">07</div><h2>Topics for the Content Vault</h2></div>
+<p><code>scrape/categories.json</code> maps a topic slug to a label and a keyword list. Matching is whole-word and case-insensitive against title, caption and hashtags, a post can land in several topics, and anything that matches nothing goes to <em>Other</em>. Add or move keywords, then rebuild without scraping:</p>
+<pre><code>python3 scrape/run.py --analyze-only</code></pre>
+<p>No code change is needed to add a topic. The Vault's hero shows how many posts are still unfiled so you can see whether a new keyword helped.</p>
+
+<div class="step"><div class="n">08</div><h2>Deploy to GitHub Pages</h2></div>
+<p>The repository ships with a GitHub Actions workflow at <code>.github/workflows/deploy.yml</code>. On every push to <code>main</code> it installs with pnpm, builds the static export with the base path set to the repository name, adds a <code>.nojekyll</code> marker and publishes to Pages. You do three things once:</p>
+<ol>
+  <li>In the repository on GitHub, open <strong>Settings → Pages</strong> and set <strong>Source</strong> to <strong>GitHub Actions</strong>.</li>
+  <li>Add the PIN hash from Step 2 as a repository secret. The workflow reads it as <code>DASHBOARD_PIN_HASH</code>:
+    <pre><code>read -s HASH; gh secret set DASHBOARD_PIN_HASH --body "$HASH"; unset HASH</code></pre></li>
+  <li>Push. The first push to <code>main</code> runs the workflow; the site is live about a minute later at <code>https://&lt;user&gt;.github.io/&lt;repo&gt;/</code>.</li>
+</ol>
+<p>Every later deploy is just a push. To confirm a deploy landed, watch the run and then read a data file straight from the live site with a cache-busting query:</p>
+<pre><code>gh run list --limit 1
+curl -s "https://phillipkaraya.github.io/fwp-analytics-dashboard/data/scrape_state.json?cb=$(date +%s)" | head -c 400</code></pre>
+<div class="callout"><span class="label">Why static</span><p>There is no server and no database. The browser fetches JSON files that were committed to the repo, so the site is as fresh as the last push and costs nothing to host. That is also why the scraper runs on your Mac rather than in the cloud: it needs your logged-in Chrome.</p></div>
+
+<h2>The day-to-day routine</h2>
+<p>When new posts have gone out, or once a day when you want a follower point:</p>
+<pre><code>cd ~/projects/fwp-analytics-dashboard
+python3 scrape/run.py
+git add public/data && git commit -m "Refresh data" && git push</code></pre>
+<p>That is the whole loop. The incremental run takes a couple of minutes, the analyzer rebuilds every derived file, the push redeploys. A few habits keep it healthy:</p>
+<ul>
+  <li><strong>LinkedIn once a day at most.</strong> It drives your real session with human-like pauses. If it reports a login wall, sign in to linkedin.com in the shared Chrome and rerun with <code>--platforms linkedin</code>.</li>
+  <li><strong>Master sweep occasionally, not on a schedule.</strong> <code>--full</code> refreshes views and likes on every old post and takes up to half an hour.</li>
+  <li><strong>Sentiment refresh only when comments change.</strong> The comment corpus is still the March 2026 snapshot; when a comment scraper exists, the same labeling command will label only the new rows.</li>
+  <li><strong>Follower history needs a scrape on a new day</strong> to add a point. Re-running the analyzer on old data never invents one.</li>
+</ul>
+
+<h2>How the numbers are computed</h2>
+<table>
+  <tr><th>Number</th><th>Rule</th></tr>
+  <tr><td>Overview window</td><td>The shortest of 30, 90 or 365 days that contains at least one post; deltas compare against the window before it. The hero says which window it picked and why.</td></tr>
+  <tr><td>Reach</td><td>Views where the platform publishes them. Threads and LinkedIn publish none, so their reach number is likes and the charts label the bar "(likes)". Likes are never summed into a views total.</td></tr>
+  <tr><td>Engagement rate</td><td>Likes plus comments plus shares, divided by views. For Threads and LinkedIn, divided by followers instead, computed at scrape time and stored on the post.</td></tr>
+  <tr><td>Averages in Insights</td><td>Only posts with a view count above zero are averaged, so viewless platforms never drag them down.</td></tr>
+  <tr><td>Follower deltas</td><td>From the last two points in <code>follower_history.json</code>. A platform missing from an older snapshot (LinkedIn before September 2026) starts its line at its first point.</td></tr>
+  <tr><td>Comment sentiment</td><td>Labels from the model, lexicon as fallback, stored per comment. The UI never re-classifies; a missing label counts as neutral.</td></tr>
+  <tr><td>Questions</td><td>The <code>isQuestion</code> flag, independent of sentiment. Ranked by likes; the reply state in the snapshot is unreliable and is never used.</td></tr>
+  <tr><td>Dates</td><td>Date-only strings are treated as local dates. Parsing them as UTC shows every date a day early in Eastern time, which is the bug this rule prevents.</td></tr>
+</table>
+
+<h2>Troubleshooting</h2>
+<table>
+  <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+  <tr><td>LinkedIn run stops with "login or checkpoint wall"</td><td>LinkedIn's session cookie expired, which it does by design.</td><td>Sign in to linkedin.com in the shared Chrome, then <code>python3 scrape/run.py --platforms linkedin</code>.</td></tr>
+  <tr><td>Instagram returns 429 or an HTML page</td><td>Instagram throttles scripted API calls even from a logged-in tab.</td><td>Already handled: the scraper reads the page's own GraphQL responses. If it recurs, wait ten minutes and rerun.</td></tr>
+  <tr><td>Threads suddenly has hundreds of posts by other people</td><td>A reload landed on the For You feed.</td><td>Already handled: posts are filtered by handle. Revert the file with git if an old version ever merged them.</td></tr>
+  <tr><td>TikTok "account not found" or YouTube 404</td><td>The handle was renamed.</td><td>Update <code>scrape/handles.py</code>. YouTube is keyed by channel ID and keeps working.</td></tr>
+  <tr><td>Groq 403 with error code 1010</td><td>Cloudflare blocks non-browser user agents.</td><td>Not a dead key. The scraper sends a browser UA; if you call the API elsewhere, do the same.</td></tr>
+  <tr><td>Groq log full of 429 counts</td><td>Free models allow about 8,000 tokens a minute; a 25-comment batch nearly fills it.</td><td>Normal. The run cools that model and continues. Run the command a second time if rows remain on the lexicon.</td></tr>
+  <tr><td>Scraper refuses to start, "memory critical"</td><td><code>ccbrowser mem</code> found the Mac short on memory.</td><td>Close heavy apps or tabs, then rerun. The check exists so a scrape can never freeze the machine.</td></tr>
+  <tr><td>Dev server shows old styles after an edit</td><td>Next 16's persistent dev cache.</td><td>Stop the server, <code>rm -rf .next/dev .next/cache</code>, start again.</td></tr>
+  <tr><td>Live site shows old data after a push</td><td>The Pages run has not finished, or the browser cached the JSON.</td><td><code>gh run list --limit 1</code>, then hard-refresh. The data status bar in the header shows the last scrape time.</td></tr>
+  <tr><td>Charts look empty in an automated browser</td><td>A hidden tab pauses animation frames, so Recharts never draws.</td><td>Not a bug. Check the DOM or make the tab visible.</td></tr>
+</table>
+
+<h2>File map</h2>
+<pre class="map"><code>app/                      one route per tab (static export)
+components/
+  charts/                 BarChart, LineChart, DoughnutChart, Section, Numbered, Badge
+  layout/                 AppShell, Nav, AuthGate, PinWall, DataStatusBar, PageHero
+  overview/ posts/ comments/ insights/ vault/
+lib/
+  data.ts                 typed loaders for public/data/*.json
+  derive.ts               totals, byPlatform, hasViews, reach, followerDeltas, sentiment
+  format.ts               fmt, fmtDate, numeralShift, platformLabel, platformShort
+  auth.ts                 SHA-256 PIN check
+  types.ts                the JSON shapes
+scrape/
+  run.py                  CLI: scrape, then analyze
+  analyze.py              analytics.json, content_vault.json, follower_history.json
+  sentiment.py            comment labels: Groq round-robin with cooldown, lexicon fallback
+  categories.json         topic keywords (editable)
+  handles.py              handles and stable IDs
+  cdp.py                  Chrome DevTools client, own-tab discipline
+  platforms/              instagram.py tiktok.py youtube.py threads.py linkedin.py
+public/data/              the committed JSON the site reads
+.github/workflows/deploy.yml   build and publish on push to main</code></pre>
+
+<h2>Rules that keep this safe</h2>
+<ul>
+  <li><strong>No secrets in the repo, ever.</strong> The PIN is a hash in a GitHub secret. The Groq key is in Keychain and reaches the process only through <code>secret-sync run</code>. Before every commit: <code>git status --short | grep -iE '\.env|secret|key|token'</code> should print nothing.</li>
+  <li><strong>The scraper uses your Chrome, it does not copy it.</strong> Cookies and login data are never copied out of the profile. The scraper opens its own tabs and closes only those.</li>
+  <li><strong>LinkedIn messaging is off limits.</strong> The scraper reads only the public activity feed and the profile follower count. Nothing from messaging is read, stored or logged.</li>
+  <li><strong>Measure what a platform publishes.</strong> Threads and LinkedIn have no view counts; the dashboard shows likes as reach instead of showing zeros or blanks.</li>
+  <li><strong>Phone width is part of done.</strong> Every card must fit a 375px screen, and every chart must label every category. The project note records the exact checks.</li>
+</ul>
+
+<footer class="end">Finance With Phil · Social Media Analytics · Setup guide written September 5, 2026 against commit e8d7cfe. Project state and session history live in the Obsidian note "Finance With Phil - Social Media Analytics".</footer>
+
+</body>
+</html>
