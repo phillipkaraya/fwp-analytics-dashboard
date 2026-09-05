@@ -17,7 +17,7 @@ export function Numbered({
 }) {
   const label = typeof n === "number" ? String(n).padStart(2, "0") : n;
   return (
-    <div data-n={label} className={cn("numbered relative", className)}>
+    <div data-n={label} className={cn("numbered relative min-w-0", className)}>
       {children}
     </div>
   );

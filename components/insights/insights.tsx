@@ -100,7 +100,7 @@ export function Insights() {
       <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
       {/* Most actionable insights first: viral posts + hook library */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {a.viralPosts && (
           <Numbered n={1}>
             <ViralPosts posts={a.viralPosts} />
@@ -116,7 +116,7 @@ export function Insights() {
       )}
 
       {/* Pattern analysis */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {a.hashtagPerformance && (
           <Numbered n={2}>
             <HashtagPerformance data={a.hashtagPerformance} />
@@ -131,7 +131,7 @@ export function Insights() {
 
       {a.postingHeatmap && <PostingHeatmap data={a.postingHeatmap} />}
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {vault && vault.categories.length > 0 && <TopicsCard vault={vault} />}
         {a.engagementFunnel && (
           <Numbered n={4}>

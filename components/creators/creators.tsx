@@ -69,7 +69,7 @@ export function Creators() {
       </header>
 
       <Section title="Add Creator">
-        <div className="grid items-end gap-3 md:grid-cols-[1fr,1fr,1fr,1fr,auto]">
+        <div className="grid grid-cols-1 items-end gap-3 md:grid-cols-[1fr,1fr,1fr,1fr,auto]">
           <Field label="Handle">
             <Input
               value={handle}
@@ -131,7 +131,7 @@ export function Creators() {
             No creators tracked yet.
           </p>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {creators.map((c) => (
               <CreatorCard
                 key={c.id}

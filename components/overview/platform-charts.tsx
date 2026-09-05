@@ -37,7 +37,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
   }));
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <Numbered n={3}>
         <Section kicker="By platform"
           title="Engagement Rate" hint="Average % per post. Threads and LinkedIn are measured against followers, since they publish no view count.">

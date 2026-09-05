@@ -15,7 +15,7 @@ export function HookAnalysis({ hookTypes, topHooks }: HooksProps) {
     .map((h) => ({ type: h.type, views: Math.round(h.avgViews) }));
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <Section
         title="Hook Type Performance"
         hint="Avg views by opening hook style"

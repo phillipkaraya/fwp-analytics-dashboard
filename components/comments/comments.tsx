@@ -172,7 +172,7 @@ export function Comments() {
       />
       <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Section title="Comment Sentiment" hint={labelHint}>
           <DoughnutChart
             data={sentimentData}

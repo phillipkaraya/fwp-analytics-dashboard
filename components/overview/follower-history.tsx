@@ -33,7 +33,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
           title="Follower History"
           hint={`Chart appears at ${MIN_POINTS} snapshots. ${sorted.length} so far.`}
         >
-          <div className="grid min-w-0 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+          <div className="grid grid-cols-1 min-w-0 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <p className="text-sm text-ink-soft">
               Every run of the scraper on a new day appends one snapshot of
               every follower count to <code className="font-mono text-xs">follower_history.json</code>.
