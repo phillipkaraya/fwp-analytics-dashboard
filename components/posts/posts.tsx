@@ -109,17 +109,25 @@ export function Posts() {
             value: fmtShort(filtered.length),
             hint: filtered.length === posts.length ? "all platforms" : `of ${fmt(posts.length)}`,
           },
+          // A Threads-only slice has no view count, so likes are the reach
+          // number and engagement is measured against followers.
           slice.viewsKnown
             ? {
                 label: "Views",
                 value: fmtShort(slice.views),
                 hint: filtered.length ? `${fmt(Math.round(slice.views / filtered.length))} per post` : undefined,
               }
-            : { label: "Views", value: "n/a", hint: "Threads shows no view counts" },
+            : {
+                label: "Likes as reach",
+                value: fmtShort(slice.likes),
+                hint: "Threads publishes no view count",
+              },
           { label: "Likes", value: fmtShort(slice.likes), hint: `${fmt(slice.comments)} comments` },
-          slice.viewsKnown
-            ? { label: "Avg engagement", value: fmtPct(slice.engagement), hint: "per post" }
-            : { label: "Avg engagement", value: "n/a", hint: "needs a view count" },
+          {
+            label: "Avg engagement",
+            value: fmtPct(slice.engagement),
+            hint: slice.viewsKnown ? "per post" : "per post, against followers",
+          },
         ]}
         aside={
           <HeroPanel label="By platform">
@@ -241,8 +249,9 @@ export function Posts() {
                   {hasViews(p.platform) ? (
                     fmt(p.views)
                   ) : (
-                    <span className="font-mono text-[11px] text-ink-muted" title="Threads shows no view counts">
-                      n/a
+                    <span className="text-ink-soft" title="Threads publishes no view count; likes are its reach">
+                      {fmt(p.likes)}
+                      <span className="ml-1 font-mono text-[10px] text-ink-muted">likes</span>
                     </span>
                   )}
                 </td>
@@ -253,11 +262,7 @@ export function Posts() {
                   {fmt(p.comments)}
                 </td>
                 <td className="px-5 py-2 text-right text-brand">
-                  {hasViews(p.platform) ? (
-                    fmtPct(toNum(p.engagementRate))
-                  ) : (
-                    <span className="font-mono text-[11px] text-ink-muted">n/a</span>
-                  )}
+                  {fmtPct(toNum(p.engagementRate))}
                 </td>
               </tr>
             ))}
@@ -334,12 +339,16 @@ function PostDetailDialog({
               </DialogTitle>
             </DialogHeader>
             <div className="grid grid-cols-4 gap-3 py-3">
-              <Stat label="Views" value={hasViews(post.platform) ? fmt(post.views) : "n/a"} emphasis />
+              <Stat
+                label={hasViews(post.platform) ? "Views" : "Likes as reach"}
+                value={hasViews(post.platform) ? fmt(post.views) : fmt(post.likes)}
+                emphasis
+              />
               <Stat label="Likes" value={fmt(post.likes)} />
               <Stat label="Comments" value={fmt(post.comments)} />
               <Stat
                 label="Engage"
-                value={hasViews(post.platform) ? fmtPct(toNum(post.engagementRate)) : "n/a"}
+                value={fmtPct(toNum(post.engagementRate))}
               />
             </div>
             {post.caption && (

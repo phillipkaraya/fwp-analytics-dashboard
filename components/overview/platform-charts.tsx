@@ -10,28 +10,27 @@ const PLATFORM_COLOR: Record<string, string> = {
   TikTok: "var(--tt)",
   YouTube: "var(--yt)",
   Threads: "var(--th)",
+  "Threads (likes)": "var(--th)",
 };
 
 export function PlatformCharts({ posts }: { posts: Post[] }) {
   const grouped = byPlatform(posts, (p) => p.platform);
-  // Threads has no view count, so its 0% and 0 views are absences, not values.
-  const measured = PLATFORMS.filter(hasViews);
-
-  const engagementData = measured.map((p) => ({
+  const engagementData = PLATFORMS.map((p) => ({
     platform: platformLabel[p],
     rate: Number(avgEngagementRate(grouped[p]).toFixed(2)),
   }));
 
-  const viewsData = measured.map((p) => ({
-    platform: platformLabel[p],
-    views: totals(grouped[p]).views,
+  // Threads publishes no view count, so its reach bar is likes and says so.
+  const viewsData = PLATFORMS.map((p) => ({
+    platform: hasViews(p) ? platformLabel[p] : `${platformLabel[p]} (likes)`,
+    views: hasViews(p) ? totals(grouped[p]).views : totals(grouped[p]).likes,
   }));
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <Numbered n={3}>
         <Section kicker="By platform"
-          title="Engagement Rate" hint="Average % per post. Threads has no view count, so it is left out.">
+          title="Engagement Rate" hint="Average % per post. Threads is measured against followers, since it has no view count.">
           <BarChart
             data={engagementData}
             xKey="platform"
@@ -43,7 +42,7 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
       </Numbered>
       <Numbered n={4}>
         <Section kicker="By platform"
-          title="Total Views" hint="Lifetime. Threads has no view count, so it is left out.">
+          title="Reach" hint="Lifetime views. Threads counts likes, since it publishes no view count.">
           <BarChart
             data={viewsData}
             xKey="platform"

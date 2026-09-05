@@ -139,7 +139,30 @@ def _extract_posts_from_body(body: str) -> list[dict]:
     return posts
 
 
-def _to_post(raw: dict) -> dict:
+def _engagement(likes: int, comments: int, shares: int, views: int, followers: int) -> float:
+    """Engagement as a percentage. Threads publishes likes, replies and reposts
+    but no view count, so when views are absent the interactions are measured
+    against followers instead (the standard reach proxy for a like-based feed).
+    Phil, 2026-09-04: fix what is looked for rather than remove it."""
+    interactions = likes + comments + shares
+    if views:
+        return interactions / views * 100
+    if followers:
+        return interactions / followers * 100
+    return 0.0
+
+
+def _stored_followers() -> int:
+    """Last known Threads follower count from scrape_state.json, for runs where
+    the profile response did not include one."""
+    try:
+        state = json.loads((DATA_FILE.parent / "scrape_state.json").read_text())
+        return int((state.get("followers") or {}).get("threads") or 0)
+    except (OSError, ValueError):
+        return 0
+
+
+def _to_post(raw: dict, followers: int = 0) -> dict:
     """Convert a raw extracted post to the dashboard's Post schema."""
     pk = str(raw.get("pk") or "")
     code = raw.get("code") or ""
@@ -160,7 +183,7 @@ def _to_post(raw: dict) -> dict:
     shares = int(text_info.get("repost_count") or 0) + int(text_info.get("quote_count") or 0)
     media_type = raw.get("media_type") or 0
     type_str = "video" if media_type == 2 else "carousel" if media_type == 8 else "post"
-    eng = ((likes + comments + shares) / views * 100) if views else 0
+    eng = _engagement(likes, comments, shares, views, followers)
     title = caption.split("\n", 1)[0][:120] if caption else ""
     hashtags = " ".join(t for t in caption.split() if t.startswith("#"))
     thumb = ""
@@ -312,9 +335,16 @@ def scrape(max_pages: int = 80, on_progress=None, full: bool = False) -> dict:
         cdp.close_owned()
         cdp.detach()
 
-    new_posts = [_to_post(raw) for raw in posts_by_pk.values()]
+    followers = followers or _stored_followers()
+    new_posts = [_to_post(raw, followers) for raw in posts_by_pk.values()]
     merged = merge(existing, new_posts)
     merged.sort(key=lambda p: p.get("date", "") or "0", reverse=True)
+    # Every stored post gets its rate from the freshest follower count, so
+    # older rows do not keep a stale (or zero) engagement.
+    if followers:
+        for p in merged:
+            if not int(p.get("views") or 0):
+                p["engagementRate"] = f"{_engagement(int(p.get('likes') or 0), int(p.get('comments') or 0), int(p.get('shares') or 0), 0, followers):.2f}"
 
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps(merged, indent=2))

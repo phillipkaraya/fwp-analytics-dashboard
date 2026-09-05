@@ -23,6 +23,12 @@ export function hasViews(platform: Platform): boolean {
   return !VIEWLESS_PLATFORMS.has(platform);
 }
 
+/** The reach number a post is judged by: views where the platform reports
+ *  them, likes on Threads. Use for ranking, never for summing across platforms. */
+export function reach(p: Post): number {
+  return hasViews(p.platform) ? toNum(p.views) : toNum(p.likes);
+}
+
 export function toNum(v: string | number | undefined | null): number {
   if (v === undefined || v === null) return 0;
   const n = typeof v === "string" ? parseFloat(v) : v;
@@ -71,7 +77,7 @@ export function topPosts(posts: Post[], days = 30, limit = 10): Post[] {
       const t = new Date(p.date).getTime();
       return Number.isFinite(t) && t >= cutoff;
     })
-    .sort((a, b) => toNum(b.views) - toNum(a.views))
+    .sort((a, b) => reach(b) - reach(a))
     .slice(0, limit);
 }
 
