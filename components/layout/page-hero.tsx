@@ -56,14 +56,16 @@ export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: Pa
                 {lede}
               </p>
             )}
-            {/* Natural widths with one even gap, so a short value next to a
-                long one does not leave a hole (equal columns did). */}
+            {/* Phones: a strict 2x2 grid, so a long hint under one stat cannot
+                push the next stat onto its own row. From sm: natural widths
+                with one even gap, so a short value next to a long one does not
+                leave a hole (equal columns did). */}
             {stats.length > 0 && (
-              <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-8 lg:justify-between lg:gap-x-8">
+              <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:flex sm:flex-wrap sm:gap-x-12 lg:justify-between lg:gap-x-8">
                 {stats.map((s, i) => (
                   <div
                     key={s.label}
-                    className="rise min-w-[8.5rem]"
+                    className="rise min-w-0 break-words sm:min-w-[8.5rem]"
                     style={{ "--rise-delay": `${120 + i * 70}ms` } as React.CSSProperties}
                   >
                     {/* Digit ink, not the glyph box, sits on the label's left
