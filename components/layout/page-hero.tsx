@@ -59,14 +59,16 @@ export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: Pa
             {/* Natural widths with one even gap, so a short value next to a
                 long one does not leave a hole (equal columns did). */}
             {stats.length > 0 && (
-              <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-8">
+              <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-8 lg:justify-between lg:gap-x-8">
                 {stats.map((s, i) => (
                   <div
                     key={s.label}
                     className="rise min-w-[8.5rem]"
                     style={{ "--rise-delay": `${120 + i * 70}ms` } as React.CSSProperties}
                   >
-                    <dd className="tabular font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
+                    {/* -0.045em pulls the digit ink flush with the label below it;
+                        the system font leaves that much side bearing at display size. */}
+                    <dd className="tabular -ml-[0.045em] font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
                       {s.value}
                     </dd>
                     <dt className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
