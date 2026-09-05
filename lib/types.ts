@@ -197,12 +197,9 @@ export interface AnalyticsBundle {
   crossPosts?: CrossPostItem[];
   topHooks?: TopHook[];
   hookTypes?: HookTypeStat[];
-  responseRate?: {
-    overall: { rate: number; total: number; responded: number };
-    byPlatform?: Record<Platform, { rate: number; total: number; responded: number }>;
-    bySentiment?: Record<string, number>;
-    priorityUnreplied?: HighValueComment[];
-  };
+  /** Number of comments classified as questions (all of them, not "unreplied"). */
+  questionCount?: number;
+  commentSentiment?: Record<string, number>;
   [key: string]: unknown;
 }
 

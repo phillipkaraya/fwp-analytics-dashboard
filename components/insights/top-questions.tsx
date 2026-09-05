@@ -3,30 +3,32 @@ import { PlatformBadge } from "@/components/charts/platform-badge";
 import type { HighValueComment } from "@/lib/types";
 import { StaleNote } from "@/components/layout/stale-note";
 
-interface UnrepliedProps {
+interface TopQuestionsProps {
   comments: HighValueComment[];
   /** Newest comment date in the dataset; comments are not re-scraped yet. */
   asOf?: string;
 }
 
-export function HighValueQuestions({ comments, asOf }: UnrepliedProps) {
+/** Audience questions ranked by likes. Deliberately says nothing about
+ *  whether Phil replied: the snapshot's reply flag is not trustworthy. */
+export function TopQuestions({ comments, asOf }: TopQuestionsProps) {
   return (
     <Section
-      title="High-Value Unreplied Questions"
-      hint={`${comments.length} questions with engagement, awaiting reply`}
+      title="Questions Worth Answering"
+      hint={`Top ${comments.length} audience questions, ranked by likes`}
       action={<StaleNote date={asOf} label="Comments" />}
       bodyClassName="max-h-[480px] overflow-y-auto pr-1"
     >
       <ul className="space-y-3">
         {comments.length === 0 && (
           <li className="py-6 text-center text-sm text-ink-muted">
-            All caught up.
+            No questions in the comment snapshot.
           </li>
         )}
         {comments.slice(0, 30).map((c) => (
           <li
             key={c.id}
-            className="rounded-md border border-border p-3 hover:border-brand/40"
+            className="rounded-md bg-muted/40 p-3 ring-1 ring-ink/[0.04] transition hover:ring-brand/40"
           >
             <div className="mb-1.5 flex items-center justify-between">
               <div className="flex items-center gap-2">

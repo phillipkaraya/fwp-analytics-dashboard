@@ -13,7 +13,7 @@ import { HashtagPerformance } from "./hashtags";
 import { CrossPosts } from "./cross-posts";
 import { Superfans } from "./superfans";
 import { HookAnalysis } from "./hooks";
-import { HighValueQuestions } from "./unreplied";
+import { TopQuestions } from "./top-questions";
 import { DoesntFollowBack } from "./follow-back";
 import { HeroPanel, HeroRow, PageHero } from "@/components/layout/page-hero";
 import { fmt, fmtDate, fmtShort } from "@/lib/format";
@@ -66,9 +66,9 @@ export function Insights() {
             hint: overlap ? `of ${fmt(overlap.totalUniqueUsers)} unique commenters` : undefined,
           },
           {
-            label: "Unreplied questions",
-            value: fmtShort(a.highValueComments?.length ?? 0),
-            hint: "with engagement, still open",
+            label: "Audience questions",
+            value: fmtShort(a.questionCount ?? a.highValueComments?.length ?? 0),
+            hint: "in the comment snapshot, top 50 ranked below",
           },
         ]}
         aside={
@@ -107,10 +107,7 @@ export function Insights() {
           </Numbered>
         )}
         {a.highValueComments && (
-          <HighValueQuestions
-            comments={a.highValueComments}
-            asOf={a.dataAsOf?.comments}
-          />
+          <TopQuestions comments={a.highValueComments} asOf={a.dataAsOf?.comments} />
         )}
       </div>
 

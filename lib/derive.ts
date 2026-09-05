@@ -200,20 +200,6 @@ export function platformCadence(posts: Post[]): {
   };
 }
 
-export function commentResponseRate(comments: Comment[]): {
-  total: number;
-  responded: number;
-  rate: number;
-} {
-  const total = comments.length;
-  const responded = comments.filter((c) => c.replied).length;
-  return {
-    total,
-    responded,
-    rate: total ? (responded / total) * 100 : 0,
-  };
-}
-
 export function sentimentBreakdown(comments: Comment[]) {
   const out = { positive: 0, neutral: 0, negative: 0, question: 0 };
   for (const c of comments) {

@@ -440,34 +440,24 @@ def comment_sections(comments: list[dict], posts_by_id: dict[str, dict]) -> dict
             "sentiment": c.get("sentiment"),
             "likes": int(_num(c.get("likes"))),
             "date": c.get("date") or "",
-            "replied": bool(c.get("replied")),
             "postUrl": post.get("url") or "",
             "postTitle": _title(post) if post else "",
         }
 
-    unreplied_q = [c for c in comments if c.get("sentiment") == "question" and not c.get("replied")]
-    unreplied_q.sort(key=lambda c: _num(c.get("likes")), reverse=True)
-    high_value = [hv(c) for c in unreplied_q[:50]]
+    # The snapshot's reply flag is unreliable (Phil, 2026-09-04), so nothing
+    # derived here uses it: no response rate, no "unreplied" filter. Questions
+    # are simply ranked by likes.
+    questions = [c for c in comments if c.get("sentiment") == "question"]
+    questions.sort(key=lambda c: _num(c.get("likes")), reverse=True)
+    high_value = [hv(c) for c in questions[:50]]
 
-    total = len(comments)
-    replied = sum(1 for c in comments if c.get("replied"))
-    by_plat = {}
-    for plat in PLATFORMS:
-        cs = [c for c in comments if c.get("platform") == plat]
-        r = sum(1 for c in cs if c.get("replied"))
-        by_plat[plat] = {"total": len(cs), "replied": r, "unreplied": len(cs) - r, "rate": _r(r / len(cs) * 100, 1) if cs else 0}
-    response_rate = {
-        "overall": {"total": total, "replied": replied, "unreplied": total - replied, "rate": _r(replied / total * 100, 1) if total else 0},
-        "byPlatform": by_plat,
-        "bySentiment": dict(Counter(c.get("sentiment") or "neutral" for c in comments)),
-        "priorityUnreplied": high_value[:10],
-    }
     newest = max((c.get("date") or "" for c in comments), default="")
     return {
         "topCommenters": top_commenters,
         "audienceOverlap": overlap,
         "highValueComments": high_value,
-        "responseRate": response_rate,
+        "questionCount": len(questions),
+        "commentSentiment": dict(Counter(c.get("sentiment") or "neutral" for c in comments)),
         "_commentsAsOf": newest,
     }
 
@@ -589,7 +579,9 @@ def run(verbose: bool = False) -> dict:
         "followerHistory": history,
         **comment_data,
     }
-    analytics.setdefault("revenue", {"deals": []})
+    # Keys we no longer produce must not survive via **previous.
+    for dead in ("responseRate", "revenue"):
+        analytics.pop(dead, None)
     ANALYTICS_FILE.write_text(json.dumps(analytics, indent=1))
 
     # Content Vault --------------------------------------------------------
