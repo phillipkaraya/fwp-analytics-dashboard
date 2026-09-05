@@ -400,7 +400,9 @@ function Chip({
       >
         {fmt(count)}
         {views !== undefined && views > 0 && (
-          <span className={active ? "text-white/60" : "text-ink-muted/70"}>
+          // Phones drop the reach suffix so chips pack two or three per row
+          // instead of stacking one per line for 15 rows.
+          <span className={cn("hidden sm:inline", active ? "text-white/60" : "text-ink-muted/70")}>
             {" "}
             · {fmt(views)} views
           </span>
