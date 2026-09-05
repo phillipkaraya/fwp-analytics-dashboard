@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          NEXT_PUBLIC_BASE_PATH: /fwp-analytics-dashboard
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_DASHBOARD_PIN_HASH: ${{ secrets.DASHBOARD_PIN_HASH }}
 
       - name: Add .nojekyll

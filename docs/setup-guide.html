@@ -179,18 +179,24 @@ claude --version</code></pre>
 
 <div class="step"><div class="n">C</div><h2>Get the project and run it</h2></div>
 <h3>C1. Decide where the code lives, then clone it</h3>
-<p>If you are setting this up for the Finance With Phil accounts, clone Phil's repository. If you are building your own copy for different accounts, first click <strong>Fork</strong> on <a href="https://github.com/phillipkaraya/fwp-analytics-dashboard">the repository page</a> so you get your own copy under your GitHub account, then clone that instead (swap <code>phillipkaraya</code> for your username in the address).</p>
+<p><strong>Setting this up for the Finance With Phil accounts?</strong> Clone Phil's repository, which already holds the data and handles:</p>
 <pre><code>mkdir -p ~/projects
 cd ~/projects
 git clone https://github.com/phillipkaraya/fwp-analytics-dashboard.git
 cd fwp-analytics-dashboard
 pnpm install</code></pre>
-<p class="expect"><strong>Expect</strong>A folder <code>~/projects/fwp-analytics-dashboard</code> full of files, and <code>pnpm install</code> ending with a summary of packages added. From now on, every command in this guide assumes you are inside that folder. If you open a new Terminal window, run <code>cd ~/projects/fwp-analytics-dashboard</code> first.</p>
+<p><strong>Building your own dashboard for different accounts?</strong> Start from the <a href="https://github.com/phillipkaraya/social-analytics-dashboard-template">template repository</a> instead. It is the same code with empty data and placeholder handles. On that page click <strong>Use this template</strong>, then <strong>Create a new repository</strong>, give it a name (for example <code>social-analytics-dashboard</code>) and make it <strong>Public</strong> (GitHub Pages is free on public repositories). Then clone your new repository with the GitHub CLI, which fills in your username for you:</p>
+<pre><code>mkdir -p ~/projects
+cd ~/projects
+gh repo clone social-analytics-dashboard
+cd social-analytics-dashboard
+pnpm install</code></pre>
+<p class="expect"><strong>Expect</strong>A project folder under <code>~/projects</code> full of files, and <code>pnpm install</code> ending with a summary of packages added. From now on, every command in this guide assumes you are inside that folder. If you open a new Terminal window, <code>cd</code> into it first.</p>
 
 <h3>C2. Start it and open it</h3>
 <pre><code>pnpm dev</code></pre>
 <p class="expect"><strong>Expect</strong>A few lines ending with a local address. Open <a href="http://localhost:3000">http://localhost:3000</a> in Chrome. You will see a PIN screen. Leave this Terminal window running; open a second window (Command N) for the next commands.</p>
-<p>In development the PIN screen accepts a built-in fallback PIN so you can look around. The site already contains real data from the last scrape, so every tab should show numbers right away. If it does, the code and the build tools are working.</p>
+<p>In development the PIN screen accepts a built-in fallback PIN so you can look around. Phil's repository already contains real data, so every tab shows numbers right away. A copy made from the template starts empty: the tabs open but show zeros until Part F. Either way, if the page loads, the code and the build tools are working.</p>
 
 <h3>C3. Choose your own PIN</h3>
 <p>The site stores only a hash of the PIN. Make one without the PIN appearing in your Terminal history (the first command waits silently for you to type the PIN and press Return):</p>
@@ -215,7 +221,7 @@ open -a "Google Chrome" --args --remote-debugging-port=9222</code></pre>
 <div class="callout warn"><span class="label">Two rules</span><p>Do not close tabs the scraper opened while it is running, and do not run a second scrape at the same time. On Phil's own Mac a helper called <code>chrome-cdp</code> does D1 in one word and a tool called <code>ccbrowser</code> coordinates several automations sharing one Chrome; you do not need either. The scraper prints a harmless warning that <code>ccbrowser</code> was not found and carries on.</p></div>
 
 <div class="step"><div class="n">E</div><h2>Point it at the right accounts</h2></div>
-<p>All account handles live in one small file, <code>scrape/handles.py</code>. If you are running this for Finance With Phil, it is already correct and you can skip to Part F. If you forked it for other accounts, open the file in any text editor (or ask Claude Code to change it) and replace the values:</p>
+<p>All account handles live in one small file, <code>scrape/handles.py</code>. If you are running this for Finance With Phil, it is already correct and you can skip to Part F. If you started from the template, the file holds placeholders; open it in any text editor (or ask Claude Code to change it) and replace the values. Phil's file looks like this:</p>
 <pre><code>HANDLES = {
     "instagram": "phillip.karaya",
     "tiktok": "phillip.karaya",
@@ -274,8 +280,8 @@ python3 scrape/run.py --analyze-only        <span class="c"># rebuild the derive
 <p>The live site needs the same hash you made in C3. It goes into a repository secret named <code>DASHBOARD_PIN_HASH</code>. The first command waits silently for you to paste the hash:</p>
 <pre><code>read -s HASH; gh secret set DASHBOARD_PIN_HASH --body "$HASH"; unset HASH</code></pre>
 <p class="expect"><strong>Expect</strong><code>✓ Set Actions secret DASHBOARD_PIN_HASH</code>. <a href="https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions">About secrets</a>.</p>
-<h3>I3. Match the address to your repository name</h3>
-<p>Pages serves a project at <code>https://&lt;your-username&gt;.github.io/&lt;repository-name&gt;/</code>. The workflow bakes that path into the build with the line <code>NEXT_PUBLIC_BASE_PATH: /fwp-analytics-dashboard</code>. If you forked and kept the name, nothing to do. If you renamed the repository, change that line to <code>/</code> followed by your repository name, or ask Claude Code to.</p>
+<h3>I3. The address takes care of itself</h3>
+<p>Pages serves a project at <code>https://&lt;your-username&gt;.github.io/&lt;repository-name&gt;/</code>. The workflow reads the repository name at build time and bakes that path in, so whatever you named your repository, nothing needs editing here.</p>
 <h3>I4. Push and watch</h3>
 <pre><code>git add public/data
 git commit -m "First data pull"
@@ -344,7 +350,8 @@ docs/                     this guide and its source</code></pre>
 <table class="links">
   <tr><th>Link</th><th>Use</th></tr>
   <tr><td><a href="https://phillipkaraya.github.io/fwp-analytics-dashboard/">Live dashboard</a></td><td>The finished example this guide builds.</td></tr>
-  <tr><td><a href="https://github.com/phillipkaraya/fwp-analytics-dashboard">Repository</a></td><td>Code, data, this guide. Fork here for your own copy.</td></tr>
+  <tr><td><a href="https://github.com/phillipkaraya/fwp-analytics-dashboard">Phil's repository</a></td><td>Finance With Phil's instance: code, data, this guide.</td></tr>
+  <tr><td><a href="https://github.com/phillipkaraya/social-analytics-dashboard-template">Template repository</a></td><td>Click Use this template to start your own copy with empty data.</td></tr>
   <tr><td><a href="https://code.claude.com/docs">Claude Code docs</a></td><td>Install, sign in, how permissions and prompts work.</td></tr>
   <tr><td><a href="https://claude.ai/download">Claude desktop app</a></td><td>Same assistant with a window instead of Terminal.</td></tr>
   <tr><td><a href="https://brew.sh/">Homebrew</a></td><td>Installs git, gh, node and python on a Mac.</td></tr>
