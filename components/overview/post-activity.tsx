@@ -13,6 +13,7 @@ export function PostActivity({ posts }: { posts: Post[] }) {
   return (
     <Numbered n={1}>
       <Section
+        kicker="Output vs reach"
         title="Monthly Activity"
         hint="Lifetime views earned by the posts published each month (bars) and how many went out (line). Last 18 months."
       >

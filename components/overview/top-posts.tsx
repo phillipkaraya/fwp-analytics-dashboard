@@ -11,6 +11,7 @@ export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number })
   return (
     <Numbered n={5}>
     <Section
+      kicker="Ranked by views"
       title="Top Performing Posts"
       hint={`${windowLabel(days)}, ranked by views`}
       bodyClassName="-mx-5"
@@ -19,7 +20,10 @@ export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number })
         <table className="data-table tabular w-full text-sm">
           <thead>
             <tr className="border-y border-border bg-muted/40 text-left">
-              <th className="px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted">
+              <th className="w-12 px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted">
+                #
+              </th>
+              <th className="px-2 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted">
                 Platform
               </th>
               <th className="px-2 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted">
@@ -46,19 +50,22 @@ export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number })
             {top.length === 0 ? (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-5 py-8 text-center text-sm text-ink-muted"
                 >
                   No posts in this window.
                 </td>
               </tr>
             ) : (
-              top.map((p) => (
+              top.map((p, i) => (
                 <tr
                   key={p.id}
                   className="border-b border-border transition even:bg-muted/30 last:border-b-0 hover:bg-muted/40"
                 >
-                  <td className="px-5 py-3">
+                  <td className="tabular px-5 py-3 font-display text-lg font-semibold leading-none text-brand/70">
+                    {String(i + 1).padStart(2, "0")}
+                  </td>
+                  <td className="px-2 py-3">
                     <PlatformBadge platform={p.platform} />
                   </td>
                   <td className="px-2 py-3 text-ink-muted">

@@ -64,7 +64,7 @@ export function ComboChart({ data, height = 280 }: { data: ComboPoint[]; height?
               return name === "views" ? [fmt(n), "Views"] : [String(n), "Posts"];
             }}
           />
-          <Bar yAxisId="views" dataKey="views" fill="var(--brand)" fillOpacity={0.85} radius={[4, 4, 0, 0]} />
+          <Bar yAxisId="views" dataKey="views" fill="var(--brand)" fillOpacity={0.85} radius={[6, 6, 0, 0]} maxBarSize={40} />
           <Line
             yAxisId="posts"
             type="monotone"

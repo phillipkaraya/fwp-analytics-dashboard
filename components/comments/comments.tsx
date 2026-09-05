@@ -213,7 +213,7 @@ export function Comments() {
         </Section>
       </div>
 
-      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4">
+      <div className="flex flex-wrap items-end gap-3 card p-4">
         <Field label="Search">
           <Input
             value={search}

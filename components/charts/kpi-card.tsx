@@ -22,8 +22,8 @@ export function KpiCard({
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-card p-5 shadow-sm transition hover:border-brand/40",
-        emphasis === "brand" && "border-t-2 border-t-brand/40",
+        "card card-hover p-5",
+        emphasis === "brand" && "border-t-2 border-t-brand",
         align === "right" && "text-right",
         className,
       )}

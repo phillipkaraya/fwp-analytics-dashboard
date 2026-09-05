@@ -10,6 +10,7 @@ import {
 import type { FollowerSnapshot, Platform, Post, ScrapeState } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
+/** One card, four cells: each platform's followers, delta, cadence and last post. */
 export function PlatformStatusRow({
   posts,
   scrape,
@@ -23,39 +24,43 @@ export function PlatformStatusRow({
   const deltas = followerDeltas(history);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="card rise grid grid-cols-2 lg:grid-cols-4">
       {PLATFORMS.map((p, i) => {
         const last = platformLastPosted(grouped[p]);
         const cad = platformCadence(grouped[p]);
         const followers = scrape.followers?.[p] ?? 0;
         const delta = deltas.byPlatform[p];
-        const stale = (last.daysAgo ?? 0) > 7;
+        const quiet = (last.daysAgo ?? 0) > 7;
         return (
           <div
             key={p}
-            className="rise rounded-lg border border-border bg-card p-4 shadow-sm"
-            style={{ "--rise-delay": `${i * 60}ms` } as React.CSSProperties}
+            className={cn(
+              "relative p-5",
+              // hairline dividers between cells, not around them
+              i % 2 === 1 && "border-l border-border/70",
+              i >= 2 && "border-t border-border/70",
+              "lg:border-t-0",
+              i > 0 && "lg:border-l lg:border-border/70",
+            )}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <PlatformDot platform={p} />
-                <h4 className="text-sm font-semibold text-ink">
+                <h4 className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
                   {platformLabel[p]}
                 </h4>
               </div>
               <span
                 className={cn(
-                  "rounded px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em]",
-                  stale
-                    ? "bg-warn-soft text-warn"
-                    : "bg-positive-soft text-positive",
+                  "rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em]",
+                  quiet ? "bg-warn-soft text-warn" : "bg-positive-soft text-positive",
                 )}
               >
-                {stale ? "quiet" : "active"}
+                {quiet ? "quiet" : "active"}
               </span>
             </div>
             <div className="mt-3 flex flex-wrap items-baseline gap-x-2">
-              <p className="font-display tabular text-2xl font-semibold leading-none text-ink">
+              <p className="font-display tabular text-3xl font-semibold leading-none tracking-[-0.02em] text-ink">
                 {fmt(followers)}
               </p>
               <span className="text-xs text-ink-muted">followers</span>
@@ -63,11 +68,7 @@ export function PlatformStatusRow({
                 <span
                   className={cn(
                     "tabular ml-auto font-mono text-[11px]",
-                    delta > 0
-                      ? "text-positive"
-                      : delta < 0
-                        ? "text-negative"
-                        : "text-ink-muted",
+                    delta > 0 ? "text-positive" : delta < 0 ? "text-negative" : "text-ink-muted",
                   )}
                   title={`Since ${fmtDate(deltas.since)}`}
                 >
@@ -76,24 +77,18 @@ export function PlatformStatusRow({
                 </span>
               )}
             </div>
-            <dl className="mt-3 space-y-1.5 border-t border-border pt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-              <div className="flex justify-between">
-                <dt>Last post</dt>
-                <dd className="text-ink-soft">
-                  {last.date ? relativeTime(last.date) : "none"}
-                </dd>
+            <dl className="mt-4 grid grid-cols-3 gap-2 text-xs">
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">Last</dt>
+                <dd className="mt-0.5 text-ink-soft">{last.date ? relativeTime(last.date) : "none"}</dd>
               </div>
-              <div className="flex justify-between">
-                <dt>Cadence</dt>
-                <dd className="tabular text-ink-soft">
-                  {cad.perWeek.toFixed(1)}/wk · {cad.perMonth.toFixed(1)}/mo
-                </dd>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">Per wk</dt>
+                <dd className="tabular mt-0.5 text-ink-soft">{cad.perWeek.toFixed(1)}</dd>
               </div>
-              <div className="flex justify-between">
-                <dt>Posts</dt>
-                <dd className="tabular text-ink-soft">
-                  {fmt(grouped[p].length)}
-                </dd>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">Posts</dt>
+                <dd className="tabular mt-0.5 text-ink-soft">{fmt(grouped[p].length)}</dd>
               </div>
             </dl>
           </div>

@@ -28,7 +28,8 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <Numbered n={3}>
-        <Section title="Engagement Rate" hint="Average % per post, by platform">
+        <Section kicker="By platform"
+          title="Engagement Rate" hint="Average % per post, by platform">
           <BarChart
             data={engagementData}
             xKey="platform"
@@ -39,7 +40,8 @@ export function PlatformCharts({ posts }: { posts: Post[] }) {
         </Section>
       </Numbered>
       <Numbered n={4}>
-        <Section title="Total Views" hint="Lifetime, by platform">
+        <Section kicker="By platform"
+          title="Total Views" hint="Lifetime, by platform">
           <BarChart
             data={viewsData}
             xKey="platform"

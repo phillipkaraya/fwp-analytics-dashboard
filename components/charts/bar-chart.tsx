@@ -71,7 +71,7 @@ export function BarChart<TKey extends string>({
               return yFormatter ? yFormatter(n) : String(n);
             }}
           />
-          <Bar dataKey={yKey as string} radius={[4, 4, 0, 0]}>
+          <Bar dataKey={yKey as string} radius={[6, 6, 0, 0]} maxBarSize={56}>
             {data.map((d, i) => (
               <Cell
                 key={i}

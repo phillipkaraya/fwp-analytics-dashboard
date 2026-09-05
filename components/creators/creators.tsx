@@ -155,7 +155,7 @@ function CreatorCard({
 }) {
   const initials = creator.handle.slice(0, 2).toUpperCase();
   return (
-    <div className="rounded-lg border border-border bg-card p-4 transition hover:border-brand/40">
+    <div className="card card-hover p-4">
       <div className="flex items-start gap-3">
         <div className="grid h-10 w-10 place-items-center rounded-full bg-brand-soft font-mono text-xs font-semibold text-brand-deep">
           {initials}

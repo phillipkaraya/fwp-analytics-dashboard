@@ -139,7 +139,7 @@ export function Posts() {
       />
       <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
-      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4">
+      <div className="flex flex-wrap items-end gap-3 card p-4">
         <Field label="Search">
           <Input
             value={search}

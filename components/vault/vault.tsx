@@ -233,7 +233,7 @@ export function Vault() {
       </nav>
 
       {/* Toolbar */}
-      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4">
+      <div className="flex flex-wrap items-end gap-3 card p-4">
         <Field label="Search">
           <Input
             value={search}
@@ -454,7 +454,7 @@ function PostCard({
   const title = post.title || post.caption?.split("\n")[0] || "(no caption)";
   const thumb = youtubeThumb(post);
   return (
-    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition hover:border-brand/40">
+    <article className="group flex flex-col overflow-hidden card shadow-sm transition hover:border-brand/40">
       <div
         className="relative aspect-video w-full overflow-hidden"
         style={{ background: PLATFORM_TINT[post.platform] }}

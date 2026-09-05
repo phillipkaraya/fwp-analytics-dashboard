@@ -29,6 +29,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
     return (
       <Numbered n={ordinal}>
         <Section
+          kicker="Growth"
           title="Follower History"
           hint={`Chart appears at ${MIN_POINTS} snapshots. ${sorted.length} so far.`}
         >
@@ -95,6 +96,7 @@ export function FollowerHistory({ history, ordinal }: { history: FollowerSnapsho
   return (
     <Numbered n={ordinal}>
       <Section
+        kicker="Growth"
         title="Follower History"
         hint={`${sorted.length} snapshots, ${fmtDate(first.date)} to ${fmtDate(last.date)}`}
         action={

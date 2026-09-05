@@ -26,7 +26,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <DataStatusBar tone="dark" />
         </div>
       </header>
-      <main>{children}</main>
+      <main className="page-texture">{children}</main>
     </div>
   );
 }

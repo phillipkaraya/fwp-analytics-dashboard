@@ -44,7 +44,7 @@ export function TopicsRibbon({ vault, limit = 6 }: { vault: ContentVault; limit?
             <li key={c.slug}>
               <Link
                 href={{ pathname: "/vault", query: { topic: c.slug } }}
-                className="group block w-[228px] rounded-lg border border-border bg-card p-4 shadow-sm transition hover:border-brand/50 hover:shadow"
+                className="group block w-[228px] card card-hover p-4"
               >
                 <div className="flex items-baseline justify-between">
                   <span className="font-mono text-[10px] tracking-[0.14em] text-ink-muted">
