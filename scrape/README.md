@@ -68,6 +68,31 @@ that platform only.
 `comments.json` and `follow_data.json` are **not** re-scraped yet. They are
 the March 2026 snapshot; the Insights sections built on them say so.
 
+### Comment sentiment
+
+`analyze.py` labels every comment through `scrape/sentiment.py` and writes the
+labels back into `comments.json` (`sentiment`, `isQuestion`, `sentimentSource`,
+`sentimentV`). The file is the cache: only comments without a current label are
+touched on each run. Two paths:
+
+- **Model** (preferred): Groq's free tier, key from Keychain. Never put the key
+  in a file; run through the resolver so it reaches the process as an env var:
+
+  ```bash
+  secret-sync run GROQ_API_KEY -- python3 scrape/run.py --analyze-only
+  ```
+
+  About 320 calls for the full corpus, 10 to 15 minutes with the model
+  round-robin. Rows the model could not label keep the lexicon label and are
+  retried next run.
+- **Lexicon** (fallback): emoji-aware, word-boundary, negation-aware, tuned to
+  this audience (congrats, fire, goat, salute, facts). Runs without a key in
+  well under a second. Bump `SENTIMENT_VERSION` after changing either the
+  lexicon or the prompt to relabel everything.
+
+A question is a separate flag, not a sentiment, so "Amazing! What camera is
+that?" is both positive and a question.
+
 ## Topics (Content Vault)
 
 `scrape/categories.json` maps a topic slug to a label and a keyword list.

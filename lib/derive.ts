@@ -221,20 +221,11 @@ export function platformCadence(posts: Post[]): {
 export function sentimentBreakdown(comments: Comment[]) {
   const out = { positive: 0, neutral: 0, negative: 0, question: 0 };
   for (const c of comments) {
-    const s = c.sentiment ?? inferSentiment(c.text);
-    out[s] += 1;
+    out[c.sentiment ?? "neutral"] += 1;
+    if (c.isQuestion) out.question += 1;
   }
   return out;
-}
-
-export function inferSentiment(
-  text: string,
-): "positive" | "neutral" | "negative" | "question" {
-  const t = text.toLowerCase();
-  if (t.includes("?")) return "question";
-  if (/(bad|wrong|hate|poor|terrible|awful|sucks|trash)/.test(t))
-    return "negative";
-  if (/(love|great|awesome|perfect|amazing|fire|thank)/.test(t))
-    return "positive";
-  return "neutral";
+/** Labels come from scrape/sentiment.py and live in comments.json. The UI
+ *  never re-classifies; a missing label counts as neutral. `question` is the
+ *  number of comments flagged as questions, independent of sentiment. */
 }

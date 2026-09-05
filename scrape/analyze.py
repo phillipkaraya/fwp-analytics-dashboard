@@ -12,7 +12,10 @@ Outputs (public/data/):  analytics.json        -> Insights tab (lib/types.ts Ana
                          follower_history.json -> follower growth series (appended, never rewritten)
 
 Topic classification uses scrape/categories.json (editable, whole-word
-keyword match, multi-label). Stdlib only; runs in well under a second.
+keyword match, multi-label). Comment sentiment is labeled here too, by
+scrape/sentiment.py (Groq model when GROQ_API_KEY is in the environment,
+emoji-aware lexicon otherwise) and written back into comments.json, which is
+the label cache. Stdlib only; sub-second without the model.
 
 History: the original analytics.json was produced once by the v1 dashboard's
 JavaScript on 2026-03-28 and the generator was lost. This module replaces it
@@ -22,6 +25,7 @@ so Insights refresh every time the scrapers run.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from collections import Counter, defaultdict
@@ -30,6 +34,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:  # `python3 scrape/analyze.py` as well as `from scrape import analyze`
+    sys.path.insert(0, str(ROOT))
+from scrape.sentiment import classify_comments  # noqa: E402
 DATA_DIR = ROOT / "public" / "data"
 CATEGORIES_FILE = Path(__file__).resolve().parent / "categories.json"
 
@@ -438,6 +445,7 @@ def comment_sections(comments: list[dict], posts_by_id: dict[str, dict]) -> dict
             "username": c.get("username") or "",
             "text": c.get("text") or "",
             "sentiment": c.get("sentiment"),
+            "isQuestion": bool(c.get("isQuestion")),
             "likes": int(_num(c.get("likes"))),
             "date": c.get("date") or "",
             "postUrl": post.get("url") or "",
@@ -446,8 +454,9 @@ def comment_sections(comments: list[dict], posts_by_id: dict[str, dict]) -> dict
 
     # The snapshot's reply flag is unreliable (Phil, 2026-09-04), so nothing
     # derived here uses it: no response rate, no "unreplied" filter. Questions
-    # are simply ranked by likes.
-    questions = [c for c in comments if c.get("sentiment") == "question"]
+    # are simply ranked by likes. A question can also be positive or negative;
+    # the flag is separate from sentiment since 2026-09-05.
+    questions = [c for c in comments if c.get("isQuestion")]
     questions.sort(key=lambda c: _num(c.get("likes")), reverse=True)
     high_value = [hv(c) for c in questions[:50]]
 
@@ -458,6 +467,7 @@ def comment_sections(comments: list[dict], posts_by_id: dict[str, dict]) -> dict
         "highValueComments": high_value,
         "questionCount": len(questions),
         "commentSentiment": dict(Counter(c.get("sentiment") or "neutral" for c in comments)),
+        "sentimentSources": dict(Counter(c.get("sentimentSource") or "none" for c in comments)),
         "_commentsAsOf": newest,
     }
 
@@ -537,6 +547,10 @@ def run(verbose: bool = False) -> dict:
                     p.setdefault("platform", plat)
                     posts.append(p)
     comments = [c for c in _load_json(COMMENTS_FILE, []) if isinstance(c, dict) and c.get("id")]
+    # Label anything without a current label; the file is the cache.
+    sent = classify_comments(comments, os.environ.get("GROQ_API_KEY"))
+    if sent["queued"]:
+        COMMENTS_FILE.write_text(json.dumps(comments, indent=1, ensure_ascii=False))
     state = _load_json(SCRAPE_STATE_FILE, {})
     previous = _load_json(ANALYTICS_FILE, {})
     if not isinstance(previous, dict):
@@ -618,6 +632,7 @@ def run(verbose: bool = False) -> dict:
         "crossPosts": len(analytics["crossPosts"]),
         "categories": {c["slug"]: c["count"] for c in categories},
         "historyPoints": len(history),
+        "sentiment": {"labeledNow": sent["queued"], "byModel": sent["llm"], "byLexicon": sent["lexicon"]},
     }
     if verbose:
         print(json.dumps(summary, indent=2))

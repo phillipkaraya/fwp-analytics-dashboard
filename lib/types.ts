@@ -31,7 +31,12 @@ export interface Comment {
   text: string;
   likes: number;
   date: string;
-  sentiment?: "positive" | "neutral" | "negative" | "question";
+  /** Labeled by scrape/sentiment.py. A question is a separate flag so a
+   *  comment can be both positive and a question. */
+  sentiment?: "positive" | "neutral" | "negative";
+  isQuestion?: boolean;
+  sentimentSource?: "llm" | "lexicon";
+  /** Unreliable in the snapshot; never used. */
   replied?: boolean;
 }
 
@@ -152,6 +157,7 @@ export interface HighValueComment {
   postUrl?: string;
 }
 
+  isQuestion?: boolean;
 export interface GrowthMonth {
   month: string;
   posts: number;
@@ -197,13 +203,15 @@ export interface AnalyticsBundle {
   crossPosts?: CrossPostItem[];
   topHooks?: TopHook[];
   hookTypes?: HookTypeStat[];
-  /** Number of comments classified as questions (all of them, not "unreplied"). */
+  /** Number of comments flagged as questions (all of them, not "unreplied"). */
   questionCount?: number;
   commentSentiment?: Record<string, number>;
   [key: string]: unknown;
 }
 
 export interface FollowUser {
+  /** How labels were produced: counts by "llm" | "lexicon". */
+  sentimentSources?: Record<string, number>;
   id: string;
   username: string;
   fullName?: string;

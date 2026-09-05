@@ -3,11 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadComments } from "@/lib/data";
 import type { Comment, Platform } from "@/lib/types";
-import {
-  PLATFORMS,
-  sentimentBreakdown,
-  inferSentiment,
-} from "@/lib/derive";
+import { PLATFORMS, sentimentBreakdown } from "@/lib/derive";
 import { fmt, fmtDate, fmtPct, fmtShort, platformLabel } from "@/lib/format";
 import { StaleNote } from "@/components/layout/stale-note";
 import { Section } from "@/components/charts/section";
@@ -46,7 +42,7 @@ export function Comments() {
     () =>
       comments.map((c) => ({
         ...c,
-        sentiment: c.sentiment ?? inferSentiment(c.text),
+        sentiment: c.sentiment ?? ("neutral" as const),
       })),
     [comments],
   );
@@ -54,8 +50,8 @@ export function Comments() {
   const filtered = useMemo(() => {
     let out = enriched;
     if (platform !== "all") out = out.filter((c) => c.platform === platform);
-    if (sentiment !== "all")
-      out = out.filter((c) => c.sentiment === sentiment);
+    if (sentiment === "question") out = out.filter((c) => c.isQuestion);
+    else if (sentiment !== "all") out = out.filter((c) => c.sentiment === sentiment);
     if (search.trim()) {
       const q = search.toLowerCase();
       out = out.filter(
@@ -85,8 +81,15 @@ export function Comments() {
     { name: "Positive", value: stats.sentiment.positive, color: "var(--positive)" },
     { name: "Neutral", value: stats.sentiment.neutral, color: "var(--ink-muted)" },
     { name: "Negative", value: stats.sentiment.negative, color: "var(--negative)" },
-    { name: "Question", value: stats.sentiment.question, color: "var(--brand)" },
   ];
+  const byModel = comments.filter((c) => c.sentimentSource === "llm").length;
+  const byLexicon = comments.length - byModel;
+  const labelHint =
+    byModel === 0
+      ? "Labeled by an emoji-aware lexicon"
+      : byLexicon === 0
+        ? "Labeled by a language model, emoji-aware lexicon as fallback"
+        : `Labeled by a language model, ${fmt(byLexicon)} by the emoji-aware lexicon`;
 
   // Comments are a frozen snapshot until a scraper exists; label the newest date.
   const asOf = useMemo(
@@ -140,7 +143,6 @@ export function Comments() {
               {(
                 [
                   ["Positive", stats.sentiment.positive, "var(--positive)"],
-                  ["Question", stats.sentiment.question, "var(--brand)"],
                   ["Neutral", stats.sentiment.neutral, "rgb(255 255 255 / 0.45)"],
                   ["Negative", stats.sentiment.negative, "var(--negative)"],
                 ] as const
@@ -171,7 +173,7 @@ export function Comments() {
       <div className="mx-auto max-w-[1500px] space-y-8 px-6 py-8">
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Section title="Comment Sentiment" hint="Auto-classified by keyword">
+        <Section title="Comment Sentiment" hint={labelHint}>
           <DoughnutChart
             data={sentimentData}
             centerLabel="Comments"
@@ -274,7 +276,7 @@ export function Comments() {
                 </td>
                 <td className="px-2 py-2 text-ink">{c.username}</td>
                 <td className="px-2 py-2">
-                  <SentimentBadge sentiment={c.sentiment} />
+                  <SentimentBadge sentiment={c.sentiment} question={c.isQuestion} />
                 </td>
                 <td className="px-2 py-2 max-w-[440px] truncate text-ink-soft">
                   {c.text}
@@ -330,20 +332,31 @@ function Th({
 
 function SentimentBadge({
   sentiment,
+  question,
 }: {
-  sentiment: "positive" | "neutral" | "negative" | "question";
+  sentiment: "positive" | "neutral" | "negative";
+  question?: boolean;
 }) {
   const map = {
     positive: "bg-positive-soft text-positive",
     neutral: "bg-muted text-ink-muted",
     negative: "bg-negative-soft text-negative",
-    question: "bg-brand-soft text-brand-deep",
   };
   return (
-    <span
-      className={`inline-block rounded px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider ${map[sentiment]}`}
-    >
-      {sentiment}
+    <span className="inline-flex items-center gap-1">
+      <span
+        className={`inline-block rounded px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider ${map[sentiment]}`}
+      >
+        {sentiment}
+      </span>
+      {question && (
+        <span
+          title="Asks Phil a question"
+          className="inline-block rounded bg-brand-soft px-1.5 py-0.5 font-mono text-[10px] font-semibold text-brand-deep"
+        >
+          ?
+        </span>
+      )}
     </span>
   );
 }
