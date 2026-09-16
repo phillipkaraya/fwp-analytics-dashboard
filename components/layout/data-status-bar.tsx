@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { loadScrapeState } from "@/lib/data";
+import type { ScrapeState } from "@/lib/types";
 import { relativeTime } from "@/lib/format";
 import { signOut } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,9 @@ export function DataStatusBar({ tone = "light" }: { tone?: "light" | "dark" }) {
   // Freshness is derived once from the fetched state, so render stays pure
   // (no Date.now() in the render path).
   const [fresh, setFresh] = useState<Freshness | null>(null);
+  // The per-platform state is handed to the Refresh dialog so each platform
+  // toggle can show its own post count and last run.
+  const [state, setState] = useState<ScrapeState | null>(null);
   const [open, setOpen] = useState(false);
   const dark = tone === "dark";
 
@@ -33,6 +37,7 @@ export function DataStatusBar({ tone = "light" }: { tone?: "light" | "dark" }) {
     loadScrapeState()
       .then((s) => {
         if (!live) return;
+        setState(s);
         const last = [
           s.instagram?.lastScrapedDate,
           s.tiktok?.lastScrapedDate,
@@ -101,7 +106,12 @@ export function DataStatusBar({ tone = "light" }: { tone?: "light" | "dark" }) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ScrapeDialog open={open} onOpenChange={setOpen} lastScrapedDate={fresh?.last} />
+      <ScrapeDialog
+        open={open}
+        onOpenChange={setOpen}
+        lastScrapedDate={fresh?.last}
+        state={state}
+      />
     </div>
   );
 }

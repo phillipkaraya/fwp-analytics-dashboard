@@ -3,9 +3,19 @@
 
 export const SCRAPER_URL = "http://localhost:5556";
 
+/** "incremental" stops at the first page of posts it already has;
+ *  "full" re-pages everything and refreshes metrics on every post. */
+export type ScrapeMode = "incremental" | "full";
+
+export interface StartScrapeOptions {
+  platforms?: string[];
+  mode?: ScrapeMode;
+}
+
 export interface ScrapeJob {
   id: string;
   status: "queued" | "running" | "complete" | "error";
+  mode?: ScrapeMode;
   platforms: string[];
   startedAt: string;
   etaSeconds: number;
@@ -35,13 +45,16 @@ export async function pingScraper(): Promise<ScraperHealth | null> {
 }
 
 export async function startScrape(
-  platforms?: string[],
+  opts: StartScrapeOptions = {},
 ): Promise<ScrapeJob | null> {
   try {
     const res = await fetch(`${SCRAPER_URL}/scrape`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(platforms ? { platforms } : {}),
+      body: JSON.stringify({
+        ...(opts.platforms ? { platforms: opts.platforms } : {}),
+        mode: opts.mode ?? "incremental",
+      }),
     });
     if (!res.ok) return null;
     return (await res.json()) as ScrapeJob;
