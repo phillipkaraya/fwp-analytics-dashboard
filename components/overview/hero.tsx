@@ -1,21 +1,63 @@
 "use client";
 
 import { fmt, fmtDate, fmtShort, numeralShift, platformLabel, relativeTime } from "@/lib/format";
-import { PLATFORMS, followerDeltas, pctChange, platformLastPosted, toNum, windowLabel, windowTotals } from "@/lib/derive";
+import {
+  PLATFORMS,
+  WINDOW_OPTIONS,
+  followerDeltas,
+  pctChange,
+  platformLastPosted,
+  toNum,
+  windowLabel,
+  windowTotals,
+  type WindowDays,
+} from "@/lib/derive";
 import type { FollowerSnapshot, Post, ScrapeState } from "@/lib/types";
 import { PlatformDot } from "@/components/charts/platform-badge";
 import { HeroPanel, HeroRow, PageHero, SignedCount } from "@/components/layout/page-hero";
+import { cn } from "@/lib/utils";
 
 interface HeroProps {
   posts: Post[];
   scrape: ScrapeState;
   history: FollowerSnapshot[];
-  /** Rolling window in days, chosen by pickWindow() in the parent. */
-  days: number;
+  /** Rolling window in days: Phil's choice, or pickWindow() until he makes one. */
+  days: WindowDays;
+  onDays: (d: WindowDays) => void;
 }
 
-/** The Overview band: the last window at display size, followers on the right. */
-export function Hero({ posts, scrape, history, days }: HeroProps) {
+/** 7 / 30 / 60 / 90 day switch on the eyebrow row (Phil, 2026-09-16). */
+function WindowSelect({ days, onDays }: { days: WindowDays; onDays: (d: WindowDays) => void }) {
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Summary window"
+      className="inline-flex rounded-full bg-white/10 p-0.5 ring-1 ring-white/15"
+    >
+      {WINDOW_OPTIONS.map((d) => {
+        const on = d === days;
+        return (
+          <button
+            key={d}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            onClick={() => onDays(d)}
+            className={cn(
+              "tabular rounded-full px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] transition",
+              on ? "bg-white text-ink" : "text-white/70 hover:text-white",
+            )}
+          >
+            {d}d
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** The Overview band: the chosen window at display size, followers on the right. */
+export function Hero({ posts, scrape, history, days, onDays }: HeroProps) {
   const cur = windowTotals(posts, days);
   const prev = windowTotals(posts, days, days);
   const deltas = followerDeltas(history);
@@ -35,17 +77,18 @@ export function Hero({ posts, scrape, history, days }: HeroProps) {
         ? {
             label: "Video views",
             value: fmtShort(cur.views),
-            hint: `${fmt(cur.viewPosts)} of ${fmt(cur.posts)} posts are video. Carousels and photos report no views.`,
+            hint: `${fmt(cur.viewPosts)} of ${fmt(cur.posts)} posts are video. Carousels report no views.`,
           }
         : {
             label: "Video views",
             value: "0",
-            hint: "No video posts in this window. Carousels and photos report no views.",
+            hint: "No video posts. Carousels and photos report no views.",
           };
 
   return (
     <PageHero
       eyebrow={`${windowLabel(days)} · all platforms`}
+      controls={<WindowSelect days={days} onDays={onDays} />}
       stats={[
         viewsStat,
         { label: "Posts published", value: fmtShort(cur.posts), pct: pctChange(cur.posts, prev.posts) },
@@ -61,8 +104,11 @@ export function Hero({ posts, scrape, history, days }: HeroProps) {
           ) : (
             "No dated posts yet."
           )}{" "}
-          {days > 30 && <>Nothing went out in the last 30 days, so the window is widened.</>}
-          {days === 30 && <>Deltas compare against the 30 days before.</>}
+          {cur.posts === 0 ? (
+            <>Nothing went out in the last {days} days. Widen the window above.</>
+          ) : (
+            <>Deltas compare against the {days} days before.</>
+          )}
         </p>
       }
       aside={

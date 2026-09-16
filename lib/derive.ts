@@ -154,20 +154,24 @@ export function windowTotals(
   return out;
 }
 
-export const WINDOW_CANDIDATES = [30, 90, 365] as const;
+/** The windows the Overview lets Phil switch between (2026-09-16). */
+export const WINDOW_OPTIONS = [7, 30, 60, 90] as const;
+export type WindowDays = (typeof WINDOW_OPTIONS)[number];
+
+/** Windows the default pick considers. 7 days is never auto-picked: it is
+ *  an opt-in close-up, not a summary. */
+export const WINDOW_CANDIDATES = [30, 60, 90] as const;
 
 /** Shortest candidate window that contains at least one post, so the hero
- *  never opens on a row of zeros after a quiet month. Falls back to a year. */
-export function pickWindow(posts: Post[], now = Date.now()): number {
+ *  never opens on a row of zeros after a quiet month. Falls back to 90. */
+export function pickWindow(posts: Post[], now = Date.now()): WindowDays {
   for (const days of WINDOW_CANDIDATES) {
     if (windowTotals(posts, days, 0, now).posts > 0) return days;
   }
-  return 365;
+  return 90;
 }
 
 export function windowLabel(days: number): string {
-  if (days === 30) return "Last 30 days";
-  if (days === 90) return "Last 90 days";
   if (days === 365) return "Last 12 months";
   return `Last ${days} days`;
 }

@@ -18,6 +18,8 @@ interface PageHeroProps {
   aside?: React.ReactNode;
   /** Extra content under the stats (a sentence, a note). */
   footer?: React.ReactNode;
+  /** A small control on the eyebrow row, right-aligned (the Overview's window switch). */
+  controls?: React.ReactNode;
 }
 
 /**
@@ -25,7 +27,7 @@ interface PageHeroProps {
  * numerals, and an optional side panel. Phil approved this shape on the
  * Overview (2026-09-04) and asked for it on every tab.
  */
-export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: PageHeroProps) {
+export function PageHero({ eyebrow, title, lede, stats = [], aside, footer, controls }: PageHeroProps) {
   return (
     <section className="hero relative overflow-hidden text-white">
       <div aria-hidden className="hero-grid absolute inset-0" />
@@ -37,9 +39,12 @@ export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: Pa
           )}
         >
           <div className="min-w-0">
-            <p className="rise font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">
-              {eyebrow}
-            </p>
+            <div className="rise flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">
+                {eyebrow}
+              </p>
+              {controls}
+            </div>
             {title && (
               <h2
                 className="rise font-display mt-2 text-3xl font-medium tracking-[-0.02em] sm:text-4xl"
@@ -57,21 +62,23 @@ export function PageHero({ eyebrow, title, lede, stats = [], aside, footer }: Pa
               </p>
             )}
             {/* Phones: a strict 2x2 grid, so a long hint under one stat cannot
-                push the next stat onto its own row. From sm: natural widths
-                with one even gap, so a short value next to a long one does not
-                leave a hole (equal columns did). */}
+                push the next stat onto its own row. Tablets: natural widths
+                with one even gap. From lg the summary is ONE row, whatever
+                the count (Phil, 2026-09-16): equal columns via grid-flow-col,
+                numerals one step smaller until xl so four fit beside the
+                side panel at 1024. */}
             {stats.length > 0 && (
-              <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:flex sm:flex-wrap sm:gap-x-12 lg:justify-between lg:gap-x-8">
+              <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:flex sm:flex-wrap sm:gap-x-12 lg:grid lg:grid-flow-col lg:auto-cols-fr lg:grid-cols-none lg:gap-x-6">
                 {stats.map((s, i) => (
                   <div
                     key={s.label}
-                    className="rise min-w-0 break-words sm:min-w-[8.5rem]"
+                    className="rise min-w-0 break-words sm:min-w-[8.5rem] lg:min-w-0"
                     style={{ "--rise-delay": `${120 + i * 70}ms` } as React.CSSProperties}
                   >
                     {/* Digit ink, not the glyph box, sits on the label's left
                         edge; a leading 1 aligns by its stem. See numeralShift. */}
                     <dd
-                      className="tabular font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl lg:text-7xl"
+                      className="tabular font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-6xl xl:text-7xl"
                       style={{ marginLeft: numeralShift(s.value) }}
                     >
                       {s.value}
