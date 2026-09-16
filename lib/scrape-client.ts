@@ -23,6 +23,9 @@ export interface ScrapeJob {
   progress: number;
   completedAt?: string;
   error?: string;
+  /** Per-platform failures. A job is still "complete" when at least one
+   *  platform succeeded, so the UI must read this to report a partial run. */
+  errors?: Record<string, string> | null;
   isStub?: boolean;
 }
 

@@ -229,9 +229,9 @@
     "avgViews": 665
    },
    {
-    "count": 17,
-    "avgEngagement": 2.17,
-    "avgViews": 1248
+    "count": 18,
+    "avgEngagement": 2.05,
+    "avgViews": 1179
    },
    {
     "count": 21,
@@ -246,9 +246,9 @@
   ],
   [
    {
-    "count": 5,
-    "avgEngagement": 4.58,
-    "avgViews": 1414
+    "count": 6,
+    "avgEngagement": 3.82,
+    "avgViews": 1178
    },
    {
     "count": 2,
@@ -707,14 +707,14 @@
     "avgViews": 1620
    },
    {
-    "count": 23,
-    "avgEngagement": 1.46,
-    "avgViews": 1189
+    "count": 24,
+    "avgEngagement": 1.4,
+    "avgViews": 1139
    },
    {
-    "count": 22,
-    "avgEngagement": 1.18,
-    "avgViews": 773
+    "count": 23,
+    "avgEngagement": 1.13,
+    "avgViews": 740
    },
    {
     "count": 13,
@@ -999,9 +999,9 @@
  ],
  "contentCategories": {
   "comedy": {
-   "count": 794,
+   "count": 797,
    "avgViews": 16826,
-   "avgLikes": 496,
+   "avgLikes": 494,
    "avgEngagement": 3.34,
    "totalViews": 8715963
   },
@@ -1013,7 +1013,7 @@
    "totalViews": 453856
   },
   "education": {
-   "count": 358,
+   "count": 359,
    "avgViews": 2418,
    "avgLikes": 112,
    "avgEngagement": 8.21,
@@ -1027,23 +1027,23 @@
    "totalViews": 529136
   },
   "cars": {
-   "count": 299,
+   "count": 300,
    "avgViews": 11279,
-   "avgLikes": 587,
+   "avgLikes": 585,
    "avgEngagement": 3.64,
    "totalViews": 2402638
   },
   "entrepreneurship": {
-   "count": 274,
+   "count": 276,
    "avgViews": 7117,
-   "avgLikes": 365,
+   "avgLikes": 364,
    "avgEngagement": 4.9,
    "totalViews": 1366470
   },
   "travel": {
-   "count": 229,
+   "count": 230,
    "avgViews": 3324,
-   "avgLikes": 103,
+   "avgLikes": 104,
    "avgEngagement": 3.66,
    "totalViews": 468804
   },
@@ -1055,9 +1055,9 @@
    "totalViews": 474192
   },
   "lifestyle": {
-   "count": 197,
+   "count": 198,
    "avgViews": 4679,
-   "avgLikes": 166,
+   "avgLikes": 167,
    "avgEngagement": 4.19,
    "totalViews": 584965
   },
@@ -1069,9 +1069,9 @@
    "totalViews": 803005
   },
   "family": {
-   "count": 159,
+   "count": 160,
    "avgViews": 2897,
-   "avgLikes": 129,
+   "avgLikes": 130,
    "avgEngagement": 5.67,
    "totalViews": 266586
   },
@@ -1939,7 +1939,7 @@
    "avgLikes": 519,
    "avgComments": 18,
    "avgEngagement": 5.11,
-   "posts": 681
+   "posts": 682
   },
   "tiktok": {
    "avgViews": 15857,
@@ -1960,7 +1960,7 @@
    "avgLikes": 0,
    "avgComments": 0,
    "avgEngagement": 0.0,
-   "posts": 564
+   "posts": 567
   },
   "linkedin": {
    "avgViews": 0,
@@ -1973,8 +1973,8 @@
  "engagementFunnel": {
   "instagram": {
    "views": 8188666,
-   "likes": 353744,
-   "comments": 12272,
+   "likes": 354130,
+   "comments": 12327,
    "shares": 0,
    "likeRate": 4.32,
    "commentRate": 0.15,
@@ -2000,7 +2000,7 @@
   },
   "threads": {
    "views": 0,
-   "likes": 297,
+   "likes": 298,
    "comments": 40,
    "shares": 12,
    "likeRate": 0,
@@ -3314,7 +3314,7 @@
    "tag": "#atlanta",
    "count": 53,
    "avgViews": 5356,
-   "avgLikes": 155,
+   "avgLikes": 156,
    "avgEngagement": 3.6,
    "totalViews": 203548
   },
@@ -3378,7 +3378,7 @@
    "tag": "#education",
    "count": 5,
    "avgViews": 4589,
-   "avgLikes": 167,
+   "avgLikes": 168,
    "avgEngagement": 5.25,
    "totalViews": 18357
   },
@@ -4067,7 +4067,7 @@
    "month": "2024-06",
    "posts": 9,
    "views": 39666,
-   "likes": 1822,
+   "likes": 1821,
    "comments": 224
   },
   {
@@ -4109,7 +4109,7 @@
    "month": "2025-01",
    "posts": 16,
    "views": 31737,
-   "likes": 2851,
+   "likes": 2853,
    "comments": 180
   },
   {
@@ -4205,10 +4205,17 @@
   },
   {
    "month": "2026-06",
-   "posts": 22,
+   "posts": 25,
    "views": 23917,
-   "likes": 688,
+   "likes": 713,
    "comments": 53
+  },
+  {
+   "month": "2026-09",
+   "posts": 1,
+   "views": 0,
+   "likes": 361,
+   "comments": 55
   }
  ],
  "followerProjections": {
@@ -4962,7 +4969,7 @@
      "id": "ig_3400415194294620061_5251656103",
      "platform": "instagram",
      "views": 11525,
-     "likes": 892,
+     "likes": 891,
      "date": "2024-06-28",
      "url": "https://www.instagram.com/p/C8ws5pgxY-d/"
     },
@@ -6244,7 +6251,7 @@
      "id": "ig_3556623510023757514_5251656103",
      "platform": "instagram",
      "views": 5838,
-     "likes": 274,
+     "likes": 276,
      "date": "2025-01-29",
      "url": "https://www.instagram.com/p/DFbqj0SxN7K/"
     },
@@ -9887,6 +9894,33 @@
    ],
    "bestPlatform": "instagram",
    "viewDiff": 3265
+  },
+  {
+   "title": "And you can get AI to run this entire process top to bottom in all types of markets \ud83d\ude0e I actually still have way more peo",
+   "platforms": [
+    "instagram",
+    "threads"
+   ],
+   "posts": [
+    {
+     "id": "ig_3925521578417935158_5251656103",
+     "platform": "instagram",
+     "views": 3244,
+     "likes": 120,
+     "date": "2026-06-22",
+     "url": "https://www.instagram.com/p/DZ6QRPHu1M2/"
+    },
+    {
+     "id": "th_3925522951847297573",
+     "platform": "threads",
+     "views": 0,
+     "likes": 1,
+     "date": "2026-06-22",
+     "url": "https://www.threads.com/@phillip.karaya/post/DZ6QlOOgEIl"
+    }
+   ],
+   "bestPlatform": "instagram",
+   "viewDiff": 3244
   },
   {
    "title": "I was not asking full on adults about how to navigate finding and living my purpose at 14 \ud83d\ude05 I\u2019m 1000% confident these yo",
@@ -20838,7 +20872,7 @@
    "postId": "ig_3400415194294620061_5251656103",
    "platform": "instagram",
    "views": 11525,
-   "likes": 892,
+   "likes": 891,
    "engagement": 9.15,
    "engagementRate": "9.15",
    "categories": [
@@ -21053,14 +21087,22 @@
    "youtube": 5020,
    "threads": 1787,
    "linkedin": 1714
+  },
+  {
+   "date": "2026-09-16",
+   "instagram": 11000,
+   "tiktok": 14000,
+   "youtube": 5020,
+   "threads": 1787,
+   "linkedin": 1714
   }
  ],
  "hookTypes": [
   {
    "type": "other",
-   "count": 1443,
+   "count": 1447,
    "avgViews": 4937,
-   "avgLikes": 217,
+   "avgLikes": 216,
    "avgEngagement": 5.31,
    "totalViews": 4517716,
    "topPost": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
@@ -21131,36 +21173,36 @@
  ],
  "lastPosted": {
   "instagram": {
-   "lastDate": "2026-06-23",
-   "daysSince": 74,
-   "lastTitle": "A employee for $200 a month that works harder than a $4000 a month employee \ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02",
-   "lastId": "ig_3926289000590522362_5251656103",
-   "totalPosts": 681
+   "lastDate": "2026-09-15",
+   "daysSince": 1,
+   "lastTitle": "First slide is how it feels waking up to more \u201cHappy Birthday Old Man or OG\u201d than I\u2019ve ever seen \ud83d\ude02\ud83d\ude02\ud83d\ude02 It\u2019s been a year of",
+   "lastId": "ig_3986484940837355954_5251656103",
+   "totalPosts": 682
   },
   "tiktok": {
    "lastDate": "2026-06-23",
-   "daysSince": 74,
+   "daysSince": 85,
    "lastTitle": "No more typing when you don\u2019t want too \ud83d\ude0c",
    "lastId": "tt_7654796959949016351",
    "totalPosts": 193
   },
   "youtube": {
    "lastDate": "2025-08-03",
-   "daysSince": 398,
+   "daysSince": 409,
    "lastTitle": "You don\u2019t have to have money to start a business.. use the banks money instead!, 151 views",
    "lastId": "yt_GLJonGVG3zA",
    "totalPosts": 644
   },
   "threads": {
-   "lastDate": "2026-06-05",
-   "daysSince": 92,
-   "lastTitle": "\ud83d\udd7a\ud83c\udffe\ud83d\ude02",
-   "lastId": "th_3913149855149112734",
-   "totalPosts": 564
+   "lastDate": "2026-06-22",
+   "daysSince": 86,
+   "lastTitle": "And you can get AI to run this entire process top to bottom in all types of markets \ud83d\ude0e I actually still have way more peo",
+   "lastId": "th_3925522951847297573",
+   "totalPosts": 567
   },
   "linkedin": {
    "lastDate": "2023-02-08",
-   "daysSince": 1305,
+   "daysSince": 1316,
    "lastTitle": "Awesome time with some awesome people! The future is definitely bright!",
    "lastId": "li_7029102857215778816",
    "totalPosts": 16
@@ -21168,11 +21210,11 @@
  },
  "cadenceStats": {
   "instagram": {
-   "avgDaysBetween": 4.7,
+   "avgDaysBetween": 4.8,
    "postsPerWeek": 1.5,
-   "postsPerMonth": 6.4,
+   "postsPerMonth": 6.3,
    "longestGap": 86,
-   "totalPosts": 681
+   "totalPosts": 682
   },
   "tiktok": {
    "avgDaysBetween": 9.6,
@@ -21190,10 +21232,10 @@
   },
   "threads": {
    "avgDaysBetween": 1.3,
-   "postsPerWeek": 5.5,
-   "postsPerMonth": 23.7,
+   "postsPerWeek": 5.4,
+   "postsPerMonth": 23.3,
    "longestGap": 97,
-   "totalPosts": 560
+   "totalPosts": 563
   },
   "linkedin": {
    "avgDaysBetween": 71.9,
@@ -28791,9 +28833,9 @@
    "totalMutual": 4588
   }
  },
- "generatedAt": "2026-09-05T20:00:01+00:00",
+ "generatedAt": "2026-09-16T20:47:45+00:00",
  "dataAsOf": {
-  "posts": "2026-09-05T18:58:40+00:00",
+  "posts": "2026-09-16T20:47:45+00:00",
   "comments": "2026-02-22"
  },
  "questionCount": 559,

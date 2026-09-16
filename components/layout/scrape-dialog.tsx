@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import {
   Dialog,
   DialogContent,
@@ -258,18 +264,19 @@ function ReadyToStart({
   mode: ScrapeMode;
   onMode: (m: ScrapeMode) => void;
   selected: Platform[];
-  onSelected: (p: Platform[]) => void;
+  onSelected: Dispatch<SetStateAction<Platform[]>>;
   state?: ScrapeState | null;
 }) {
   const perPlatform = MODES.find((m) => m.value === mode)?.minutes ?? 1;
   const minutes = perPlatform * selected.length;
 
   // Keep PLATFORMS order so the request and the progress list read the same.
+  // Functional update: two toggles in one tick must not read a stale list.
   function toggle(p: Platform) {
-    onSelected(
-      selected.includes(p)
-        ? selected.filter((x) => x !== p)
-        : PLATFORMS.filter((x) => x === p || selected.includes(x)),
+    onSelected((prev) =>
+      prev.includes(p)
+        ? prev.filter((x) => x !== p)
+        : PLATFORMS.filter((x) => x === p || prev.includes(x)),
     );
   }
 
@@ -445,26 +452,65 @@ function CompleteJob({
   job: ScrapeJob;
   etaLabel?: string;
 }) {
+  // The service reports "complete" whenever at least one platform succeeded,
+  // so a partial run has to be read off the per-platform errors.
+  const failed = Object.entries(job.errors ?? {}).filter(([k]) => k !== "analyze");
+  const analyzeError = job.errors?.analyze;
+  const ok = job.platforms.filter((p) => !(job.errors && p in job.errors));
+  const partial = failed.length > 0 || !!analyzeError;
+  const at = job.completedAt
+    ? new Date(job.completedAt).toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : etaLabel;
+  const name = (p: string) =>
+    (platformLabel as Record<string, string>)[p] ?? p;
+
   return (
     <div
       className={cn(
-        "rounded-md border border-positive/40 bg-positive-soft p-3 text-sm text-ink",
+        "rounded-md border p-3 text-sm text-ink",
+        partial
+          ? "border-warn/40 bg-warn-soft"
+          : "border-positive/40 bg-positive-soft",
       )}
     >
-      <div className="font-mono text-[10px] uppercase tracking-wider text-positive">
-        ✓ Scrape complete
+      <div
+        className={cn(
+          "font-mono text-[10px] uppercase tracking-wider",
+          partial ? "text-warn" : "text-positive",
+        )}
+      >
+        {partial ? "Finished with problems" : "✓ Scrape complete"}
       </div>
       <p className="mt-1">
-        {modeLabel(job.mode)} finished on {job.platforms.length} platform
-        {job.platforms.length === 1 ? "" : "s"} ({job.platforms.join(", ")}) at{" "}
-        {job.completedAt
-          ? new Date(job.completedAt).toLocaleTimeString("en-US", {
-              hour: "numeric",
-              minute: "2-digit",
-            })
-          : etaLabel}
-        . Reload the dashboard to see the updated data.
+        {modeLabel(job.mode)} finished at {at}.{" "}
+        {ok.length > 0
+          ? `${ok.map(name).join(", ")} updated.`
+          : "Nothing was updated."}
       </p>
+      {failed.length > 0 && (
+        <ul className="mt-2 space-y-1.5">
+          {failed.map(([p, msg]) => (
+            <li key={p} className="text-xs">
+              <span className="font-medium text-ink">{name(p)} failed:</span>{" "}
+              <span className="text-ink-soft">{msg.split("\n")[0]}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {analyzeError && (
+        <p className="mt-2 text-xs">
+          <span className="font-medium text-ink">Rebuilding Insights failed:</span>{" "}
+          <span className="text-ink-soft">{analyzeError.split("\n")[0]}</span>
+        </p>
+      )}
+      {ok.length > 0 && (
+        <p className="mt-2 text-xs text-ink-soft">
+          Reload the dashboard to see the updated data.
+        </p>
+      )}
     </div>
   );
 }

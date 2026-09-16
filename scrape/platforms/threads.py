@@ -233,6 +233,42 @@ def _extract_follower_count(body: str) -> int:
     return 0
 
 
+_SCROLL_HEIGHT = "(document.scrollingElement || document.body || {scrollHeight: 0}).scrollHeight"
+
+
+def _wait_fresh_document(cdp: CDP, timeout: float, url_substring: str | None = None) -> str:
+    """Block until a reload or navigation has produced a NEW document that is
+    fully loaded with a body (and optionally on a URL containing `url_substring`).
+
+    `wait_for_load()` alone can return on the OLD document, which is still
+    "complete" on the same URL until the new navigation commits; the next
+    evaluate then lands on a half-parsed page with no body (2026-09-16:
+    "Cannot read properties of null (reading 'scrollHeight')" inside the
+    dashboard's Refresh run). The caller marks the old document with
+    `window.__fwpPreNav` first; a fresh document has no such marker.
+    Returns the final URL, or "" if the deadline passed."""
+    deadline = time.time() + timeout
+    href = ""
+    while time.time() < deadline:
+        try:
+            href = cdp.evaluate("window.location.href") or ""
+            fresh = cdp.evaluate(
+                "!window.__fwpPreNav && document.readyState === 'complete' && !!document.body"
+            )
+        except CDPError:
+            fresh = False
+        if fresh and (url_substring is None or url_substring.lower() in href.lower()):
+            return href
+        time.sleep(0.25)
+    return href
+
+
+def _mark_and(cdp: CDP, expression: str) -> None:
+    """Tag the current document, then run the expression that replaces it."""
+    cdp.evaluate("window.__fwpPreNav = true")
+    cdp.evaluate(expression)
+
+
 def scrape(max_pages: int = 80, on_progress=None, full: bool = False) -> dict:
     """Capture Threads' own graphql responses while scrolling the profile.
 
@@ -256,16 +292,20 @@ def scrape(max_pages: int = 80, on_progress=None, full: bool = False) -> dict:
         # installed after load misses the first batch.)
         cdp.add_init_script(_INSTALL_HOOK)
         cdp.evaluate("window.scrollTo(0, 0)")
-        cdp.evaluate("window.location.reload()")
-        time.sleep(0.5)
-        cdp.wait_for_load(timeout=20, expect_url_substring=f"@{HANDLE}")
+        _mark_and(cdp, "window.location.reload()")
+        href = _wait_fresh_document(cdp, timeout=25)
         # Threads sometimes lands a logged-in reload on the For You feed. Make
         # sure we are on the profile before capturing anything, otherwise the
         # hook would happily collect other people's posts.
-        href = cdp.evaluate("window.location.href") or ""
         if f"@{HANDLE}".lower() not in href.lower():
+            cdp.evaluate("window.__fwpPreNav = true")
             cdp.navigate(PAGE_URL)
-            cdp.wait_for_load(timeout=20, expect_url_substring=f"@{HANDLE}")
+            href = _wait_fresh_document(cdp, timeout=25, url_substring=f"@{HANDLE}")
+        if f"@{HANDLE}".lower() not in href.lower():
+            raise CDPError(
+                f"Threads did not open the profile (landed on {href or 'no URL'}). "
+                "If that is a login page, sign in to threads.com in the shared Chrome and rerun."
+            )
         time.sleep(2.5)
         # Re-install hook (reload wiped it)
         cdp.evaluate(_INSTALL_HOOK)
@@ -300,10 +340,10 @@ def scrape(max_pages: int = 80, on_progress=None, full: bool = False) -> dict:
                 stopped_early = True
                 break
 
-            height_before = cdp.evaluate("document.body.scrollHeight") or 0
-            cdp.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            height_before = cdp.evaluate(_SCROLL_HEIGHT) or 0
+            cdp.evaluate(f"window.scrollTo(0, {_SCROLL_HEIGHT})")
             time.sleep(2.0)
-            height_after = cdp.evaluate("document.body.scrollHeight") or 0
+            height_after = cdp.evaluate(_SCROLL_HEIGHT) or 0
 
             if on_progress:
                 on_progress("scrolling", {
