@@ -24,10 +24,24 @@ export function hasViews(platform: Platform): boolean {
   return !VIEWLESS_PLATFORMS.has(platform);
 }
 
-/** The reach number a post is judged by: views where the platform reports
- *  them, likes on Threads. Use for ranking, never for summing across platforms. */
+/**
+ * Views are a video metric. Instagram reports play counts for reels and
+ * videos only; carousels and photos arrive with views 0 no matter how well
+ * they did (all 109 of them in the data as of 2026-09-16). A zero there is
+ * not a measurement, so those posts take likes as reach, the same way
+ * Threads and LinkedIn do (Phil, 2026-09-16).
+ */
+export const VIEWLESS_TYPES: ReadonlySet<string> = new Set(["carousel", "post", "image", "article"]);
+
+/** Whether this particular post carries a real view count. */
+export function postHasViews(p: Post): boolean {
+  return hasViews(p.platform) && !VIEWLESS_TYPES.has((p.type ?? "").toLowerCase());
+}
+
+/** The reach number a post is judged by: views where the post reports
+ *  them, likes otherwise. Use for ranking, never for summing across posts. */
 export function reach(p: Post): number {
-  return hasViews(p.platform) ? toNum(p.views) : toNum(p.likes);
+  return postHasViews(p) ? toNum(p.views) : toNum(p.likes);
 }
 
 export function toNum(v: string | number | undefined | null): number {
@@ -107,6 +121,9 @@ export function monthlyActivity(
 
 export interface WindowTotals {
   posts: number;
+  /** Posts in the window that carry a view count (postHasViews). `views`
+   *  is summed over these only; the rest report no views, not zero views. */
+  viewPosts: number;
   views: number;
   likes: number;
   comments: number;
@@ -122,12 +139,15 @@ export function windowTotals(
 ): WindowTotals {
   const end = now - offsetDays * DAY;
   const start = end - days * DAY;
-  const out: WindowTotals = { posts: 0, views: 0, likes: 0, comments: 0 };
+  const out: WindowTotals = { posts: 0, viewPosts: 0, views: 0, likes: 0, comments: 0 };
   for (const p of posts) {
     const t = new Date(p.date).getTime();
     if (!Number.isFinite(t) || t <= start || t > end) continue;
     out.posts += 1;
-    out.views += toNum(p.views);
+    if (postHasViews(p)) {
+      out.viewPosts += 1;
+      out.views += toNum(p.views);
+    }
     out.likes += toNum(p.likes);
     out.comments += toNum(p.comments);
   }

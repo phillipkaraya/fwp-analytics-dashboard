@@ -103,6 +103,31 @@ ENRICH_CAP_INCREMENTAL = 60
 ENRICH_CAP_FULL = 200
 
 
+# Instagram reports play counts for reels and videos only. Carousels and
+# photos always arrive with views 0, which is an absence, not a measurement:
+# their engagement is measured against followers, as Threads does (Phil,
+# 2026-09-16: "fix the carousel 0 views thing"). The dashboard's
+# postHasViews() in lib/derive.ts mirrors this list.
+VIEWLESS_TYPES = ("carousel", "post")
+
+
+def recompute_viewless_engagement(posts: list[dict], followers: int) -> int:
+    """Set engagementRate = (likes + comments) / followers for view-less post
+    types. Runs on the whole merged file so older rows catch up on the next
+    scrape. Returns how many rows changed."""
+    if not followers:
+        return 0
+    changed = 0
+    for p in posts:
+        if p.get("type") not in VIEWLESS_TYPES or p.get("views"):
+            continue
+        rate = f"{(int(p.get('likes') or 0) + int(p.get('comments') or 0)) / followers * 100:.2f}"
+        if p.get("engagementRate") != rate:
+            p["engagementRate"] = rate
+            changed += 1
+    return changed
+
+
 def _enrich_views(cdp: CDP, posts: list[dict], cap: int, on_progress=None) -> int:
     """Fill in views (and bump likes/comments) for reels/videos that have
     views == 0, newest first, up to `cap` media-info calls. Returns count."""
@@ -346,6 +371,10 @@ def scrape(max_pages: int = 60, on_progress=None, full: bool = False) -> dict:
         cdp.close_owned()
         cdp.detach()
 
+    # Carousels and photos: engagement against followers, never against views.
+    fixed = recompute_viewless_engagement(merged, followers)
+    if on_progress and fixed:
+        on_progress("viewless engagement recomputed", {"posts": fixed, "followers": followers})
     merged.sort(key=lambda p: p.get("date", "") or "0", reverse=True)
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps(merged, indent=2))

@@ -25,11 +25,29 @@ export function Hero({ posts, scrape, history, days }: HeroProps) {
     0,
   );
 
+  // Views are summed over posts that report them. When the window also holds
+  // carousels or photos, say so instead of letting their zeros read as views;
+  // when it holds nothing but those, a zero video-view count is the truth.
+  const viewsStat =
+    cur.viewPosts === cur.posts
+      ? { label: "Views", value: fmtShort(cur.views), pct: pctChange(cur.views, prev.views) }
+      : cur.viewPosts > 0
+        ? {
+            label: "Video views",
+            value: fmtShort(cur.views),
+            hint: `${fmt(cur.viewPosts)} of ${fmt(cur.posts)} posts are video. Carousels and photos report no views.`,
+          }
+        : {
+            label: "Video views",
+            value: "0",
+            hint: "No video posts in this window. Carousels and photos report no views.",
+          };
+
   return (
     <PageHero
       eyebrow={`${windowLabel(days)} · all platforms`}
       stats={[
-        { label: "Views", value: fmtShort(cur.views), pct: pctChange(cur.views, prev.views) },
+        viewsStat,
         { label: "Posts published", value: fmtShort(cur.posts), pct: pctChange(cur.posts, prev.posts) },
         { label: "Likes", value: fmtShort(cur.likes), pct: pctChange(cur.likes, prev.likes) },
         { label: "Comments", value: fmtShort(cur.comments), pct: pctChange(cur.comments, prev.comments) },

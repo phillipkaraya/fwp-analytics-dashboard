@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadAllPosts } from "@/lib/data";
 import type { Post, Platform } from "@/lib/types";
-import { PLATFORMS, avgEngagementRate, byPlatform, hasViews, toNum, totals } from "@/lib/derive";
+import { PLATFORMS, avgEngagementRate, byPlatform, hasViews, postHasViews, toNum, totals } from "@/lib/derive";
 import { HeroPanel, HeroRow, PageHero } from "@/components/layout/page-hero";
 import { PlatformDot } from "@/components/charts/platform-badge";
 import { fmt, fmtDate, fmtPct, fmtShort, platformLabel } from "@/lib/format";
@@ -80,9 +80,12 @@ export function Posts() {
     return {
       ...t,
       engagement: avgEngagementRate(filtered),
-      // False when every post in the slice is from a platform without a view
-      // count (Threads, LinkedIn).
-      viewsKnown: filtered.some((p) => hasViews(p.platform)),
+      // False when no post in the slice carries a view count: a view-less
+      // platform (Threads, LinkedIn) or view-less types (carousels, photos).
+      viewsKnown: filtered.some(postHasViews),
+      // The per-post average is over posts that report views, so a carousel
+      // in the slice does not drag it down with a zero that is not a count.
+      viewPosts: filtered.filter(postHasViews).length,
       viewlessLabel: PLATFORMS.filter((pl) => !hasViews(pl) && grouped[pl].length > 0)
         .map((pl) => platformLabel[pl])
         .join(" and "),
@@ -119,12 +122,18 @@ export function Posts() {
             ? {
                 label: "Views",
                 value: fmtShort(slice.views),
-                hint: filtered.length ? `${fmt(Math.round(slice.views / filtered.length))} per post` : undefined,
+                hint: slice.viewPosts
+                  ? `${fmt(Math.round(slice.views / slice.viewPosts))} per ${
+                      slice.viewPosts === filtered.length ? "post" : "video post"
+                    }`
+                  : undefined,
               }
             : {
                 label: "Likes as reach",
                 value: fmtShort(slice.likes),
-                hint: `${slice.viewlessLabel || "This platform"} publishes no view count`,
+                hint: slice.viewlessLabel
+                  ? `${slice.viewlessLabel} publishes no view count`
+                  : "Carousels and photos carry no view count",
               },
           { label: "Likes", value: fmtShort(slice.likes), hint: `${fmt(slice.comments)} comments` },
           {
@@ -250,10 +259,10 @@ export function Posts() {
                   {p.title || p.caption?.slice(0, 80) || "(no title)"}
                 </td>
                 <td className="px-2 py-2 text-right text-ink">
-                  {hasViews(p.platform) ? (
+                  {postHasViews(p) ? (
                     fmt(p.views)
                   ) : (
-                    <span className="text-ink-soft" title="No view count on this platform; likes are its reach">
+                    <span className="text-ink-soft" title="No view count for this post; likes are its reach">
                       {fmt(p.likes)}
                       <span className="ml-1 font-mono text-[10px] text-ink-muted">likes</span>
                     </span>
@@ -344,8 +353,8 @@ function PostDetailDialog({
             </DialogHeader>
             <div className="grid grid-cols-4 gap-3 py-3">
               <Stat
-                label={hasViews(post.platform) ? "Views" : "Likes as reach"}
-                value={hasViews(post.platform) ? fmt(post.views) : fmt(post.likes)}
+                label={postHasViews(post) ? "Views" : "Likes as reach"}
+                value={postHasViews(post) ? fmt(post.views) : fmt(post.likes)}
                 emphasis
               />
               <Stat label="Likes" value={fmt(post.likes)} />

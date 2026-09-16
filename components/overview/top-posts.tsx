@@ -1,7 +1,7 @@
 import { Section } from "@/components/charts/section";
 import { PlatformBadge } from "@/components/charts/platform-badge";
 import { fmt, fmtPct, fmtDate } from "@/lib/format";
-import { topPosts, toNum, windowLabel } from "@/lib/derive";
+import { postHasViews, topPosts, toNum, windowLabel } from "@/lib/derive";
 import { Numbered } from "@/components/charts/numbered";
 import type { Post } from "@/lib/types";
 
@@ -86,7 +86,14 @@ export function TopPosts({ posts, days = 30 }: { posts: Post[]; days?: number })
                     )}
                   </td>
                   <td className="px-2 py-3 text-right text-ink">
-                    {fmt(p.views)}
+                    {postHasViews(p) ? (
+                      fmt(p.views)
+                    ) : (
+                      <span className="text-ink-soft" title="No view count for this post; likes are its reach">
+                        {fmt(p.likes)}
+                        <span className="ml-1 font-mono text-[10px] text-ink-muted">likes</span>
+                      </span>
+                    )}
                   </td>
                   <td className="px-2 py-3 text-right text-ink-soft">
                     {fmt(p.likes)}
