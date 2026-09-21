@@ -1,15 +1,15 @@
 {
- "generatedAt": "2026-09-16T21:13:47+00:00",
- "totalPosts": 2102,
+ "generatedAt": "2026-09-21T21:28:43+00:00",
+ "totalPosts": 2103,
  "categories": [
   {
    "slug": "comedy",
    "label": "Comedy",
-   "count": 797,
-   "totalViews": 8715963,
-   "avgViews": 16826,
+   "count": 798,
+   "totalViews": 8717057,
+   "avgViews": 16795,
    "platforms": {
-    "instagram": 306,
+    "instagram": 307,
     "tiktok": 50,
     "youtube": 199,
     "threads": 239,
@@ -356,6 +356,7 @@
     "yt_XlyK9ni8cM8",
     "yt_YPOUxL1EKf0",
     "yt_pCvi94gGGok",
+    "ig_3988981312806879246_5251656103",
     "ig_3926289000590522362_5251656103",
     "tt_7044901310080060678",
     "ig_2973103543738924552_5251656103",
@@ -1305,11 +1306,11 @@
   {
    "slug": "education",
    "label": "Education",
-   "count": 359,
-   "totalViews": 590131,
-   "avgViews": 2418,
+   "count": 360,
+   "totalViews": 591225,
+   "avgViews": 2413,
    "platforms": {
-    "instagram": 174,
+    "instagram": 175,
     "tiktok": 40,
     "youtube": 74,
     "threads": 62,
@@ -1457,6 +1458,7 @@
     "ig_2622850123807320002_5251656103",
     "ig_2911351771089698984_5251656103",
     "yt_XlyK9ni8cM8",
+    "ig_3988981312806879246_5251656103",
     "tt_7024498453803748613",
     "tt_7024136550992579845",
     "tt_7044901310080060678",
@@ -3956,6 +3958,10 @@
   }
  ],
  "byPost": {
+  "ig_3988981312806879246_5251656103": [
+   "education",
+   "comedy"
+  ],
   "ig_3986484940837355954_5251656103": [
    "entrepreneurship",
    "education",

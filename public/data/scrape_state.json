@@ -1,9 +1,9 @@
 {
   "instagram": {
     "status": "complete",
-    "totalScraped": 682,
-    "lastScrapedDate": "2026-09-16T20:40:14+00:00",
-    "lastPostId": "ig_3986484940837355954_5251656103",
+    "totalScraped": 683,
+    "lastScrapedDate": "2026-09-21T21:28:42+00:00",
+    "lastPostId": "ig_3988981312806879246_5251656103",
     "lastRunNewPosts": 1
   },
   "tiktok": {
@@ -35,7 +35,7 @@
     "linkedin": 1714
   },
   "followersUpdated": {
-    "instagram": "2026-09-16T20:40:14+00:00",
+    "instagram": "2026-09-21T21:28:42+00:00",
     "tiktok": "2026-09-05T04:15:36+00:00",
     "youtube": "2026-09-05T04:15:43+00:00",
     "threads": "2026-09-16T20:47:45+00:00",

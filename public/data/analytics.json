@@ -247,7 +247,7 @@
   [
    {
     "count": 6,
-    "avgEngagement": 4.45,
+    "avgEngagement": 4.59,
     "avgViews": 1178
    },
    {
@@ -667,9 +667,9 @@
     "avgViews": 1242
    },
    {
-    "count": 17,
-    "avgEngagement": 4.74,
-    "avgViews": 3211
+    "count": 18,
+    "avgEngagement": 4.55,
+    "avgViews": 3093
    },
    {
     "count": 24,
@@ -941,18 +941,18 @@
    "avgViews": 3217
   },
   {
-   "day": 5,
-   "hour": 11,
-   "count": 17,
-   "avgEngagement": 4.74,
-   "avgViews": 3211
-  },
-  {
    "day": 6,
    "hour": 14,
    "count": 4,
    "avgEngagement": 1.47,
    "avgViews": 3116
+  },
+  {
+   "day": 5,
+   "hour": 11,
+   "count": 18,
+   "avgEngagement": 4.55,
+   "avgViews": 3093
   },
   {
    "day": 2,
@@ -999,11 +999,11 @@
  ],
  "contentCategories": {
   "comedy": {
-   "count": 797,
-   "avgViews": 16826,
+   "count": 798,
+   "avgViews": 16795,
    "avgLikes": 494,
    "avgEngagement": 3.34,
-   "totalViews": 8715963
+   "totalViews": 8717057
   },
   "other": {
    "count": 471,
@@ -1013,11 +1013,11 @@
    "totalViews": 453856
   },
   "education": {
-   "count": 359,
-   "avgViews": 2418,
+   "count": 360,
+   "avgViews": 2413,
    "avgLikes": 112,
-   "avgEngagement": 8.21,
-   "totalViews": 590131
+   "avgEngagement": 8.19,
+   "totalViews": 591225
   },
   "finance": {
    "count": 334,
@@ -1106,9 +1106,9 @@
    "likes": 198558,
    "comments": 710,
    "engagementRate": "3.49",
-   "viralityScore": 390.5,
-   "multiplier": 390.5,
-   "avgViewsForPlatform": 14701,
+   "viralityScore": 391.16,
+   "multiplier": 391.16,
+   "avgViewsForPlatform": 14676,
    "date": "2024-07-29",
    "categories": [
     "comedy"
@@ -1159,9 +1159,9 @@
    "likes": 44217,
    "comments": 176,
    "engagementRate": "11.08",
-   "viralityScore": 27.51,
-   "multiplier": 27.51,
-   "avgViewsForPlatform": 14701,
+   "viralityScore": 27.56,
+   "multiplier": 27.56,
+   "avgViewsForPlatform": 14676,
    "date": "2024-04-01",
    "categories": [
     "comedy",
@@ -1425,9 +1425,9 @@
    "likes": 6085,
    "comments": 255,
    "engagementRate": "6.30",
-   "viralityScore": 6.86,
-   "multiplier": 6.86,
-   "avgViewsForPlatform": 14701,
+   "viralityScore": 6.87,
+   "multiplier": 6.87,
+   "avgViewsForPlatform": 14676,
    "date": "2024-05-15",
    "categories": [
     "real_estate",
@@ -1531,9 +1531,9 @@
    "likes": 4041,
    "comments": 82,
    "engagementRate": "4.69",
-   "viralityScore": 6.05,
-   "multiplier": 6.05,
-   "avgViewsForPlatform": 14701,
+   "viralityScore": 6.06,
+   "multiplier": 6.06,
+   "avgViewsForPlatform": 14676,
    "date": "2023-08-16",
    "categories": [
     "cars",
@@ -1606,9 +1606,9 @@
    "likes": 631,
    "comments": 35,
    "engagementRate": "0.85",
-   "viralityScore": 5.43,
-   "multiplier": 5.43,
-   "avgViewsForPlatform": 14701,
+   "viralityScore": 5.44,
+   "multiplier": 5.44,
+   "avgViewsForPlatform": 14676,
    "date": "2023-11-05",
    "categories": [
     "comedy",
@@ -1935,11 +1935,11 @@
  ],
  "platformAverages": {
   "instagram": {
-   "avgViews": 14701,
-   "avgLikes": 519,
+   "avgViews": 14676,
+   "avgLikes": 518,
    "avgComments": 18,
-   "avgEngagement": 5.11,
-   "posts": 682
+   "avgEngagement": 5.1,
+   "posts": 683
   },
   "tiktok": {
    "avgViews": 15857,
@@ -1972,9 +1972,9 @@
  },
  "engagementFunnel": {
   "instagram": {
-   "views": 8188666,
-   "likes": 354130,
-   "comments": 12327,
+   "views": 8189760,
+   "likes": 354169,
+   "comments": 12392,
    "shares": 0,
    "likeRate": 4.32,
    "commentRate": 0.15,
@@ -4207,15 +4207,15 @@
    "month": "2026-06",
    "posts": 25,
    "views": 23917,
-   "likes": 713,
+   "likes": 710,
    "comments": 53
   },
   {
    "month": "2026-09",
-   "posts": 1,
-   "views": 0,
-   "likes": 361,
-   "comments": 55
+   "posts": 2,
+   "views": 1094,
+   "likes": 403,
+   "comments": 120
   }
  ],
  "followerProjections": {
@@ -21095,16 +21095,24 @@
    "youtube": 5020,
    "threads": 1787,
    "linkedin": 1714
+  },
+  {
+   "date": "2026-09-21",
+   "instagram": 11000,
+   "tiktok": 14000,
+   "youtube": 5020,
+   "threads": 1787,
+   "linkedin": 1714
   }
  ],
  "hookTypes": [
   {
    "type": "other",
-   "count": 1447,
-   "avgViews": 4937,
+   "count": 1448,
+   "avgViews": 4933,
    "avgLikes": 216,
-   "avgEngagement": 5.31,
-   "totalViews": 4517716,
+   "avgEngagement": 5.3,
+   "totalViews": 4518810,
    "topPost": "This literally happened 1 week after a Turo customer wrecked one of my cars #entrepreneurship  ain\u2019t easy #airbnbhost"
   },
   {
@@ -21173,36 +21181,36 @@
  ],
  "lastPosted": {
   "instagram": {
-   "lastDate": "2026-09-15",
-   "daysSince": 1,
-   "lastTitle": "First slide is how it feels waking up to more \u201cHappy Birthday Old Man or OG\u201d than I\u2019ve ever seen \ud83d\ude02\ud83d\ude02\ud83d\ude02 It\u2019s been a year of",
-   "lastId": "ig_3986484940837355954_5251656103",
-   "totalPosts": 682
+   "lastDate": "2026-09-18",
+   "daysSince": 3,
+   "lastTitle": "Made 5,000 websites in 2 weeks in the background while I did other things and even this video in about 10 (Anyone that e",
+   "lastId": "ig_3988981312806879246_5251656103",
+   "totalPosts": 683
   },
   "tiktok": {
    "lastDate": "2026-06-23",
-   "daysSince": 85,
+   "daysSince": 90,
    "lastTitle": "No more typing when you don\u2019t want too \ud83d\ude0c",
    "lastId": "tt_7654796959949016351",
    "totalPosts": 193
   },
   "youtube": {
    "lastDate": "2025-08-03",
-   "daysSince": 409,
+   "daysSince": 414,
    "lastTitle": "You don\u2019t have to have money to start a business.. use the banks money instead!, 151 views",
    "lastId": "yt_GLJonGVG3zA",
    "totalPosts": 644
   },
   "threads": {
    "lastDate": "2026-06-22",
-   "daysSince": 86,
+   "daysSince": 91,
    "lastTitle": "And you can get AI to run this entire process top to bottom in all types of markets \ud83d\ude0e I actually still have way more peo",
    "lastId": "th_3925522951847297573",
    "totalPosts": 567
   },
   "linkedin": {
    "lastDate": "2023-02-08",
-   "daysSince": 1316,
+   "daysSince": 1321,
    "lastTitle": "Awesome time with some awesome people! The future is definitely bright!",
    "lastId": "li_7029102857215778816",
    "totalPosts": 16
@@ -21214,7 +21222,7 @@
    "postsPerWeek": 1.5,
    "postsPerMonth": 6.3,
    "longestGap": 86,
-   "totalPosts": 682
+   "totalPosts": 683
   },
   "tiktok": {
    "avgDaysBetween": 9.6,
@@ -28833,9 +28841,9 @@
    "totalMutual": 4588
   }
  },
- "generatedAt": "2026-09-16T21:13:47+00:00",
+ "generatedAt": "2026-09-21T21:28:43+00:00",
  "dataAsOf": {
-  "posts": "2026-09-16T20:47:45+00:00",
+  "posts": "2026-09-21T21:28:42+00:00",
   "comments": "2026-02-22"
  },
  "questionCount": 559,
