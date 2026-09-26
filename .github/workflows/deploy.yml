@@ -34,6 +34,15 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Require a PIN
+        run: |
+          if [ -z "$NEXT_PUBLIC_DASHBOARD_PIN_HASH" ]; then
+            echo "::error::Set the DASHBOARD_PIN_HASH repository secret first. Nothing was published."
+            exit 1
+          fi
+        env:
+          NEXT_PUBLIC_DASHBOARD_PIN_HASH: ${{ secrets.DASHBOARD_PIN_HASH }}
+
       - name: Build
         run: pnpm build
         env:

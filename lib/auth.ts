@@ -1,17 +1,35 @@
 // Client-side PIN gate using SHA-256.
-// The hash is configured via NEXT_PUBLIC_DASHBOARD_PIN_HASH at build time
-// (falls back to the v1 hash for "1973" so dev still works without env config).
+// The hash comes from NEXT_PUBLIC_DASHBOARD_PIN_HASH at build time: .env.local on
+// your Mac, the DASHBOARD_PIN_HASH repository secret on GitHub Pages.
+// There is deliberately no fallback in a production build. Without a hash the
+// site shows a "PIN not set" screen instead of a lock anyone could open, and the
+// deploy workflow refuses to publish.
 
 export const PIN_STORAGE_KEY = "fwp_auth";
 
-const FALLBACK_PIN_HASH =
-  "9baed8fceea6e36d36670d72429d909547165efc038c293a14a41ef2edf83141";
+// Development only (`pnpm dev` before .env.local exists): the PIN is 0000.
+// Never used by `pnpm build`, so it can't reach a published site.
+export const DEV_PIN = "0000";
+const DEV_PIN_HASH =
+  "9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0";
 
-export function getExpectedHash(): string {
-  // GitHub Actions interpolates an unset secret to an empty string, so we
-  // explicitly check for that case in addition to undefined.
-  const envHash = process.env.NEXT_PUBLIC_DASHBOARD_PIN_HASH?.trim();
-  return envHash ? envHash.toLowerCase() : FALLBACK_PIN_HASH;
+function envHash(): string {
+  // GitHub Actions interpolates an unset secret to an empty string.
+  return process.env.NEXT_PUBLIC_DASHBOARD_PIN_HASH?.trim().toLowerCase() ?? "";
+}
+
+export function usingDevPin(): boolean {
+  return !envHash() && process.env.NODE_ENV === "development";
+}
+
+export function getExpectedHash(): string | null {
+  const hash = envHash();
+  if (hash) return hash;
+  return usingDevPin() ? DEV_PIN_HASH : null;
+}
+
+export function pinConfigured(): boolean {
+  return getExpectedHash() !== null;
 }
 
 export async function sha256(input: string): Promise<string> {
@@ -23,8 +41,9 @@ export async function sha256(input: string): Promise<string> {
 }
 
 export async function verifyPin(pin: string): Promise<boolean> {
-  const hash = await sha256(pin);
-  return hash === getExpectedHash();
+  const expected = getExpectedHash();
+  if (!expected) return false;
+  return (await sha256(pin)) === expected;
 }
 
 // Same-tab sessionStorage writes do not fire the "storage" event, so the
